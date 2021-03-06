@@ -9,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 public class PannableCanvas extends BorderPane {
 
     DoubleProperty myScale = new SimpleDoubleProperty(1.0);
-
+    DoubleProperty revScale = new SimpleDoubleProperty(1.0);
 
 
     public PannableCanvas () {
@@ -40,6 +40,7 @@ public class PannableCanvas extends BorderPane {
      */
     public void setScale( double scale) {
         myScale.set(scale);
+        revScale.set(3/scale);
     }
 
     /**

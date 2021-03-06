@@ -9,12 +9,12 @@ import javafx.scene.input.ScrollEvent;
  */
 public class SceneGestures {
 
-    private static final double MAX_SCALE = 100.0d;
+    private static final double MAX_SCALE = 200.0d;
     private static final double MIN_SCALE = .1d;
 
     private DragContext sceneDragContext = new DragContext();
 
-PannableCanvas canvas;
+    PannableCanvas canvas;
 
     public SceneGestures( PannableCanvas canvas) {
         this.canvas = canvas;
@@ -76,7 +76,7 @@ PannableCanvas canvas;
             double scale = canvas.getScale(); // currently we only use Y, same value is used for X
             double oldScale = scale;
 
-            scale *= Math.pow(1.01, event.getDeltaY());
+            scale *= Math.pow(1.005, event.getDeltaY());
 
             if (scale <= MIN_SCALE) {
                 scale = MIN_SCALE;

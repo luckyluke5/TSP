@@ -6,14 +6,16 @@ tsp_delaunay/DragContext.java
  tsp_delaunay.DragContext
 tsp_delaunay/Vertex.java
  tsp_delaunay.Vertex
+tsp_delaunay/main.java
+ tsp_delaunay.main
 tsp_delaunay/Graph.java
  tsp_delaunay.Graph
+tsp_delaunay/ModifiedWeightedEdge.java
+ tsp_delaunay.ModifiedWeightedEdge
+tsp_delaunay/PannableCanvas.java
+ tsp_delaunay.PannableCanvas
 tsp_delaunay/SceneGestures.java
  tsp_delaunay.SceneGestures
  tsp_delaunay.SceneGestures$1
  tsp_delaunay.SceneGestures$2
  tsp_delaunay.SceneGestures$3
-tsp_delaunay/PannableCanvas.java
- tsp_delaunay.PannableCanvas
-tsp_delaunay/main.java
- tsp_delaunay.main

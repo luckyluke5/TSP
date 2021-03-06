@@ -3,6 +3,8 @@ package tsp_delaunay;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,15 +20,20 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import jdk.internal.event.Event;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class main extends Application {
+
 
 
 
@@ -40,17 +47,31 @@ public class main extends Application {
 
         Group group = new Group();
         Scene scene = new Scene(group, 1024, 768);
+        // create canvas
+        PannableCanvas canvas = new PannableCanvas();
+     //   File file= new File("Beispiel1(7).txt");
+
+
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(stage);
         //Create some Menu for loading the examples
         //not ready
-        MenuBar menubar = new MenuBar();
-        Menu menu1 = new Menu("File");
-        menubar.getMenus().add(menu1);
-        MenuItem menuItem1 = new MenuItem("Beispiel 1");
+        Button browse = new Button("Choose file");
 
-        MenuItem menuItem2 = new MenuItem("Beispiel 2");
-        menu1.getItems().addAll(menuItem1,menuItem2);
+        browse.setOnAction(e ->{
+            canvas.getChildren().clear();
+            //fileChooser.showOpenDialog(stage);
+            start(stage);
+        });
+       // File file =new File("Beispiel1(7).txt");
+      //  file= fileChooser.showOpenDialog(stage);
 
-        File file = new File("Beispiel1(7).txt");
+
+
+
+
+
+
         Vertex vertex = new Vertex(file);
         ArrayList<Circle> circles = new ArrayList<>();
 
@@ -58,8 +79,7 @@ public class main extends Application {
 
 
 
-        // create canvas
-        PannableCanvas canvas = new PannableCanvas();
+
 
 
 
@@ -73,32 +93,25 @@ public class main extends Application {
 
 
         // create sample nodes which can be dragged
-        NodeGestures nodeGestures = new NodeGestures( canvas);
+        Group group1 = new Group();
+        NodeGestures nodeGestures = new NodeGestures(canvas);
 
         for(Point2D point : vertex.points){
             Circle cir = new Circle(point.getX(),point.getY(),vertex.getRadius());
 
             cir.addEventFilter( MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
             cir.addEventFilter( MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
+            cir.radiusProperty().bind(canvas.revScale);
             circles.add(cir);
         }
 
         Graph graph = new Graph(vertex);
 
         //Create group with cirles to add to canvas
-        Group group1 = new Group();
+
         group1.getChildren().addAll(circles);
         group1.getTransforms().add(new Translate(-vertex.min_x(), -vertex.min_y()));
         group1.getTransforms().add(new Scale(0.9, -0.9, vertex.min_x() + vertex.x_diff() / 2, vertex.min_y() + vertex.y_diff() / 2));
-
-
-
-
-
-
-
-
-
 
 
 
@@ -133,7 +146,8 @@ public class main extends Application {
         button2.setOnAction(actionEvent -> group1.getChildren().addAll(graph.getGroup()));
 
 
-        VBox vBox = new VBox(menubar,button1,button2);
+
+        VBox vBox = new VBox(browse,button1,button2);
         vBox.autosize();
         vBox.setAlignment(Pos.BASELINE_RIGHT);
         vBox.setSpacing(10);
@@ -147,7 +161,9 @@ public class main extends Application {
         stage.setScene(scene);
         stage.show();
 
-        //canvas.addGrid();
+
 
     }
+
+
 }
