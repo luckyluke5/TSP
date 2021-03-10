@@ -36,6 +36,7 @@ public class main extends Application {
 
 
     MainScene scene;
+    MainGroup group;
 
 
     public static void main(String[] args) {
@@ -45,7 +46,7 @@ public class main extends Application {
     @Override
     public void start(Stage stage) {
 
-        Group group = new Group();
+        group = new MainGroup();
         scene = new MainScene(group, 1024, 768);
         // create canvas
         PannableCanvas canvas = new PannableCanvas();
