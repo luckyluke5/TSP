@@ -1,5 +1,8 @@
 package tsp.delaunay;
 
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -16,9 +19,14 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import jdk.internal.event.Event;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 
+import javax.security.auth.kerberos.KerberosTicket;
+import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
@@ -41,39 +49,23 @@ public class main extends Application {
         scene = new MainScene(group, 1024, 768);
         // create canvas
         PannableCanvas canvas = new PannableCanvas();
-     //   File file= new File("Beispiel1(7).txt");
-
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose the Example");
         File file = fileChooser.showOpenDialog(stage);
+
         //Create some Menu for loading the examples
-        //not ready
         Button browse = new Button("Choose file");
 
         browse.setOnAction(e ->{
             canvas.getChildren().clear();
-            //fileChooser.showOpenDialog(stage);
+
             start(stage);
         });
-       // File file =new File("Beispiel1(7).txt");
-      //  file= fileChooser.showOpenDialog(stage);
-
-
-
-
-
 
 
         Vertex vertex = new Vertex(file);
         ArrayList<Circle> circles = new ArrayList<>();
-
-
-
-
-
-
-
-
 
         //Calculating scale and passing it to canvas
         NumberBinding scale_height = Bindings.divide(scene.heightProperty(), vertex.y_diff());
@@ -97,6 +89,7 @@ public class main extends Application {
             circles.add(cir);
         }
 
+
         Graph graph = new Graph(vertex);
 
         //Create group with cirles to add to canvas
@@ -115,6 +108,24 @@ public class main extends Application {
         scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
 
 
+
+        graph.convexHull();
+
+
+        ArrayList<Line> stroke = new ArrayList();
+        for(Line2D line : graph.getLines()) {
+
+            Line l = new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+
+            l.setStrokeWidth(vertex.getRadius() / 2);
+            l.strokeWidthProperty().bind(canvas.revScale);
+            l.setStroke(Color.ORANGE.deriveColor(1, 1, 1, 0.5));
+            stroke.add(l);
+
+        }
+
+
+
         //Buttons
         Button button1 = new Button("Calculate MST");
 
@@ -126,6 +137,7 @@ public class main extends Application {
             ) {
                 Point2D source = graph.graph.getEdgeSource(edge);
                 Point2D target = graph.graph.getEdgeTarget(edge);
+
                 Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
                 line.setStrokeWidth(vertex.getRadius()/2);
                 line.setStroke(Color.GRAY);
@@ -134,8 +146,36 @@ public class main extends Application {
             }
 
         });
+
+
+
+        Timeline timeline=new Timeline();
+        final int STARTTIME = 0;
+        System.out.println("STARTTIME "+ graph.getLines().size());
+        final Integer[] length = {STARTTIME};
+        timeline.setCycleCount(Timeline.INDEFINITE);
+
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.4),actionEvent->{
+            length[0]++;
+
+            int i = length[0];
+            group1.getChildren().add(stroke.get(i-1));
+            if(length[0]>=stroke.size()){
+                timeline.stop();
+            }
+
+        }));
+
         Button button2 = new Button("Triangulation");
-        button2.setOnAction(actionEvent -> group1.getChildren().addAll(graph.getGroup()));
+        button2.setOnAction(actionEvent ->{
+            graph.convexHull();
+
+            timeline.playFromStart();
+
+        });
+
+
+
 
 
         VBox vBox = getButtonBox(browse, button1, button2);

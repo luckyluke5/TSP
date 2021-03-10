@@ -43,6 +43,8 @@ public class Vertex {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+        //Sort  the Points using x coordinate to add them to the graph already sorted.
+        points.sort(Comparator.comparing(Point2D::getX));
 
     }
 
