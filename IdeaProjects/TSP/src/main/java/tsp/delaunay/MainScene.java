@@ -1,4 +1,4 @@
-package tsp_delaunay;
+package tsp.delaunay;
 
 import javafx.scene.Group;
 import javafx.scene.Parent;

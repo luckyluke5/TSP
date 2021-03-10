@@ -1,19 +1,13 @@
-package tsp_delaunay;
+package tsp.delaunay;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.awt.geom.Point2D;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 
 public class Graph {
