@@ -21,16 +21,4 @@ public class MainGroup extends Group {
 
         this.getChildren().add(vBox);
     }
-
-    @Override
-    public ObservableList<Node> getChildren(){
-
-        try {
-            throw new Exception("should not used");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return super.getChildren();
-    }
 }
