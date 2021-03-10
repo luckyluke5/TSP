@@ -155,9 +155,10 @@ public class main extends Application {
         //passing the group with points and edges to canvas
         canvas.getChildren().addAll(group1);
 
-
-        group.getChildren().add(canvas);
-        group.getChildren().add(vBox);
+        group.setCanvas(canvas);
+        //group.getChildren().add(canvas);
+        group.setButtons(vBox);
+        //group.getChildren().add(vBox);
 
         stage.setScene(scene);
         stage.show();
