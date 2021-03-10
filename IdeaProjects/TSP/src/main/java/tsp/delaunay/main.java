@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class main extends Application {
 
 
-
+    MainScene scene;
 
 
     public static void main(String[] args) {
@@ -46,7 +46,7 @@ public class main extends Application {
     public void start(Stage stage) {
 
         Group group = new Group();
-        Scene scene = new Scene(group, 1024, 768);
+        scene = new MainScene(group, 1024, 768);
         // create canvas
         PannableCanvas canvas = new PannableCanvas();
      //   File file= new File("Beispiel1(7).txt");
