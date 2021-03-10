@@ -1,12 +1,9 @@
 package tsp.delaunay;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -18,14 +15,9 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import jdk.internal.event.Event;
-import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
 
-import javax.security.auth.kerberos.KerberosTicket;
-import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -52,16 +44,9 @@ public class main extends Application {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose the Example");
-        File file = fileChooser.showOpenDialog(stage);
+        File file = fileChooser.showOpenDialog(new Popup());
 
-        //Create some Menu for loading the examples
-        Button browse = new Button("Choose file");
-
-        browse.setOnAction(e ->{
-            canvas.getChildren().clear();
-
-            start(stage);
-        });
+        Button browse = getBrowseButton(stage, canvas);
 
 
         Vertex vertex = new Vertex(file);
@@ -125,60 +110,15 @@ public class main extends Application {
         }
 
 
-
-        //Buttons
-        Button button1 = new Button("Calculate MST");
-
-        //MST not correct, just for testing
-        // Animation needed
-        button1.setOnAction(actionEvent -> {
-            SpanningTreeAlgorithm.SpanningTree<DefaultEdge> mst = graph.getMST();
-            for (DefaultEdge edge : mst.getEdges()
-            ) {
-                Point2D source = graph.graph.getEdgeSource(edge);
-                Point2D target = graph.graph.getEdgeTarget(edge);
-
-                Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
-                line.setStrokeWidth(vertex.getRadius()/2);
-                line.setStroke(Color.GRAY);
-                group1.getChildren().add(line);
-
-            }
-
-        });
+        Button button1 = group.createMSTButton(vertex, group1, graph);
 
 
+        Timeline timeline = group.getTimeline(group1, graph, stroke);
 
-        Timeline timeline=new Timeline();
-        final int STARTTIME = 0;
-        System.out.println("STARTTIME "+ graph.getLines().size());
-        final Integer[] length = {STARTTIME};
-        timeline.setCycleCount(Timeline.INDEFINITE);
-
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.4),actionEvent->{
-            length[0]++;
-
-            int i = length[0];
-            group1.getChildren().add(stroke.get(i-1));
-            if(length[0]>=stroke.size()){
-                timeline.stop();
-            }
-
-        }));
-
-        Button button2 = new Button("Triangulation");
-        button2.setOnAction(actionEvent ->{
-            graph.convexHull();
-
-            timeline.playFromStart();
-
-        });
+        Button button2 = group.createTriangulationButton(graph, timeline);
 
 
-
-
-
-        VBox vBox = getButtonBox(browse, button1, button2);
+        VBox vBox = group.getButtonBox(browse, button1, button2);
         //passing the group with points and edges to canvas
         canvas.getChildren().addAll(group1);
 
@@ -194,12 +134,16 @@ public class main extends Application {
 
     }
 
-    private VBox getButtonBox(Button browse, Button button1, Button button2) {
-        VBox vBox = new VBox(browse, button1, button2);
-        vBox.autosize();
-        vBox.setAlignment(Pos.BASELINE_RIGHT);
-        vBox.setSpacing(10);
-        return vBox;
+    private Button getBrowseButton(Stage stage, PannableCanvas canvas) {
+        //Create some Menu for loading the examples
+        Button browse = new Button("Choose file");
+
+        browse.setOnAction(e ->{
+            canvas.getChildren().clear();
+
+            start(stage);
+        });
+        return browse;
     }
 
 
