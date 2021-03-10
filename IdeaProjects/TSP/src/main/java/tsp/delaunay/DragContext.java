@@ -1,4 +1,4 @@
-package tsp_delaunay;
+package tsp.delaunay;
 /**
  * Mouse drag context used for scene and nodes.
  */
