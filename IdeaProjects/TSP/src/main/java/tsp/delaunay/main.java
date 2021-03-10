@@ -147,11 +147,7 @@ public class main extends Application {
         button2.setOnAction(actionEvent -> group1.getChildren().addAll(graph.getGroup()));
 
 
-
-        VBox vBox = new VBox(browse,button1,button2);
-        vBox.autosize();
-        vBox.setAlignment(Pos.BASELINE_RIGHT);
-        vBox.setSpacing(10);
+        VBox vBox = getButtonBox(browse, button1, button2);
         //passing the group with points and edges to canvas
         canvas.getChildren().addAll(group1);
 
@@ -165,6 +161,14 @@ public class main extends Application {
 
 
 
+    }
+
+    private VBox getButtonBox(Button browse, Button button1, Button button2) {
+        VBox vBox = new VBox(browse, button1, button2);
+        vBox.autosize();
+        vBox.setAlignment(Pos.BASELINE_RIGHT);
+        vBox.setSpacing(10);
+        return vBox;
     }
 
 
