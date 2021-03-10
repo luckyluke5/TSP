@@ -1,4 +1,4 @@
-package tsp_delaunay;
+package tsp.delaunay;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -6,15 +6,9 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
@@ -35,13 +29,13 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class main extends Application {
 
 
-
+    MainScene scene;
+    MainGroup group;
 
 
     public static void main(String[] args) {
@@ -51,8 +45,8 @@ public class main extends Application {
     @Override
     public void start(Stage stage) {
 
-        Group group = new Group();
-        Scene scene = new Scene(group, 1024, 768);
+        group = new MainGroup();
+        scene = new MainScene(group, 1024, 768);
         // create canvas
         PannableCanvas canvas = new PannableCanvas();
 
@@ -184,23 +178,28 @@ public class main extends Application {
 
 
 
-
-        VBox vBox = new VBox(browse,button1,button2);
-        vBox.autosize();
-        vBox.setAlignment(Pos.BASELINE_RIGHT);
-        vBox.setSpacing(10);
+        VBox vBox = getButtonBox(browse, button1, button2);
         //passing the group with points and edges to canvas
         canvas.getChildren().addAll(group1);
 
-
-        group.getChildren().add(canvas);
-        group.getChildren().add(vBox);
+        group.setCanvas(canvas);
+        //group.getChildren().add(canvas);
+        group.setButtons(vBox);
+        //group.getChildren().add(vBox);
 
         stage.setScene(scene);
         stage.show();
 
 
 
+    }
+
+    private VBox getButtonBox(Button browse, Button button1, Button button2) {
+        VBox vBox = new VBox(browse, button1, button2);
+        vBox.autosize();
+        vBox.setAlignment(Pos.BASELINE_RIGHT);
+        vBox.setSpacing(10);
+        return vBox;
     }
 
 

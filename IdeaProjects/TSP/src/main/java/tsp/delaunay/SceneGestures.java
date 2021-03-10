@@ -1,4 +1,4 @@
-package tsp_delaunay;
+package tsp.delaunay;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
