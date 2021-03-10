@@ -1,4 +1,4 @@
-package tsp.delaunay;
+package tsp_delaunay;
 
 import javafx.event.EventHandler;
 import javafx.scene.Group;

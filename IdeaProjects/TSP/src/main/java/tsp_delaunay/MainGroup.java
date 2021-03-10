@@ -1,4 +1,4 @@
-package tsp.delaunay;
+package tsp_delaunay;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Group;

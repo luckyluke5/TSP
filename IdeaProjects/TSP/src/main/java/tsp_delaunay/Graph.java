@@ -1,4 +1,4 @@
-package tsp.delaunay;
+package tsp_delaunay;
 
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.scene.Group;

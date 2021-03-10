@@ -1,4 +1,4 @@
-package tsp.delaunay;
+package tsp_delaunay;
 
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import org.jgrapht.graph.DefaultEdge;

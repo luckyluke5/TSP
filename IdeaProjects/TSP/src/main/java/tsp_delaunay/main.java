@@ -1,4 +1,4 @@
-package tsp.delaunay;
+package tsp_delaunay;
 
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
