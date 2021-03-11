@@ -1,4 +1,4 @@
-package tsp_delaunay;
+package tsp.delaunay;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
