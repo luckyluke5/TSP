@@ -15,7 +15,7 @@ tsp_delaunay/PannableCanvas.java
  tsp_delaunay.PannableCanvas
 tsp_delaunay/ModifiedWeightedEdge.java
  tsp_delaunay.ModifiedWeightedEdge
-tsp_delaunay/main.java
- tsp_delaunay.main
 tsp_delaunay/Graph.java
  tsp_delaunay.Graph
+tsp_delaunay/main.java
+ tsp_delaunay.main
