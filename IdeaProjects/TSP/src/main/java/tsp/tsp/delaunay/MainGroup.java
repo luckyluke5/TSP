@@ -18,6 +18,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainGroup extends Group {
@@ -26,13 +27,8 @@ public class MainGroup extends Group {
     private Controller controller;
     private PannableCanvas canvas;
 
-    void initalizeGroup(MainScene scene) {
-        getCanvas().makeSceneGestures(scene);
-        ArrayList<Line> stroke = createStrokes();
-        Group group1 = getCircleGroup();
-        Timeline timeline = getTimeline(group1, getController().getGraph(), stroke);
-        VBox vBox = createButtonBox(getCanvas(), group1, timeline, getController());
-        setButtons(vBox);
+    public MainGroup() {
+        setCanvas(new PannableCanvas());
     }
 
     ArrayList<Line> createStrokes() {
@@ -48,6 +44,23 @@ public class MainGroup extends Group {
 
         }
         return stroke;
+    }
+
+    void initalizeGroup(MainScene scene) {
+
+        File file = Controller.getFileWithFileLoaderPopUp();
+
+        getController().setFile(file);
+
+
+        getCanvas().setCanvasScale(getController().getVertex(), scene);
+
+        getCanvas().makeSceneGestures(scene);
+        ArrayList<Line> stroke = this.createStrokes();
+        Group group1 = getCircleGroup();
+        Timeline timeline = getTimeline(group1, getController().getGraph(), stroke);
+        VBox vBox = createButtonBox(getCanvas(), group1, timeline, getController());
+        setButtons(vBox);
     }
 
     Group getGroupWithCirclesAndTransform(ArrayList<Circle> circles) {

@@ -26,15 +26,9 @@ public class main extends Application {
 
         scene = new MainScene(group, 1024, 768);
         // create canvas
-
-        group.setCanvas(new PannableCanvas());
-
-        File file = scene.getFileWithFileLoaderPopUp();
-
-        group.getController().setFile(file);
+        group.initalizeGroup(scene);
 
 
-        group.getCanvas().setCanvasScale(group.getController().getVertex(), scene);
 
 
 
@@ -43,7 +37,6 @@ public class main extends Application {
         //dragg with left mouse
 
 
-        group.initalizeGroup(scene);
 
 
         //passing the group with points and edges to canvas

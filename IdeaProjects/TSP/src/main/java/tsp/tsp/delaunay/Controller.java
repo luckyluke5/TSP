@@ -1,6 +1,8 @@
 package tsp.delaunay;
 
 import javafx.application.Application;
+import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -11,6 +13,13 @@ public class Controller {
     private Application application;
     private Vertex vertex;
     private Graph graph;
+
+    static File getFileWithFileLoaderPopUp() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose the Example");
+        File file = fileChooser.showOpenDialog(new Popup());
+        return file;
+    }
 
     public Vertex getVertex() {
         return vertex;
@@ -31,7 +40,7 @@ public class Controller {
     }
 
     public void setFile(File file) {
-        vertex = new Vertex(file);
+        vertex = FileReader.readPointsFromFile(file);
         graph = new Graph(getVertex());
         graph.convexHull();
     }
