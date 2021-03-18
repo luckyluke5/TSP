@@ -7,12 +7,14 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
-public class Controller {
+public class MainController {
 
 
     private Application application;
     private Vertex vertex;
     private Graph graph;
+    MainScene mainScene;
+    MainGroup mainGroup;
 
     static File getFileWithFileLoaderPopUp() {
         FileChooser fileChooser = new FileChooser();
@@ -25,7 +27,7 @@ public class Controller {
         return vertex;
     }
 
-    public Controller(Application application) {
+    public MainController(Application application) {
         this.application = application;
     }
 

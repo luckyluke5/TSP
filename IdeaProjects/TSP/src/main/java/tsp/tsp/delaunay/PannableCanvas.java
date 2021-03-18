@@ -35,14 +35,14 @@ public class PannableCanvas extends BorderPane {
 
     }
 
-    ArrayList<Circle> createPointsWithNodeGesture(Controller controller) {
+    ArrayList<Circle> createPointsWithNodeGesture(MainController mainController) {
         ArrayList<Circle> circles = new ArrayList<>();
 
         // create sample nodes which can be dragged
         NodeGestures nodeGestures = new NodeGestures(this);
 
-        for (Point2D point : controller.getVertex().points) {
-            Circle cir = new Circle(point.getX(), point.getY(), controller.getVertex().getRadius());
+        for (Point2D point : mainController.getVertex().points) {
+            Circle cir = new Circle(point.getX(), point.getY(), mainController.getVertex().getRadius());
 
             cir.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
             cir.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());

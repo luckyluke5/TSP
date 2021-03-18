@@ -23,9 +23,10 @@ import java.util.ArrayList;
 
 public class MainGroup extends Group {
 
-    Pane buttonsBox;
-    private Controller controller;
+    private Pane buttonsBox;
     private PannableCanvas canvas;
+
+    private MainController mainController;
 
     public MainGroup() {
         setCanvas(new PannableCanvas());
@@ -48,7 +49,7 @@ public class MainGroup extends Group {
 
     void initalizeGroup(MainScene scene) {
 
-        File file = Controller.getFileWithFileLoaderPopUp();
+        File file = MainController.getFileWithFileLoaderPopUp();
 
         getController().setFile(file);
 
@@ -70,17 +71,17 @@ public class MainGroup extends Group {
 
         group1.getChildren().addAll(circles);
         group1.getTransforms().add(new Translate(-getController().getVertex().min_x(), -getController().getVertex().min_y()));
-        group1.getTransforms().add(new Scale(0.9, -0.9, getController().getVertex().min_x() + getController().getVertex().x_diff() / 2, controller.getVertex().min_y() + controller.getVertex().y_diff() / 2));
+        group1.getTransforms().add(new Scale(0.9, -0.9, getController().getVertex().min_x() + getController().getVertex().x_diff() / 2, mainController.getVertex().min_y() + mainController.getVertex().y_diff() / 2));
         return group1;
     }
 
-    public Controller getController() {
+    public MainController getController() {
 
-        return controller;
+        return mainController;
     }
 
-    public void setController(Controller controller) {
-        this.controller = controller;
+    public void setController(MainController mainController) {
+        this.mainController = mainController;
     }
 
     public PannableCanvas getCanvas() {
@@ -154,22 +155,22 @@ public class MainGroup extends Group {
         return timeline;
     }
 
-    private Button createBrowseButton(PannableCanvas canvas, Controller controller) {
+    private Button createBrowseButton(PannableCanvas canvas, MainController mainController) {
         //Create some Menu for loading the examples
         Button browse = new Button("Choose file");
 
         browse.setOnAction(e -> {
             canvas.getChildren().clear();
 
-            controller.newInstance();
+            mainController.newInstance();
         });
         return browse;
     }
 
-    private VBox createButtonBox(PannableCanvas canvas, Group group1, Timeline timeline, Controller controller) {
-        Button browse = createBrowseButton(canvas, controller);
-        Button mstButton = createMSTButton(controller.getVertex(), group1, controller.getGraph());
-        Button triangulationButton = createTriangulationButton(controller.getGraph(), timeline);
+    private VBox createButtonBox(PannableCanvas canvas, Group group1, Timeline timeline, MainController mainController) {
+        Button browse = createBrowseButton(canvas, mainController);
+        Button mstButton = createMSTButton(mainController.getVertex(), group1, mainController.getGraph());
+        Button triangulationButton = createTriangulationButton(mainController.getGraph(), timeline);
         VBox vBox1 = new VBox(browse, mstButton, triangulationButton);
         vBox1.autosize();
         vBox1.setAlignment(Pos.BASELINE_RIGHT);
