@@ -47,23 +47,6 @@ public class MainGroup extends Group {
         return stroke;
     }
 
-    void initalizeGroup(MainScene scene) {
-
-        File file = MainController.getFileWithFileLoaderPopUp();
-
-        getController().setFile(file);
-
-
-        getCanvas().setCanvasScale(getController().getVertex(), scene);
-
-        getCanvas().makeSceneGestures(scene);
-        ArrayList<Line> stroke = this.createStrokes();
-        Group group1 = getCircleGroup();
-        Timeline timeline = getTimeline(group1, getController().getGraph(), stroke);
-        VBox vBox = createButtonBox(getCanvas(), group1, timeline, getController());
-        setButtons(vBox);
-    }
-
     Group getGroupWithCirclesAndTransform(ArrayList<Circle> circles) {
         Group group1 = new Group();
 
@@ -135,7 +118,7 @@ public class MainGroup extends Group {
         return button2;
     }
 
-    private Timeline getTimeline(Group group1, Graph graph, ArrayList<Line> stroke) {
+    public Timeline getTimeline(Group group1, Graph graph, ArrayList<Line> stroke) {
         Timeline timeline = new Timeline();
         final int STARTTIME = 0;
         System.out.println("STARTTIME " + graph.getLines().size());
@@ -167,7 +150,7 @@ public class MainGroup extends Group {
         return browse;
     }
 
-    private VBox createButtonBox(PannableCanvas canvas, Group group1, Timeline timeline, MainController mainController) {
+    public VBox createButtonBox(PannableCanvas canvas, Group group1, Timeline timeline, MainController mainController) {
         Button browse = createBrowseButton(canvas, mainController);
         Button mstButton = createMSTButton(mainController.getVertex(), group1, mainController.getGraph());
         Button triangulationButton = createTriangulationButton(mainController.getGraph(), timeline);
@@ -179,7 +162,7 @@ public class MainGroup extends Group {
         return vBox;
     }
 
-    private Group getCircleGroup() {
+    public Group getCircleGroup() {
         ArrayList<Circle> circles = getCanvas().createPointsWithNodeGesture(getController());
         Group group1 = getGroupWithCirclesAndTransform(circles);
         getCanvas().getChildren().addAll(group1);

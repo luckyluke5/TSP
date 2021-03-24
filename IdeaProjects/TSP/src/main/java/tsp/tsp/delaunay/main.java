@@ -15,7 +15,9 @@ public class main extends Application {
 
         MainController mainController = new MainController(this);
 
-        stage.setScene(mainController.getMainSceneController().mainScene());
+        mainController.setSceneToStage(stage);
+
+        // stage.setScene(mainController.getMainSceneController().mainScene());
         stage.show();
 
 

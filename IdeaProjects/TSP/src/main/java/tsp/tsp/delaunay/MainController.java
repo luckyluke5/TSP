@@ -22,8 +22,6 @@ public class MainController {
         mainSceneController = new MainSceneController(this);
 
 
-
-
     }
 
     static File getFileWithFileLoaderPopUp() {
@@ -42,7 +40,7 @@ public class MainController {
         return vertex;
     }
 
-    void newInstance(){
+    void newInstance() {
 
         try {
             application.start(new Stage());
@@ -59,9 +57,14 @@ public class MainController {
     }
 
 
-
     Graph getGraph() {
 
         return graph;
+    }
+
+    public void setSceneToStage(Stage stage) {
+        mainSceneController.setSceneToStage(stage);
+
+
     }
 }
