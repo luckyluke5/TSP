@@ -9,12 +9,22 @@ import java.io.File;
 
 public class MainController {
 
+    MainSceneController mainSceneController;
+
 
     private Application application;
     private Vertex vertex;
     private Graph graph;
-    MainScene mainScene;
-    MainGroup mainGroup;
+
+    public MainController(Application application) {
+        this.application = application;
+
+        mainSceneController = new MainSceneController(this);
+
+
+
+
+    }
 
     static File getFileWithFileLoaderPopUp() {
         FileChooser fileChooser = new FileChooser();
@@ -23,12 +33,13 @@ public class MainController {
         return file;
     }
 
-    public Vertex getVertex() {
-        return vertex;
+    MainSceneController getMainSceneController() {
+
+        return mainSceneController;
     }
 
-    public MainController(Application application) {
-        this.application = application;
+    public Vertex getVertex() {
+        return vertex;
     }
 
     void newInstance(){
