@@ -10,11 +10,20 @@ import java.util.ArrayList;
 
 public class MainGroupController {
     MainGroup mainGroup;
+    PannableCanvasController pannableCanvasController;
+    MainController mainController;
 
-    public MainGroupController(MainController mainController) {
+    public MainGroupController(MainController _mainController) {
+        mainController=_mainController;
         MainGroup group = new MainGroup();
-        group.setController(mainController);
+        group.setMainController(mainController);
+        group.setMainGroupController(this);
         mainGroup=group;
+
+
+
+        pannableCanvasController=new PannableCanvasController();
+        setCanvas(pannableCanvasController.getCanvas());
     }
 
     public MainGroup getMainGroup() {
@@ -30,13 +39,24 @@ public class MainGroupController {
         mainGroup.getController().setFile(file);
 
 
-        mainGroup.getCanvas().setCanvasScale(mainGroup.getController().getVertex(), mainScene);
+        getCanvas().setCanvasScale(mainGroup.getController().getVertex(), mainScene);
 
-        mainGroup.getCanvas().makeSceneGestures(mainScene);
-        ArrayList<Line> stroke = mainGroup.createStrokes();
+        getCanvas().makeSceneGestures(mainScene);
+        ArrayList<Line> stroke = PannableCanvasController.createStrokes(this);
         Group group1 = mainGroup.getCircleGroup();
         Timeline timeline = mainGroup.getTimeline(group1, mainGroup.getController().getGraph(), stroke);
-        VBox vBox = mainGroup.createButtonBox(mainGroup.getCanvas(), group1, timeline, mainGroup.getController());
+        VBox vBox = mainGroup.createButtonBox(getCanvas(), group1, timeline, mainGroup.getController());
         mainGroup.setButtons(vBox);
     }
+
+    public PannableCanvas getCanvas() {
+        return pannableCanvasController.getCanvas();
+    }
+
+    public void setCanvas(PannableCanvas canvas) {
+
+        mainGroup.getChildren().add(canvas);
+    }
+
+
 }

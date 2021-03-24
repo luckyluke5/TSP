@@ -18,34 +18,20 @@ import org.jgrapht.graph.DefaultEdge;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.io.File;
 import java.util.ArrayList;
 
 public class MainGroup extends Group {
 
     private Pane buttonsBox;
-    private PannableCanvas canvas;
+    //private PannableCanvas canvas;
 
     private MainController mainController;
 
-    public MainGroup() {
-        setCanvas(new PannableCanvas());
-    }
+    private MainGroupController mainGroupController;
 
-    ArrayList<Line> createStrokes() {
-        ArrayList<Line> stroke = new ArrayList();
-        for (Line2D line : getController().getGraph().getLines()) {
-
-            Line l = new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
-
-            l.setStrokeWidth(getController().getVertex().getRadius() / 2);
-            l.strokeWidthProperty().bind(getCanvas().revScale);
-            l.setStroke(Color.ORANGE.deriveColor(1, 1, 1, 0.5));
-            stroke.add(l);
-
-        }
-        return stroke;
-    }
+//    public MainGroup() {
+//        setCanvas(new PannableCanvas());
+//    }
 
     Group getGroupWithCirclesAndTransform(ArrayList<Circle> circles) {
         Group group1 = new Group();
@@ -63,18 +49,18 @@ public class MainGroup extends Group {
         return mainController;
     }
 
-    public void setController(MainController mainController) {
+    public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
 
-    public PannableCanvas getCanvas() {
-        return canvas;
-    }
+//    public PannableCanvas getCanvas() {
+//        return canvas;
+//    }
 
-    public void setCanvas(PannableCanvas _canvas) {
-        canvas = _canvas;
-        this.getChildren().add(canvas);
-    }
+//    public void setCanvas(PannableCanvas _canvas) {
+//        canvas = _canvas;
+//        this.getChildren().add(canvas);
+//    }
 
     public void setButtons(Pane vBox) {
 
@@ -163,9 +149,13 @@ public class MainGroup extends Group {
     }
 
     public Group getCircleGroup() {
-        ArrayList<Circle> circles = getCanvas().createPointsWithNodeGesture(getController());
+        ArrayList<Circle> circles = mainGroupController.getCanvas().createPointsWithNodeGesture(getController());
         Group group1 = getGroupWithCirclesAndTransform(circles);
-        getCanvas().getChildren().addAll(group1);
+        mainGroupController.getCanvas().getChildren().addAll(group1);
         return group1;
+    }
+
+    public void setMainGroupController(MainGroupController mainGroupController) {
+        this.mainGroupController = mainGroupController;
     }
 }
