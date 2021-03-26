@@ -4,12 +4,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class MainGroupController {
     //MainGroup mainGroup;
@@ -75,13 +70,6 @@ public class MainGroupController {
             mainController.newInstance();
         });
         return browse;
-    }
-
-    public static void setButtons(MainGroup group, Pane vBox) {
-
-        //group.buttonsBox = vBox;
-
-        group.getChildren().add(vBox);
     }
 
     public PannableCanvasController getPannableCanvasController() {

@@ -2,6 +2,7 @@ package tsp.delaunay;
 
 import javafx.animation.Timeline;
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 
@@ -38,7 +39,14 @@ public class MainGroup extends Group {
         Group group1 = PannableCanvasController.getCircleGroup(mainScene.mainGroup);
         Timeline timeline = PannableCanvasController.getTimeline(group1, mainScene.mainGroup.getMainController().getGraph(), stroke);
         VBox vBox = MainGroupController.createButtonBox(mainScene.mainGroup, canvas, group1, timeline, mainScene.mainGroup.getMainController());
-        MainGroupController.setButtons(mainScene.mainGroup, vBox);
+        mainScene.mainGroup.setButtons(vBox);
+    }
+
+    public void setButtons(Pane vBox) {
+
+        //group.buttonsBox = vBox;
+
+        getChildren().add(vBox);
     }
 
     public MainGroupController getMainGroupController() {
