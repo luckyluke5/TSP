@@ -9,7 +9,7 @@ import java.io.File;
 
 public class MainController {
 
-    MainSceneController mainSceneController;
+    //MainSceneController mainSceneController;
 
 
     private Application application;
@@ -19,7 +19,7 @@ public class MainController {
     public MainController(Application application) {
         this.application = application;
 
-        mainSceneController = new MainSceneController(this);
+        //mainSceneController = new MainSceneController(this);
 
 
     }
@@ -31,10 +31,6 @@ public class MainController {
         return file;
     }
 
-    MainSceneController getMainSceneController() {
-
-        return mainSceneController;
-    }
 
     public Vertex getVertex() {
         return vertex;
@@ -50,6 +46,7 @@ public class MainController {
 
     }
 
+
     public void setFile(File file) {
         vertex = FileReader.readPointsFromFile(file);
         graph = new Graph(getVertex());
@@ -62,9 +59,6 @@ public class MainController {
         return graph;
     }
 
-    public void setSceneToStage(Stage stage) {
-        mainSceneController.setSceneToStage(stage);
 
 
-    }
 }

@@ -15,11 +15,23 @@ import java.util.ArrayList;
 
 public class PannableCanvas extends BorderPane {
 
+    PannableCanvasController pannableCanvasController;
+
+    public PannableCanvasController getPannableCanvasController() {
+        return pannableCanvasController;
+    }
+
+    public void setPannableCanvasController(PannableCanvasController pannableCanvasController) {
+        this.pannableCanvasController = pannableCanvasController;
+    }
+
     DoubleProperty myScale = new SimpleDoubleProperty(1.0);
     DoubleProperty revScale = new SimpleDoubleProperty(1.0);
 
 
     public PannableCanvas () {
+
+        pannableCanvasController=new PannableCanvasController();
 
         // add scale transform
         scaleXProperty().bind(myScale);
@@ -92,5 +104,9 @@ public class PannableCanvas extends BorderPane {
         NumberBinding scale = Bindings.min(scale_height, scale_width);
 
         setScale(scale.getValue().doubleValue());
+    }
+
+    public void setMainController(MainController mainController) {
+        pannableCanvasController.setMainController(mainController);
     }
 }

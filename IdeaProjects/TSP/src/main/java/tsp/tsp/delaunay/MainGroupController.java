@@ -12,11 +12,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class MainGroupController {
-    MainGroup mainGroup;
+    //MainGroup mainGroup;
     PannableCanvasController pannableCanvasController;
     MainController mainController;
 
-    public MainGroupController(MainController _mainController) {
+    public MainGroupController() {
+    }
+    /*public MainGroupController(MainController _mainController) {
         mainController=_mainController;
         MainGroup group = new MainGroup();
         group.setMainController(mainController);
@@ -26,8 +28,8 @@ public class MainGroupController {
 
 
         pannableCanvasController=new PannableCanvasController();
-        setCanvas(pannableCanvasController.getCanvas());
-    }
+        //setCanvas(pannableCanvasController.getCanvas());
+    }*/
 
     static Button createMSTButton(Vertex vertex, Group group1, Graph graph) {
         //Buttons
@@ -82,37 +84,36 @@ public class MainGroupController {
         group.getChildren().add(vBox);
     }
 
-    public MainGroup getMainGroup() {
-        return mainGroup;
+    public PannableCanvasController getPannableCanvasController() {
+        return pannableCanvasController;
     }
+
+    public void setPannableCanvasController(PannableCanvasController pannableCanvasController) {
+        this.pannableCanvasController = pannableCanvasController;
+    }
+
+    /*public MainGroup getMainGroup() {
+        return mainGroup;
+    }*/
 
     
 
-    public void initalizeGroup(MainScene mainScene) {
-
-        File file = MainController.getFileWithFileLoaderPopUp();
-
-        mainGroup.getMainController().setFile(file);
-
-
-        getCanvas().setCanvasScale(mainGroup.getMainController().getVertex(), mainScene);
-
-        getCanvas().makeSceneGestures(mainScene);
-        ArrayList<Line> stroke = PannableCanvasController.createStrokes(this);
-        Group group1 = PannableCanvasController.getCircleGroup(mainGroup);
-        Timeline timeline = PannableCanvasController.getTimeline(group1, mainGroup.getMainController().getGraph(), stroke);
-        VBox vBox = createButtonBox(mainGroup, getCanvas(), group1, timeline, mainGroup.getMainController());
-        setButtons(mainGroup, vBox);
-    }
-
-    public PannableCanvas getCanvas() {
+    /*public PannableCanvas getCanvas() {
         return pannableCanvasController.getCanvas();
-    }
+    }*/
 
-    public void setCanvas(PannableCanvas canvas) {
+    /*public void setCanvas(PannableCanvas canvas) {
 
         mainGroup.getChildren().add(canvas);
+    }*/
+
+
+    public MainController getMainController() {
+        return mainController;
     }
 
+    public void setMainController(MainController mainController) {
+        this.mainController=mainController;
 
+    }
 }

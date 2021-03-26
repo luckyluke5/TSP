@@ -6,9 +6,29 @@ import javafx.stage.Stage;
 public class MainSceneController {
 
     MainGroupController mainGroupController;
-    MainScene mainScene;
+    //MainScene mainScene;
+    MainController mainController;
 
-    public MainSceneController(MainController mainController) {
+    public MainSceneController() {
+    }
+
+    public MainController getMainController() {
+        return mainController;
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController=mainController;
+    }
+
+    public MainGroupController getMainGroupController() {
+        return mainGroupController;
+    }
+
+
+    public void setMainGroupController(MainGroupController mainGroupController) {
+        this.mainGroupController = mainGroupController;
+    }
+/*    private MainSceneController(MainController mainController) {
 
         mainGroupController=new MainGroupController(mainController);
 
@@ -18,13 +38,12 @@ public class MainSceneController {
         mainGroupController.initalizeGroup(mainScene);
 
 
-    }
+    }*/
 
-    public MainScene mainScene() {
+
+
+    /*public MainScene mainScene() {
         return mainScene;
-    }
+    }*/
 
-    public void setSceneToStage(Stage stage) {
-        stage.setScene(mainScene);
-    }
 }

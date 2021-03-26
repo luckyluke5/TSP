@@ -17,24 +17,29 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class PannableCanvasController {
-    PannableCanvas canvas;
 
-    public PannableCanvasController() {
+    MainController mainController;
+
+
+
+    //PannableCanvas canvas;
+
+    /*public PannableCanvasController() {
         canvas=new PannableCanvas();
-    }
+    }*/
 
-    public PannableCanvasController(PannableCanvas canvas) {
+    /*public PannableCanvasController(PannableCanvas canvas) {
         this.canvas = canvas;
-    }
+    }*/
 
-    static ArrayList<Line> createStrokes(MainGroupController mainGroupController) {
+    static ArrayList<Line> createStrokes(MainGroupController mainGroupController, PannableCanvas canvas) {
         ArrayList<Line> stroke = new ArrayList();
         for (Line2D line : mainGroupController.mainController.getGraph().getLines()) {
 
             Line l = new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
 
             l.setStrokeWidth(mainGroupController.mainController.getVertex().getRadius() / 2);
-            l.strokeWidthProperty().bind(mainGroupController.getCanvas().revScale);
+            l.strokeWidthProperty().bind(canvas.revScale);
             l.setStroke(Color.ORANGE.deriveColor(1, 1, 1, 0.5));
             stroke.add(l);
 
@@ -69,14 +74,14 @@ public class PannableCanvasController {
 
         group1.getChildren().addAll(circles);
         group1.getTransforms().add(new Translate(-group.getMainController().getVertex().min_x(), -group.getMainController().getVertex().min_y()));
-        group1.getTransforms().add(new Scale(0.9, -0.9, group.getMainController().getVertex().min_x() + group.getMainController().getVertex().x_diff() / 2, group.mainController.getVertex().min_y() + group.mainController.getVertex().y_diff() / 2));
+        group1.getTransforms().add(new Scale(0.9, -0.9, group.getMainController().getVertex().min_x() + group.getMainController().getVertex().x_diff() / 2, group.getMainController().getVertex().min_y() + group.getMainController().getVertex().y_diff() / 2));
         return group1;
     }
 
     public static Group getCircleGroup(MainGroup group) {
-        ArrayList<Circle> circles = group.mainGroupController.getCanvas().createPointsWithNodeGesture(group.getMainController());
+        ArrayList<Circle> circles = group.pannableCanvas.createPointsWithNodeGesture(group.getMainController());
         Group group1 = getGroupWithCirclesAndTransform(group, circles);
-        group.mainGroupController.getCanvas().getChildren().addAll(group1);
+        group.pannableCanvas.getChildren().addAll(group1);
         return group1;
     }
 
@@ -101,7 +106,11 @@ public class PannableCanvasController {
         timeline.playFromStart();
     }
 
-    public PannableCanvas getCanvas() {
+    /*public PannableCanvas getCanvas() {
         return canvas;
+    }*/
+
+    public void setMainController(MainController mainController) {
+        this.mainController=mainController;
     }
 }

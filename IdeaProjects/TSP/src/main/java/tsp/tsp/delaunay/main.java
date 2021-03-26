@@ -15,9 +15,15 @@ public class main extends Application {
 
         MainController mainController = new MainController(this);
 
-        mainController.setSceneToStage(stage);
+        MainGroup mainGroup=new MainGroup();
+        MainScene mainScene=new MainScene(mainGroup,1024, 768);
 
-        // stage.setScene(mainController.getMainSceneController().mainScene());
+        mainScene.setMainController(mainController);
+
+        MainGroup.initalizeGroup(mainGroup.getMainGroupController(), mainGroup.pannableCanvas, mainScene);
+
+        stage.setScene(mainScene);
+
         stage.show();
 
 
