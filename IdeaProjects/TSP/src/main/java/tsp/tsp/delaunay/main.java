@@ -20,7 +20,7 @@ public class main extends Application {
 
         mainScene.setMainController(mainController);
 
-        MainGroup.initalizeGroup(mainGroup.getMainGroupController(), mainGroup.pannableCanvas, mainScene);
+        mainGroup.initalizeGroup(mainScene);
 
         stage.setScene(mainScene);
 
