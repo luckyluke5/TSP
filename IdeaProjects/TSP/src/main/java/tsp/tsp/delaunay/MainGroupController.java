@@ -8,29 +8,15 @@ public class MainGroupController {
     PannableCanvasController pannableCanvasController;
     MainController mainController;
 
-    public MainGroupController() {
-    }
-
     void pushBrowseButton(PannableCanvas canvas) {
         canvas.getChildren().clear();
 
         mainController.newInstance();
     }
-    /*public MainGroupController(MainController _mainController) {
-        mainController=_mainController;
-        MainGroup group = new MainGroup();
-        group.setMainController(mainController);
-        group.setMainGroupController(this);
-        mainGroup=group;
 
-
-
-        pannableCanvasController=new PannableCanvasController();
-        //setCanvas(pannableCanvasController.getCanvas());
-    }*/
 
     void pushTriangulationButton(Timeline timeline) {
-        PannableCanvasController.showTriangulationAnimation(mainController.getGraph(), timeline);
+        pannableCanvasController.showTriangulationAnimation(timeline);
     }
 
     public PannableCanvasController getPannableCanvasController() {
@@ -41,7 +27,6 @@ public class MainGroupController {
         this.pannableCanvasController = pannableCanvasController;
     }
 
-
     public MainController getMainController() {
         return mainController;
     }
@@ -51,7 +36,7 @@ public class MainGroupController {
 
     }
 
-    void pushMSTbutton(Group group1) {
-        PannableCanvasController.addMSTtoGroup(mainController.getVertex(), group1, mainController.getGraph());
+    void pushMSTButton(Group group1) {
+        PannableCanvas.addMSTtoGroup(pannableCanvasController.getMainController(), group1);
     }
 }

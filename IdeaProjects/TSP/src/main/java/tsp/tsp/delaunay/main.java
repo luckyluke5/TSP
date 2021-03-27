@@ -20,7 +20,7 @@ public class main extends Application {
 
         mainScene.setMainController(mainController);
 
-        mainGroup.initalizeGroup(mainScene);
+        mainGroup.initializeGroup(mainScene);
 
         stage.setScene(mainScene);
 
