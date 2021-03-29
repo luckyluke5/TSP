@@ -6,8 +6,6 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
-import java.io.File;
-
 public class MainGroup extends Group implements MainGroupInterface {
 
     public MainGroupController mainGroupController;
@@ -29,20 +27,14 @@ public class MainGroup extends Group implements MainGroupInterface {
 
     public void initializeGroup(MainScene mainScene) {
 
-        File file = MainController.getFileWithFileLoaderPopUp();
-        getMainController().setFile(file);
+        mainGroupController.loadNewFile();
+
 
         pannableCanvas.initializePannableCanvas(mainScene);
 
         createButtonBox(pannableCanvas.timeline);
 
 
-
-    }
-
-    public MainController getMainController() {
-
-        return mainGroupController.getMainController();
     }
 
     public void createButtonBox(Timeline timeline) {
@@ -81,10 +73,10 @@ public class MainGroup extends Group implements MainGroupInterface {
         return button2;
     }
 
-    public void setMainController(MainController mainController) {
+    /*public void setMainController(MainController mainController) {
         mainGroupController.setMainController(mainController);
         pannableCanvas.setMainController(mainController);
-    }
+    }*/
 
     public MainGroupController getMainGroupController() {
         return mainGroupController;

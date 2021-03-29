@@ -12,7 +12,7 @@ public class MainController {
     //MainSceneController mainSceneController;
 
 
-    private Application application;
+    private final Application application;
     private Vertex vertex;
     private Graph graph;
 
@@ -24,11 +24,11 @@ public class MainController {
 
     }
 
-    static File getFileWithFileLoaderPopUp() {
+    void getFileWithFileLoaderPopUp() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose the Example");
         File file = fileChooser.showOpenDialog(new Popup());
-        return file;
+        setFile(file);
     }
 
 

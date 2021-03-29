@@ -14,7 +14,8 @@ public class MainSceneController {
     }
 
     public void setMainController(MainController mainController) {
-        this.mainController=mainController;
+        this.mainController = mainController;
+        mainGroupController.setMainController(mainController);
     }
 
     public MainGroupController getMainGroupController() {

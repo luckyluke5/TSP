@@ -33,6 +33,7 @@ public class MainGroupController {
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+        pannableCanvasController.setMainController(mainController);
 
     }
 
@@ -42,5 +43,9 @@ public class MainGroupController {
 
     public void setView(MainGroupInterface group) {
         view = group;
+    }
+
+    void loadNewFile() {
+        mainController.getFileWithFileLoaderPopUp();
     }
 }

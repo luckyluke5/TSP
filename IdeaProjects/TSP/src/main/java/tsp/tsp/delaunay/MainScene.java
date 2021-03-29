@@ -41,9 +41,9 @@ public class MainScene extends Scene implements MainSceneInterface {
 
 
 
-    public void setMainController(MainController mainController) {
+    /*public void setMainController(MainController mainController) {
         mainSceneController.setMainController(mainController);
 
         mainGroup.setMainController(mainController);
-    }
+    }*/
 }

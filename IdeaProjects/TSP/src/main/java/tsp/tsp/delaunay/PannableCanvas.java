@@ -100,9 +100,9 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         setTranslateY(getTranslateY() - y);
     }
 
-    public void setMainController(MainController mainController) {
+    /*public void setMainController(MainController mainController) {
         controller.setMainController(mainController);
-    }
+    }*/
 
     void initializePannableCanvas(MainScene mainScene) {
         setCanvasScale(mainScene);
@@ -147,7 +147,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     }
 
     public void getCircleGroup() {
-        ArrayList<Circle> circles = createPointsWithNodeGesture(controller.getMainController());
+        ArrayList<Circle> circles = createPointsWithNodeGesture();
         circleGroup = getGroupWithCirclesAndTransform(circles);
         getChildren().addAll(circleGroup);
 
@@ -173,14 +173,14 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     }
 
-    ArrayList<Circle> createPointsWithNodeGesture(MainController mainController) {
+    ArrayList<Circle> createPointsWithNodeGesture() {
         ArrayList<Circle> circles = new ArrayList<>();
 
         // create sample nodes which can be dragged
         NodeGestures nodeGestures = new NodeGestures(this);
 
-        for (Point2D point : mainController.getVertex().points) {
-            Circle cir = new Circle(point.getX(), point.getY(), mainController.getVertex().getRadius());
+        for (Point2D point : controller.getMainController().getVertex().points) {
+            Circle cir = new Circle(point.getX(), point.getY(), controller.getMainController().getVertex().getRadius());
 
             cir.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
             cir.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
