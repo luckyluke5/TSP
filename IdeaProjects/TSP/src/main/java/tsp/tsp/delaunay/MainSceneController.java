@@ -4,6 +4,7 @@ public class MainSceneController {
 
     MainGroupController mainGroupController;
     MainController mainController;
+    private MainSceneInterface mainScene;
 
     public MainSceneController() {
     }
@@ -25,4 +26,7 @@ public class MainSceneController {
         this.mainGroupController = mainGroupController;
     }
 
+    public void setScene(MainSceneInterface mainScene) {
+        this.mainScene = mainScene;
+    }
 }

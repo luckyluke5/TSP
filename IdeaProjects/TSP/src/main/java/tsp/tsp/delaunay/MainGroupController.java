@@ -1,15 +1,15 @@
 package tsp.delaunay;
 
 import javafx.animation.Timeline;
-import javafx.scene.Group;
 
 public class MainGroupController {
     //MainGroup mainGroup;
     PannableCanvasController pannableCanvasController;
     MainController mainController;
+    private MainGroupInterface view;
 
-    void pushBrowseButton(PannableCanvas canvas) {
-        canvas.getChildren().clear();
+    void pushBrowseButton() {
+        pannableCanvasController.clearOldInstance();
 
         mainController.newInstance();
     }
@@ -36,7 +36,11 @@ public class MainGroupController {
 
     }
 
-    void pushMSTButton(Group group1) {
-        PannableCanvas.addMSTtoGroup(pannableCanvasController.getMainController(), group1);
+    void pushMSTButton() {
+        pannableCanvasController.pushMSTButton();
+    }
+
+    public void setView(MainGroupInterface group) {
+        view = group;
     }
 }

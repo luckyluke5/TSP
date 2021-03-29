@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 
-public class MainGroup extends Group {
+public class MainGroup extends Group implements MainGroupInterface {
 
     public MainGroupController mainGroupController;
     //MainController mainController;
@@ -18,6 +18,7 @@ public class MainGroup extends Group {
 
     public MainGroup() {
         mainGroupController = new MainGroupController();
+        mainGroupController.setView(this);
 
         pannableCanvas = new PannableCanvas();
 
@@ -33,7 +34,7 @@ public class MainGroup extends Group {
 
         pannableCanvas.initializePannableCanvas(mainScene);
 
-        createButtonBox(pannableCanvas.circleGroup, pannableCanvas.timeline);
+        createButtonBox(pannableCanvas.timeline);
 
 
 
@@ -44,9 +45,9 @@ public class MainGroup extends Group {
         return mainGroupController.getMainController();
     }
 
-    public void createButtonBox(Group group1, Timeline timeline) {
+    public void createButtonBox(Timeline timeline) {
         Button browse = createBrowseButton();
-        Button mstButton = createMSTButton(group1);
+        Button mstButton = createMSTButton();
         Button triangulationButton = createTriangulationButton(timeline);
         buttonBox = new VBox(browse, mstButton, triangulationButton);
         getChildren().add(buttonBox);
@@ -60,17 +61,17 @@ public class MainGroup extends Group {
         //Create some Menu for loading the examples
         Button browse = new Button("Choose file");
 
-        browse.setOnAction(e -> mainGroupController.pushBrowseButton(pannableCanvas));
+        browse.setOnAction(e -> mainGroupController.pushBrowseButton());
         return browse;
     }
 
-    Button createMSTButton(Group group1) {
+    Button createMSTButton() {
         //Buttons
         Button button1 = new Button("Calculate MST");
 
         //MST not correct, just for testing
         // Animation needed
-        button1.setOnAction(actionEvent -> mainGroupController.pushMSTButton(group1));
+        button1.setOnAction(actionEvent -> mainGroupController.pushMSTButton());
         return button1;
     }
 

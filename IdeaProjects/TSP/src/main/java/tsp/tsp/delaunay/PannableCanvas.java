@@ -25,7 +25,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 
-public class PannableCanvas extends BorderPane {
+public class PannableCanvas extends BorderPane implements PannableCanvasInterface {
 
     public Timeline timeline;
     public Group circleGroup;
@@ -37,6 +37,7 @@ public class PannableCanvas extends BorderPane {
     public PannableCanvas() {
 
         controller = new PannableCanvasController();
+        controller.setView(this);
 
         // add scale transform
         scaleXProperty().bind(myScale);
@@ -45,11 +46,26 @@ public class PannableCanvas extends BorderPane {
         // logging
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             System.out.println(
-                    "canvas event: " + ( ((event.getSceneX() - getBoundsInParent().getMinX()) / getScale()) + ", scale: " + getScale())
+                    "canvas event: " + (((event.getSceneX() - getBoundsInParent().getMinX()) / getScale()) + ", scale: " + getScale())
             );
-            System.out.println( "canvas bounds: " + getBoundsInParent());
+            System.out.println("canvas bounds: " + getBoundsInParent());
         });
 
+    }
+
+    public void showMST() {
+        SpanningTreeAlgorithm.SpanningTree<DefaultEdge> mst = controller.getMainController().getGraph().getMST();
+        for (DefaultEdge edge : mst.getEdges()
+        ) {
+            Point2D source = controller.getMainController().getGraph().graph.getEdgeSource(edge);
+            Point2D target = controller.getMainController().getGraph().graph.getEdgeTarget(edge);
+
+            Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
+            line.setStrokeWidth(controller.getMainController().getVertex().getRadius() / 2);
+            line.setStroke(Color.GRAY);
+            circleGroup.getChildren().add(line);
+
+        }
     }
 
     public double getScale() {
@@ -63,21 +79,6 @@ public class PannableCanvas extends BorderPane {
     public void setScale(double scale) {
         myScale.set(scale);
         revScale.set(3 / scale);
-    }
-
-    static void addMSTtoGroup(MainController mainController, Group group1) {
-        SpanningTreeAlgorithm.SpanningTree<DefaultEdge> mst = mainController.getGraph().getMST();
-        for (DefaultEdge edge : mst.getEdges()
-        ) {
-            Point2D source = mainController.getGraph().graph.getEdgeSource(edge);
-            Point2D target = mainController.getGraph().graph.getEdgeTarget(edge);
-
-            Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
-            line.setStrokeWidth(mainController.getVertex().getRadius() / 2);
-            line.setStroke(Color.GRAY);
-            group1.getChildren().add(line);
-
-        }
     }
 
     public PannableCanvasController getController() {
@@ -199,5 +200,9 @@ public class PannableCanvas extends BorderPane {
         group1.getTransforms().add(new Translate(-controller.getMainController().getVertex().min_x(), -controller.getMainController().getVertex().min_y()));
         group1.getTransforms().add(new Scale(0.9, -0.9, controller.getMainController().getVertex().min_x() + controller.getMainController().getVertex().x_diff() / 2, controller.getMainController().getVertex().min_y() + controller.getMainController().getVertex().y_diff() / 2));
         return group1;
+    }
+
+    public void clear() {
+        getChildren().clear();
     }
 }
