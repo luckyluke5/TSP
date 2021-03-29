@@ -6,11 +6,6 @@ import javafx.stage.Stage;
 public class main extends Application {
 
 
-
-
-    private MainController mainController;
-
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -18,22 +13,17 @@ public class main extends Application {
     @Override
     public void start(Stage stage) {
 
-        mainController =new MainController(this);
+        MainController mainController = new MainController(this);
 
-        MainGroup group = new MainGroup();
-        group.setController(mainController);
+        MainGroup mainGroup=new MainGroup();
+        MainScene mainScene=new MainScene(mainGroup,1024, 768);
 
-        mainController.mainGroup=group;
+        mainScene.setMainController(mainController);
 
+        mainGroup.initializeGroup(mainScene);
 
-        MainScene scene = new MainScene(group, 1024, 768);
+        stage.setScene(mainScene);
 
-        mainController.mainScene=scene;
-
-        group.initalizeGroup(scene);
-
-
-        stage.setScene(scene);
         stage.show();
 
 

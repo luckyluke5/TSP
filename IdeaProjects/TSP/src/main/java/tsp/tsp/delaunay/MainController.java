@@ -9,12 +9,20 @@ import java.io.File;
 
 public class MainController {
 
+    //MainSceneController mainSceneController;
+
 
     private Application application;
     private Vertex vertex;
     private Graph graph;
-    MainScene mainScene;
-    MainGroup mainGroup;
+
+    public MainController(Application application) {
+        this.application = application;
+
+        //mainSceneController = new MainSceneController(this);
+
+
+    }
 
     static File getFileWithFileLoaderPopUp() {
         FileChooser fileChooser = new FileChooser();
@@ -23,15 +31,12 @@ public class MainController {
         return file;
     }
 
+
     public Vertex getVertex() {
         return vertex;
     }
 
-    public MainController(Application application) {
-        this.application = application;
-    }
-
-    void newInstance(){
+    void newInstance() {
 
         try {
             application.start(new Stage());
@@ -41,6 +46,7 @@ public class MainController {
 
     }
 
+
     public void setFile(File file) {
         vertex = FileReader.readPointsFromFile(file);
         graph = new Graph(getVertex());
@@ -48,9 +54,11 @@ public class MainController {
     }
 
 
-
     Graph getGraph() {
 
         return graph;
     }
+
+
+
 }
