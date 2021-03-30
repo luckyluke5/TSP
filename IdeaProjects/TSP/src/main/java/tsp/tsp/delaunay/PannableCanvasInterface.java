@@ -5,4 +5,5 @@ public interface PannableCanvasInterface {
 
     void showMST();
 
+    void playTimelineFromStart();
 }

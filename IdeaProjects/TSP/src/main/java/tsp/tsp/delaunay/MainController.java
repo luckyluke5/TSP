@@ -16,6 +16,9 @@ public class MainController {
     private Vertex vertex;
     private Graph graph;
 
+    PannableCanvasControllerInterface pannableCanvasController;
+
+
     public MainController(Application application) {
         this.application = application;
 
@@ -47,7 +50,7 @@ public class MainController {
     }
 
 
-    public void setFile(File file) {
+    void setFile(File file) {
         vertex = FileReader.readPointsFromFile(file);
         graph = new Graph(getVertex());
         graph.convexHull();
@@ -60,5 +63,21 @@ public class MainController {
     }
 
 
+    void showMST() {
+        pannableCanvasController.pushMSTButton();
+    }
 
+    void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
+        this.pannableCanvasController = pannableCanvasController;
+    }
+
+    void showTriangulation() {
+        pannableCanvasController.showTriangulationAnimation();
+    }
+
+    public void showNewInstanceWindow() {
+        pannableCanvasController.clearOldInstance();
+
+        newInstance();
+    }
 }

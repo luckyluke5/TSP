@@ -24,6 +24,7 @@ public class main extends Application {
 
         mainGroup.initializeGroup(mainScene);
 
+
         stage.setScene(mainScene);
 
         stage.show();

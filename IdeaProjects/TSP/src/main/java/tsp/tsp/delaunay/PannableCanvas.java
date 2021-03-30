@@ -53,6 +53,10 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     }
 
+    public void playTimelineFromStart() {
+        timeline.playFromStart();
+    }
+
     public void showMST() {
         SpanningTreeAlgorithm.SpanningTree<DefaultEdge> mst = controller.getMainController().getGraph().getMST();
         for (DefaultEdge edge : mst.getEdges()
