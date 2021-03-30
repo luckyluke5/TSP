@@ -1,30 +1,19 @@
 package tsp.delaunay;
 
-import javafx.animation.Timeline;
-import javafx.scene.Group;
-
 public class MainGroupController {
     //MainGroup mainGroup;
     PannableCanvasController pannableCanvasController;
     MainController mainController;
+    private MainGroupInterface view;
+    private ButtonBoxController buttonBoxController;
 
-    void pushBrowseButton(PannableCanvas canvas) {
-        canvas.getChildren().clear();
-
-        mainController.newInstance();
-    }
-
-
-    void pushTriangulationButton(Timeline timeline) {
-        pannableCanvasController.showTriangulationAnimation(timeline);
-    }
 
     public PannableCanvasController getPannableCanvasController() {
         return pannableCanvasController;
     }
 
-    public void setPannableCanvasController(PannableCanvasController pannableCanvasController) {
-        this.pannableCanvasController = pannableCanvasController;
+    public void setPannableCanvasController(PannableCanvasController controller) {
+        pannableCanvasController = controller;
     }
 
     public MainController getMainController() {
@@ -33,10 +22,20 @@ public class MainGroupController {
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+        pannableCanvasController.setMainController(mainController);
+        buttonBoxController.setMainController(mainController);
 
     }
 
-    void pushMSTButton(Group group1) {
-        PannableCanvas.addMSTtoGroup(pannableCanvasController.getMainController(), group1);
+    public void setView(MainGroupInterface group) {
+        view = group;
+    }
+
+    void loadNewFile() {
+        mainController.getFileWithFileLoaderPopUp();
+    }
+
+    public void setButtonBoxController(ButtonBoxController controller) {
+        buttonBoxController = controller;
     }
 }

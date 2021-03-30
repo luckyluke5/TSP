@@ -1,23 +1,35 @@
 package tsp.delaunay;
 
-import javafx.animation.Timeline;
-
-public class PannableCanvasController {
+public class PannableCanvasController implements PannableCanvasControllerInterface {
 
     private MainController mainController;
+    private PannableCanvasInterface view;
 
-    void showTriangulationAnimation(Timeline timeline) {
+    public void showTriangulationAnimation() {
         getMainController().getGraph().convexHull();
        // getMainController().getGraph().MST_TSP();
 
-        timeline.playFromStart();
+        view.playTimelineFromStart();
     }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+        mainController.setPannableCanvasController(this);
     }
 
     public MainController getMainController() {
         return mainController;
+    }
+
+    public void setView(PannableCanvasInterface pannableCanvas) {
+        view = pannableCanvas;
+    }
+
+    public void clearOldInstance() {
+        view.clear();
+    }
+
+    public void pushMSTButton() {
+        view.showMST();
     }
 }

@@ -25,7 +25,7 @@ import javafx.geometry.Point2D;
 import java.util.ArrayList;
 
 
-public class PannableCanvas extends BorderPane {
+public class PannableCanvas extends BorderPane implements PannableCanvasInterface {
 
     public Timeline timeline;
     public Group circleGroup;
@@ -37,6 +37,7 @@ public class PannableCanvas extends BorderPane {
     public PannableCanvas() {
 
         controller = new PannableCanvasController();
+        controller.setView(this);
 
         // add scale transform
         scaleXProperty().bind(myScale);
@@ -45,11 +46,30 @@ public class PannableCanvas extends BorderPane {
         // logging
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             System.out.println(
-                    "canvas event: " + ( ((event.getSceneX() - getBoundsInParent().getMinX()) / getScale()) + ", scale: " + getScale())
+                    "canvas event: " + (((event.getSceneX() - getBoundsInParent().getMinX()) / getScale()) + ", scale: " + getScale())
             );
-            System.out.println( "canvas bounds: " + getBoundsInParent());
+            System.out.println("canvas bounds: " + getBoundsInParent());
         });
 
+    }
+
+    public void playTimelineFromStart() {
+        timeline.playFromStart();
+    }
+
+    public void showMST() {
+        SpanningTreeAlgorithm.SpanningTree<DefaultEdge> mst = controller.getMainController().getGraph().getMST();
+        for (DefaultEdge edge : mst.getEdges()
+        ) {
+            Point2D source = controller.getMainController().getGraph().graph.getEdgeSource(edge);
+            Point2D target = controller.getMainController().getGraph().graph.getEdgeTarget(edge);
+
+            Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
+            line.setStrokeWidth(controller.getMainController().getVertex().getRadius() / 2);
+            line.setStroke(Color.GRAY);
+            circleGroup.getChildren().add(line);
+
+        }
     }
 
     public double getScale() {
@@ -63,21 +83,6 @@ public class PannableCanvas extends BorderPane {
     public void setScale(double scale) {
         myScale.set(scale);
         revScale.set(3 / scale);
-    }
-
-    static void addMSTtoGroup(MainController mainController, Group group1) {
-        SpanningTreeAlgorithm.SpanningTree<DefaultEdge> mst = mainController.getGraph().getMST();
-        for (DefaultEdge edge : mst.getEdges()
-        ) {
-            Point2D source = mainController.getGraph().graph.getEdgeSource(edge);
-            Point2D target = mainController.getGraph().graph.getEdgeTarget(edge);
-
-            Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
-            line.setStrokeWidth(mainController.getVertex().getRadius() / 2);
-            line.setStroke(Color.GRAY);
-            group1.getChildren().add(line);
-
-        }
     }
 
     public PannableCanvasController getController() {
@@ -99,9 +104,9 @@ public class PannableCanvas extends BorderPane {
         setTranslateY(getTranslateY() - y);
     }
 
-    public void setMainController(MainController mainController) {
+    /*public void setMainController(MainController mainController) {
         controller.setMainController(mainController);
-    }
+    }*/
 
     void initializePannableCanvas(MainScene mainScene) {
         setCanvasScale(mainScene);
@@ -153,7 +158,7 @@ public class PannableCanvas extends BorderPane {
     }
 
     public void getCircleGroup() {
-        ArrayList<Circle> circles = createPointsWithNodeGesture(controller.getMainController());
+        ArrayList<Circle> circles = createPointsWithNodeGesture();
         circleGroup = getGroupWithCirclesAndTransform(circles);
         getChildren().addAll(circleGroup);
 
@@ -178,14 +183,14 @@ public class PannableCanvas extends BorderPane {
 
     }
 
-    ArrayList<Circle> createPointsWithNodeGesture(MainController mainController) {
+    ArrayList<Circle> createPointsWithNodeGesture() {
         ArrayList<Circle> circles = new ArrayList<>();
 
         // create sample nodes which can be dragged
         NodeGestures nodeGestures = new NodeGestures(this);
 
-        for (Point2D point : mainController.getVertex().points) {
-            Circle cir = new Circle(point.getX(), point.getY(), mainController.getVertex().getRadius());
+        for (Point2D point : controller.getMainController().getVertex().points) {
+            Circle cir = new Circle(point.getX(), point.getY(), controller.getMainController().getVertex().getRadius());
 
             cir.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
             cir.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
@@ -205,5 +210,9 @@ public class PannableCanvas extends BorderPane {
         group1.getTransforms().add(new Translate(-controller.getMainController().getVertex().min_x(), -controller.getMainController().getVertex().min_y()));
         group1.getTransforms().add(new Scale(0.9, -0.9, controller.getMainController().getVertex().min_x() + controller.getMainController().getVertex().x_diff() / 2, controller.getMainController().getVertex().min_y() + controller.getMainController().getVertex().y_diff() / 2));
         return group1;
+    }
+
+    public void clear() {
+        getChildren().clear();
     }
 }

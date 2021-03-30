@@ -15,12 +15,15 @@ public class main extends Application {
 
         MainController mainController = new MainController(this);
 
-        MainGroup mainGroup=new MainGroup();
-        MainScene mainScene=new MainScene(mainGroup,1024, 768);
+        MainGroup mainGroup = new MainGroup();
+        MainScene mainScene = new MainScene(mainGroup, 1024, 768);
 
-        mainScene.setMainController(mainController);
+        mainScene.mainSceneController.setMainController(mainController);
+
+        //mainScene.setMainController(mainController);
 
         mainGroup.initializeGroup(mainScene);
+
 
         stage.setScene(mainScene);
 
