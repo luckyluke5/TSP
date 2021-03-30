@@ -51,6 +51,7 @@ public class MainController {
         vertex = FileReader.readPointsFromFile(file);
         graph = new Graph(getVertex());
         graph.convexHull();
+
     }
 
 

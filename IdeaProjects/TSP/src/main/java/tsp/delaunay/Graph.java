@@ -1,13 +1,16 @@
 package tsp.delaunay;
 
 import javafx.scene.Group;
+import org.graalvm.compiler.lir.LIRInstruction;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
+import org.jgrapht.alg.tour.TwoApproxMetricTSP;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
+import javafx.geometry.Point2D;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -17,13 +20,10 @@ import java.util.stream.Collectors;
 public class Graph {
     DefaultUndirectedWeightedGraph<Point2D, DefaultEdge> graph;
     ArrayList<Point2D> points;
-    ArrayList<DefaultEdge> edges = new ArrayList<>();
     Vertex vertex;
 
     ArrayList<Point2D> hull = new ArrayList<>();
 
-
-    ArrayList<Line2D> lines = new ArrayList<>();
     Group group = new Group();
 
     public Graph(Vertex vertex) {
@@ -99,15 +99,12 @@ public class Graph {
 
         // Print Result
         int size = hull.size();
-        // Add last line
-        lines.add(new Line2D.Double(hull.get(0),hull.get(size-1)));
         graph.addEdge(hull.get(0),hull.get(size-1) );
         //Add the lines of convex Hull
         for(int i=0;i< hull.size()-1;i++){
-            Point2D temp1 = new Point2D.Double(hull.get(i).getX(),hull.get(i).getY());
-            Point2D temp2 = new Point2D.Double(hull.get(i+1).getX(),hull.get(i+1).getY());
+            Point2D temp1 = new Point2D(hull.get(i).getX(),hull.get(i).getY());
+            Point2D temp2 = new Point2D(hull.get(i+1).getX(),hull.get(i+1).getY());
 
-            lines.add(new Line2D.Double(temp1,temp2));
             graph.addEdge(temp1,temp2);
 
         }
@@ -116,7 +113,7 @@ public class Graph {
 
 
 
-
+/*
     public void triangulate(){
 
         for (int i=0;i<points.size()-3;i++){
@@ -178,7 +175,7 @@ public class Graph {
           //  System.out.println("LOG: Determinante: "+ isPointInsideCircle(a,b,c,d));
         }
 
-    }
+    }*/
 
     public boolean isPointInsideCircle(Point2D a, Point2D b, Point2D c, Point2D d){
         double matrix[][] = new double[3][3];
@@ -205,18 +202,31 @@ public class Graph {
         }else return false;
     }
 
+    public void MST_TSP(){
+        DefaultUndirectedWeightedGraph tempGraph = new DefaultUndirectedWeightedGraph(DefaultEdge.class);
+
+        for (int i = 0; i < points.size(); i++) {
+            for (int j = i + 1; j < points.size(); j++) {
+                DefaultEdge edge = graph.addEdge(points.get(i), points.get(j));
+                graph.setEdgeWeight(edge, points.get(i).distance(points.get(j)));
+            }
+
+            GraphPath<Point2D, DefaultEdge> mstTour = new TwoApproxMetricTSP<Point2D, DefaultEdge>().getTour(tempGraph);
+
+           for(DefaultEdge edge : mstTour.getEdgeList()){
+               Point2D source = mstTour.getGraph().getEdgeSource(edge);
+               Point2D target = mstTour.getGraph().getEdgeTarget(edge);
+
+               graph.addEdge(source,target);
+               graph.setEdgeWeight(source,target,source.distance(target));
+
+           }
 
 
-    public ArrayList<Line2D> getLines() {
-
-        return lines;
-
+        }
     }
 
-    public Group getGroup(){
-        getLines();
-        return this.group;
-    }
+
     public SpanningTreeAlgorithm.SpanningTree<DefaultEdge> getMST() {
         return new KruskalMinimumSpanningTree<>(graph).getSpanningTree();
     }

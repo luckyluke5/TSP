@@ -8,6 +8,7 @@ public class PannableCanvasController {
 
     void showTriangulationAnimation(Timeline timeline) {
         getMainController().getGraph().convexHull();
+       // getMainController().getGraph().MST_TSP();
 
         timeline.playFromStart();
     }

@@ -21,7 +21,7 @@ import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.graph.DefaultEdge;
 
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
+import javafx.geometry.Point2D;
 import java.util.ArrayList;
 
 
@@ -130,11 +130,18 @@ public class PannableCanvas extends BorderPane {
         scene.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
     }
 
+    /**createStrokes:
+     *
+     *Iterate Edges in Graph to create drawable lines
+     * Also used for the animation
+     */
+
     void createStrokes() {
         strokes = new ArrayList();
-        for (Line2D line : controller.getMainController().getGraph().getLines()) {
+        Graph graph = controller.getMainController().getGraph();
+        for (DefaultEdge line : graph.graph.edgeSet()) {
 
-            Line l = new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+            Line l = new Line(graph.graph.getEdgeSource(line).getX(),graph.graph.getEdgeSource(line).getY(), graph.graph.getEdgeTarget(line).getX(), graph.graph.getEdgeTarget(line).getY());
 
             l.setStrokeWidth(controller.getMainController().getVertex().getRadius() / 2);
             l.strokeWidthProperty().bind(revScale);
@@ -155,7 +162,6 @@ public class PannableCanvas extends BorderPane {
     public void getTimeline() {
         timeline = new Timeline();
         final int STARTTIME = 0;
-        System.out.println("STARTTIME " + controller.getMainController().getGraph().getLines().size());
         Integer[] length = {STARTTIME};
         timeline.setCycleCount(Timeline.INDEFINITE);
 
