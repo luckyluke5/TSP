@@ -51,7 +51,7 @@ public class ButtonBox extends VBox implements ButtonBoxInterface {
 
     }
 
-    public ButtonBoxController getController() {
+    public ButtonBoxControllerInterface getController() {
         return controller;
     }
 }

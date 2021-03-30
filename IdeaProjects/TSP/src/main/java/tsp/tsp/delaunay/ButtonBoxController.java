@@ -1,6 +1,6 @@
 package tsp.delaunay;
 
-public class ButtonBoxController {
+public class ButtonBoxController implements ButtonBoxControllerInterface {
     MainController mainController;
     ButtonBoxInterface view;
 

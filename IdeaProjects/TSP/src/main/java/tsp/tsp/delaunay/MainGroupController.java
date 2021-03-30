@@ -1,18 +1,18 @@
 package tsp.delaunay;
 
-public class MainGroupController {
+public class MainGroupController implements MainGroupControllerInterface {
     //MainGroup mainGroup;
-    PannableCanvasController pannableCanvasController;
+    PannableCanvasControllerInterface pannableCanvasController;
     MainController mainController;
     private MainGroupInterface view;
-    private ButtonBoxController buttonBoxController;
+    private ButtonBoxControllerInterface buttonBoxController;
 
 
-    public PannableCanvasController getPannableCanvasController() {
+    public PannableCanvasControllerInterface getPannableCanvasController() {
         return pannableCanvasController;
     }
 
-    public void setPannableCanvasController(PannableCanvasController controller) {
+    public void setPannableCanvasController(PannableCanvasControllerInterface controller) {
         pannableCanvasController = controller;
     }
 
@@ -35,7 +35,7 @@ public class MainGroupController {
         mainController.getFileWithFileLoaderPopUp();
     }
 
-    public void setButtonBoxController(ButtonBoxController controller) {
+    public void setButtonBoxController(ButtonBoxControllerInterface controller) {
         buttonBoxController = controller;
     }
 }

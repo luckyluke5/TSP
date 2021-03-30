@@ -85,7 +85,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         revScale.set(3 / scale);
     }
 
-    public PannableCanvasController getController() {
+    public PannableCanvasControllerInterface getController() {
         return controller;
     }
 

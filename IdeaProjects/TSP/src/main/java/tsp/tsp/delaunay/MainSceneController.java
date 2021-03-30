@@ -2,7 +2,7 @@ package tsp.delaunay;
 
 public class MainSceneController {
 
-    MainGroupController mainGroupController;
+    MainGroupControllerInterface mainGroupController;
     MainController mainController;
     private MainSceneInterface mainScene;
 
@@ -18,12 +18,12 @@ public class MainSceneController {
         mainGroupController.setMainController(mainController);
     }
 
-    public MainGroupController getMainGroupController() {
+    public MainGroupControllerInterface getMainGroupController() {
         return mainGroupController;
     }
 
 
-    public void setMainGroupController(MainGroupController mainGroupController) {
+    public void setMainGroupController(MainGroupControllerInterface mainGroupController) {
         this.mainGroupController = mainGroupController;
     }
 

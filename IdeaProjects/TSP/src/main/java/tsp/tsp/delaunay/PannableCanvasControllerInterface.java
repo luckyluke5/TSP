@@ -1,6 +1,6 @@
 package tsp.delaunay;
 
-public interface PannableCanvasControllerInterface {
+public interface PannableCanvasControllerInterface extends Controller {
     void pushMSTButton();
 
     void showTriangulationAnimation();

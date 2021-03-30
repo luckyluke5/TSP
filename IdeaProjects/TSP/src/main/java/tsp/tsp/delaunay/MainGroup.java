@@ -33,7 +33,7 @@ public class MainGroup extends Group implements MainGroupInterface {
 
     }
 
-    public MainGroupController getMainGroupController() {
+    public MainGroupControllerInterface getMainGroupController() {
         return mainGroupController;
     }
 
