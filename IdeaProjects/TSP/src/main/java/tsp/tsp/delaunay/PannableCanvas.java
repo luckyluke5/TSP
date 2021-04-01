@@ -18,7 +18,6 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
-import org.jgrapht.graph.DefaultEdge;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -27,12 +26,18 @@ import java.util.ArrayList;
 
 public class PannableCanvas extends BorderPane implements PannableCanvasInterface {
 
-    public Timeline timeline;
-    public Group circleGroup;
     DoubleProperty myScale = new SimpleDoubleProperty(1.0);
     DoubleProperty revScale = new SimpleDoubleProperty(1.0);
-    private PannableCanvasController controller;
+    private final Group inTourLines;
+    private final Group strokesGroup;
+    // das ist nicht die main group die in der scene verankert ist
+    // sondern die erste gruppe, an der circle, strokes und tourLines enthalten ist
+    private final Group mainGroup;
+    private Timeline timeline;
+    private Group circleGroup;
     private ArrayList<Line> strokes;
+
+    private PannableCanvasController controller;
 
     public PannableCanvas() {
 
@@ -51,25 +56,15 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
             System.out.println("canvas bounds: " + getBoundsInParent());
         });
 
-    }
+        mainGroup = new Group();
+        inTourLines = new Group();
+        circleGroup = new Group();
+        strokesGroup = new Group();
 
-    public void playTimelineFromStart() {
-        timeline.playFromStart();
-    }
+        getChildren().add(mainGroup);
+        mainGroup.getChildren().add(strokesGroup);
 
-    public void showMST() {
-        SpanningTreeAlgorithm.SpanningTree<DefaultEdge> mst = controller.getMainController().getGraph().getMST();
-        for (DefaultEdge edge : mst.getEdges()
-        ) {
-            Point2D source = controller.getMainController().getGraph().graph.getEdgeSource(edge);
-            Point2D target = controller.getMainController().getGraph().graph.getEdgeTarget(edge);
 
-            Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
-            line.setStrokeWidth(controller.getMainController().getVertex().getRadius() / 2);
-            line.setStroke(Color.GRAY);
-            circleGroup.getChildren().add(line);
-
-        }
     }
 
     public double getScale() {
@@ -83,6 +78,49 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     public void setScale(double scale) {
         myScale.set(scale);
         revScale.set(3 / scale);
+    }
+
+    public void playTimelineFromStart() {
+        timeline.playFromStart();
+    }
+
+    @Override
+    public void showTourUpdate() {
+        ArrayList<Line2D> lines = controller.getTourLines();
+
+        lines.forEach(line -> {
+
+            Line javaFXLine = convertLine(line);
+            javaFXLine.setStrokeWidth(getDefaultLineStrokeWidth());
+            javaFXLine.setStroke(Color.GREEN);
+            inTourLines.getChildren().add(javaFXLine);
+        });
+        mainGroup.getChildren().add(inTourLines);
+
+
+    }
+
+    private Line convertLine(Line2D line) {
+        return new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+    }
+
+    private double getDefaultLineStrokeWidth() {
+        return controller.getMainController().getVertex().getRadius() / 2;
+    }
+
+    public void showMST() {
+        SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> mst = controller.getMainController().getGraph().getMST();
+        for (ModifiedWeightedEdge edge : mst.getEdges()
+        ) {
+            Point2D source = controller.getMainController().getGraph().graph.getEdgeSource(edge);
+            Point2D target = controller.getMainController().getGraph().graph.getEdgeTarget(edge);
+
+            Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
+            line.setStrokeWidth(getDefaultLineStrokeWidth());
+            line.setStroke(Color.GRAY);
+            circleGroup.getChildren().add(line);
+
+        }
     }
 
     public PannableCanvasControllerInterface getController() {
@@ -114,6 +152,8 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         createStrokes();
         getCircleGroup();
         getTimeline();
+
+        transformGroup(mainGroup);
     }
 
     void setCanvasScale(Scene scene) {
@@ -139,9 +179,9 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         strokes = new ArrayList();
         for (Line2D line : controller.getMainController().getGraph().getLines()) {
 
-            Line l = new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+            Line l = convertLine(line);
 
-            l.setStrokeWidth(controller.getMainController().getVertex().getRadius() / 2);
+            l.setStrokeWidth(getDefaultLineStrokeWidth());
             l.strokeWidthProperty().bind(revScale);
             l.setStroke(Color.ORANGE.deriveColor(1, 1, 1, 0.5));
             strokes.add(l);
@@ -152,8 +192,9 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     public void getCircleGroup() {
         ArrayList<Circle> circles = createPointsWithNodeGesture();
-        circleGroup = getGroupWithCirclesAndTransform(circles);
-        getChildren().addAll(circleGroup);
+        circleGroup = getGroupWithCircles(circles);
+
+        mainGroup.getChildren().add(circleGroup);
 
     }
 
@@ -168,7 +209,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
             length[0]++;
 
             int i = length[0];
-            circleGroup.getChildren().add(strokes.get(i - 1));
+            mainGroup.getChildren().add(strokes.get(i - 1));
             if (length[0] >= strokes.size()) {
                 timeline.stop();
             }
@@ -195,14 +236,18 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         return circles;
     }
 
-    Group getGroupWithCirclesAndTransform(ArrayList<Circle> circles) {
+    private void transformGroup(Group group1) {
+        group1.getTransforms().add(new Translate(-controller.getMainController().getVertex().min_x(), -controller.getMainController().getVertex().min_y()));
+        group1.getTransforms().add(new Scale(0.9, -0.9, controller.getMainController().getVertex().min_x() + controller.getMainController().getVertex().x_diff() / 2, controller.getMainController().getVertex().min_y() + controller.getMainController().getVertex().y_diff() / 2));
+    }
+
+    Group getGroupWithCircles(ArrayList<Circle> circles) {
         Group group1 = new Group();
 
         //Create group with cirles to add to canvas
 
         group1.getChildren().addAll(circles);
-        group1.getTransforms().add(new Translate(-controller.getMainController().getVertex().min_x(), -controller.getMainController().getVertex().min_y()));
-        group1.getTransforms().add(new Scale(0.9, -0.9, controller.getMainController().getVertex().min_x() + controller.getMainController().getVertex().x_diff() / 2, controller.getMainController().getVertex().min_y() + controller.getMainController().getVertex().y_diff() / 2));
+        //transformGroup(group1);
         return group1;
     }
 

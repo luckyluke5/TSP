@@ -1,21 +1,23 @@
 package tsp.delaunay;
 
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+public class ModifiedWeightedEdge extends DefaultWeightedEdge {
 
-public class ModifiedWeightedEdge extends DefaultEdge {
-
+    boolean inTour;
 
     public ModifiedWeightedEdge() {
-        super();
+        inTour = false;
 
     }
 
+    public boolean isInTour() {
+        return inTour;
+    }
+
+    public void setInTour(boolean inTour) {
+        this.inTour = inTour;
+    }
 
 
 }

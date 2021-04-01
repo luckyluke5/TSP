@@ -14,7 +14,7 @@ public class MainController {
 
     private final Application application;
     private Vertex vertex;
-    private Graph graph;
+    private Instance graph;
 
     PannableCanvasControllerInterface pannableCanvasController;
 
@@ -36,7 +36,7 @@ public class MainController {
 
 
     public Vertex getVertex() {
-        return vertex;
+        return graph.getVertex();
     }
 
     void newInstance() {
@@ -52,19 +52,19 @@ public class MainController {
 
     void setFile(File file) {
         vertex = FileReader.readPointsFromFile(file);
-        graph = new Graph(getVertex());
+        graph = new Instance(vertex);
         graph.convexHull();
     }
 
 
-    Graph getGraph() {
+    Instance getGraph() {
 
         return graph;
     }
 
 
     void showMST() {
-        pannableCanvasController.pushMSTButton();
+        pannableCanvasController.showMST();
     }
 
     void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
@@ -75,9 +75,24 @@ public class MainController {
         pannableCanvasController.showTriangulationAnimation();
     }
 
+    void showTourUpdate() {
+        pannableCanvasController.showTourUpdate();
+    }
+
     public void showNewInstanceWindow() {
         pannableCanvasController.clearOldInstance();
 
         newInstance();
+    }
+
+    void computeShortTour() {
+
+    }
+
+    void makeTwoOptOptimization() {
+
+        TwoOptSolver solver = new TwoOptSolver(graph.graph);
+        solver.towOptForNonIntersectingEdges();
+
     }
 }
