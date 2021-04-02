@@ -54,6 +54,8 @@ public class MainController {
         vertex = FileReader.readPointsFromFile(file);
         graph = new Instance(vertex);
         graph.convexHull();
+        graph.triangulate();
+        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
     }
 
 
