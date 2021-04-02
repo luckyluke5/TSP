@@ -1,6 +1,7 @@
 package tsp.delaunay;
 
-import java.awt.geom.Point2D;
+import javafx.geometry.Point2D;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class FileReader {
                     int point_id = Integer.parseInt(scanner.next());
                     double x = Double.parseDouble(scanner.next());
                     double y = Double.parseDouble(scanner.next());
-                    points.add(new Point2D.Double(x, y));
+                    points.add(new Point2D(x, y));
                 } catch (Exception e) {
                     System.out.println("Es gibt eine Zeile in dem File die man nicht lesen kann.");
 

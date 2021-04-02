@@ -1,5 +1,6 @@
 package tsp.delaunay;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
@@ -11,7 +12,6 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.MaskSubgraph;
 
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -83,6 +83,28 @@ public class Instance {
     }
 
     // Prints convex hull of a set of n points.
+
+    public void triangulate() {
+        DelaunayTriangulator delaunayTriangulator = new DelaunayTriangulator(getPoints());
+        delaunayTriangulator.triangulate();
+        for (int i = 0; i < delaunayTriangulator.getTriangles().size(); i++) {
+            Triangle2D triangle = delaunayTriangulator.getTriangles().get(i);
+            Point2D a = triangle.a;
+            Point2D b = triangle.b;
+            Point2D c = triangle.c;
+
+            ModifiedWeightedEdge ab = graph.addEdge(a, b);
+            //graph.setEdgeWeight(ab,a.distance(b));
+            ModifiedWeightedEdge bc = graph.addEdge(b, c);
+            // graph.setEdgeWeight(bc,b.distance(c));
+            ModifiedWeightedEdge ac = graph.addEdge(a, c);
+            // graph.setEdgeWeight(ac,a.distance(c));
+
+        }
+
+    }
+
+
     public void convexHull() {
 
         int n = getPoints().size();

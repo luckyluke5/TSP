@@ -1,8 +1,8 @@
 package tsp.delaunay;
 
 
-import java.awt.geom.Point2D;
-import java.io.File;
+import javafx.geometry.Point2D;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
@@ -42,20 +42,19 @@ public class Vertex {
         return points.stream().max(Comparator.comparing(Point2D::getY)).orElseThrow(NoSuchElementException::new).getY();
     }
 
-    public double x_diff(){
-        return  this.max_x() - this.min_x();
-    }
-
-    public double y_diff(){
-        return this.max_y() - this.min_y();
-    }
-
     //radius for vertecies and lines width
-    public double getRadius(){
-        double diff = Math.min(this.x_diff(), this.y_diff());
-        return diff/factor *2;
+    public double getRadius() {
+        double diff = Math.min(x_diff(), y_diff());
+        return diff / factor * 2;
     }
 
+    public double x_diff() {
+        return max_x() - min_x();
+    }
+
+    public double y_diff() {
+        return max_y() - min_y();
+    }
 
 
 }
