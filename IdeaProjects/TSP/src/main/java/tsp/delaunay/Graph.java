@@ -6,6 +6,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.tour.TwoApproxMetricTSP;
+import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
@@ -33,8 +34,7 @@ public class Graph {
             graph.addVertex(point);
         }
         points= vertex.points;
-        //triangulate();
-        //convexHull(points, points.size());
+
 
     }
 
@@ -48,8 +48,28 @@ public class Graph {
         return (val > 0)? 1: 2; // clock or counterclock wise
     }
 
-    // Prints convex hull of a set of n points.
-    public void convexHull(){
+
+    public void triangulate(){
+        DelaunayTriangulator delaunayTriangulator = new DelaunayTriangulator(points);
+        delaunayTriangulator.triangulate();
+        for(int i =0; i<delaunayTriangulator.getTriangles().size();i++){
+            Triangle2D triangle = delaunayTriangulator.getTriangles().get(i);
+            Point2D a = triangle.a;
+            Point2D b = triangle.b;
+            Point2D c = triangle.c;
+
+            DefaultEdge ab = graph.addEdge(a,b);
+            //graph.setEdgeWeight(ab,a.distance(b));
+            DefaultEdge bc = graph.addEdge(b,c);
+           // graph.setEdgeWeight(bc,b.distance(c));
+            DefaultEdge ac = graph.addEdge(a,c);
+           // graph.setEdgeWeight(ac,a.distance(c));
+
+        }
+
+    }
+
+   /*public void convexHull() {
 
         int  n = this.points.size();
 
@@ -111,7 +131,7 @@ public class Graph {
 
     }
 
-
+*/
 
 /*
     public void triangulate(){
@@ -202,29 +222,6 @@ public class Graph {
         }else return false;
     }
 
-    public void MST_TSP(){
-        DefaultUndirectedWeightedGraph tempGraph = new DefaultUndirectedWeightedGraph(DefaultEdge.class);
-
-        for (int i = 0; i < points.size(); i++) {
-            for (int j = i + 1; j < points.size(); j++) {
-                DefaultEdge edge = graph.addEdge(points.get(i), points.get(j));
-                graph.setEdgeWeight(edge, points.get(i).distance(points.get(j)));
-            }
-
-            GraphPath<Point2D, DefaultEdge> mstTour = new TwoApproxMetricTSP<Point2D, DefaultEdge>().getTour(tempGraph);
-
-           for(DefaultEdge edge : mstTour.getEdgeList()){
-               Point2D source = mstTour.getGraph().getEdgeSource(edge);
-               Point2D target = mstTour.getGraph().getEdgeTarget(edge);
-
-               graph.addEdge(source,target);
-               graph.setEdgeWeight(source,target,source.distance(target));
-
-           }
-
-
-        }
-    }
 
 
     public SpanningTreeAlgorithm.SpanningTree<DefaultEdge> getMST() {

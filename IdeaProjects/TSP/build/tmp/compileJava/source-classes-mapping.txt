@@ -1,37 +1,59 @@
-tsp/delaunay/Graph.java
- tsp.delaunay.Graph
-tsp/delaunay/DragContext.java
- tsp.delaunay.DragContext
-tsp/delaunay/FileReader.java
- tsp.delaunay.FileReader
-tsp/delaunay/ButtonBox.java
- tsp.delaunay.ButtonBox
-tsp/delaunay/ModifiedWeightedEdge.java
- tsp.delaunay.ModifiedWeightedEdge
+tsp/delaunay/EdgeDistancePack.java
+ tsp.delaunay.EdgeDistancePack
 tsp/delaunay/Vertex.java
  tsp.delaunay.Vertex
+tsp/delaunay/DragContext.java
+ tsp.delaunay.DragContext
+tsp/delaunay/MainGroupInterface.java
+ tsp.delaunay.MainGroupInterface
+tsp/delaunay/MainSceneInterface.java
+ tsp.delaunay.MainSceneInterface
+tsp/delaunay/ButtonBoxInterface.java
+ tsp.delaunay.ButtonBoxInterface
+tsp/delaunay/FileReader.java
+ tsp.delaunay.FileReader
+tsp/delaunay/PannableCanvasInterface.java
+ tsp.delaunay.PannableCanvasInterface
+tsp/delaunay/ModifiedWeightedEdge.java
+ tsp.delaunay.ModifiedWeightedEdge
+tsp/delaunay/PannableCanvasControllerInterface.java
+ tsp.delaunay.PannableCanvasControllerInterface
 tsp/delaunay/main.java
  tsp.delaunay.main
-tsp/delaunay/MainController.java
- tsp.delaunay.MainController
-tsp/delaunay/PannableCanvas.java
- tsp.delaunay.PannableCanvas
 tsp/delaunay/NodeGestures.java
  tsp.delaunay.NodeGestures
  tsp.delaunay.NodeGestures$1
  tsp.delaunay.NodeGestures$2
-tsp/delaunay/MainScene.java
- tsp.delaunay.MainScene
-tsp/delaunay/MainGroup.java
- tsp.delaunay.MainGroup
-tsp/delaunay/MainGroupController.java
- tsp.delaunay.MainGroupController
-tsp/delaunay/MainSceneController.java
- tsp.delaunay.MainSceneController
 tsp/delaunay/SceneGestures.java
  tsp.delaunay.SceneGestures
  tsp.delaunay.SceneGestures$1
  tsp.delaunay.SceneGestures$2
  tsp.delaunay.SceneGestures$3
+tsp/delaunay/Edge2D.java
+ tsp.delaunay.Edge2D
+tsp/delaunay/PannableCanvas.java
+ tsp.delaunay.PannableCanvas
+tsp/delaunay/MainScene.java
+ tsp.delaunay.MainScene
+tsp/delaunay/MainGroup.java
+ tsp.delaunay.MainGroup
+tsp/delaunay/MainSceneController.java
+ tsp.delaunay.MainSceneController
 tsp/delaunay/PannableCanvasController.java
  tsp.delaunay.PannableCanvasController
+tsp/delaunay/MainController.java
+ tsp.delaunay.MainController
+tsp/delaunay/Graph.java
+ tsp.delaunay.Graph
+tsp/delaunay/ButtonBoxController.java
+ tsp.delaunay.ButtonBoxController
+tsp/delaunay/DelaunayTriangulator.java
+ tsp.delaunay.DelaunayTriangulator
+tsp/delaunay/Triangle2D.java
+ tsp.delaunay.Triangle2D
+tsp/delaunay/TriangleSoup.java
+ tsp.delaunay.TriangleSoup
+tsp/delaunay/ButtonBox.java
+ tsp.delaunay.ButtonBox
+tsp/delaunay/MainGroupController.java
+ tsp.delaunay.MainGroupController

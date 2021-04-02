@@ -53,7 +53,8 @@ public class MainController {
     void setFile(File file) {
         vertex = FileReader.readPointsFromFile(file);
         graph = new Graph(getVertex());
-        graph.convexHull();
+        graph.triangulate();
+
 
     }
 
@@ -64,9 +65,7 @@ public class MainController {
     }
 
 
-    void showMST() {
-        pannableCanvasController.pushMSTButton();
-    }
+
 
     void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
         this.pannableCanvasController = pannableCanvasController;
@@ -74,6 +73,10 @@ public class MainController {
 
     void showTriangulation() {
         pannableCanvasController.showTriangulationAnimation();
+    }
+
+    void showMST() {
+        pannableCanvasController.pushMSTButton();
     }
 
     public void showNewInstanceWindow() {

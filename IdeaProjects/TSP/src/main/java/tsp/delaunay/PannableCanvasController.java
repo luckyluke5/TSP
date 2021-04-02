@@ -6,8 +6,8 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     private PannableCanvasInterface view;
 
     public void showTriangulationAnimation() {
-        getMainController().getGraph().convexHull();
-       // getMainController().getGraph().MST_TSP();
+        getMainController().getGraph().triangulate();
+
 
         view.playTimelineFromStart();
     }

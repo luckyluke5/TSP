@@ -58,9 +58,12 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     }
 
     public void showMST() {
+
+
+
         SpanningTreeAlgorithm.SpanningTree<DefaultEdge> mst = controller.getMainController().getGraph().getMST();
-        for (DefaultEdge edge : mst.getEdges()
-        ) {
+
+        for (DefaultEdge edge : mst.getEdges()) {
             Point2D source = controller.getMainController().getGraph().graph.getEdgeSource(edge);
             Point2D target = controller.getMainController().getGraph().graph.getEdgeTarget(edge);
 
