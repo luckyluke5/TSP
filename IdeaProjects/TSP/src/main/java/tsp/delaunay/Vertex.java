@@ -1,8 +1,7 @@
 package tsp.delaunay;
 
 
-import javafx.geometry.Point2D;
-
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.NoSuchElementException;

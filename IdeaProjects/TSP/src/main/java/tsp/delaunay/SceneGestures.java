@@ -12,7 +12,7 @@ public class SceneGestures {
     private static final double MAX_SCALE = 200.0d;
     private static final double MIN_SCALE = .1d;
 
-    private DragContext sceneDragContext = new DragContext();
+    private final DragContext sceneDragContext = new DragContext();
 
     PannableCanvas canvas;
 
@@ -32,12 +32,12 @@ public class SceneGestures {
         return onScrollEventHandler;
     }
 
-    private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
 
         public void handle(MouseEvent event) {
 
             // right mouse button => panning
-            if( !event.isSecondaryButtonDown())
+            if (!event.isSecondaryButtonDown())
                 return;
 
             sceneDragContext.mouseAnchorX = event.getSceneX();
@@ -50,11 +50,11 @@ public class SceneGestures {
 
     };
 
-    private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
         public void handle(MouseEvent event) {
 
             // right mouse button => panning
-            if( !event.isSecondaryButtonDown())
+            if (!event.isSecondaryButtonDown())
                 return;
 
             canvas.setTranslateX(sceneDragContext.translateAnchorX + event.getSceneX() - sceneDragContext.mouseAnchorX);
@@ -67,7 +67,7 @@ public class SceneGestures {
     /**
      * Mouse wheel handler: zoom to pivot point
      */
-    private EventHandler<ScrollEvent> onScrollEventHandler = new EventHandler<ScrollEvent>() {
+    private final EventHandler<ScrollEvent> onScrollEventHandler = new EventHandler<ScrollEvent>() {
 
         @Override
         public void handle(ScrollEvent event) {

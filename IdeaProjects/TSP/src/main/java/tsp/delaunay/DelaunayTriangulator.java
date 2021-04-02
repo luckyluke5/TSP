@@ -1,7 +1,7 @@
 package tsp.delaunay;
 
-import javafx.geometry.Point2D;
 
+import java.awt.geom.Point2D;
 import java.util.List;
 
 
@@ -42,9 +42,9 @@ public class DelaunayTriangulator {
 
         maxOfAnyCoordinate *= 16.0d;
 
-        Point2D p1 = new Point2D(0.0d, 3.0d * maxOfAnyCoordinate);
-        Point2D p2 = new Point2D(3.0d * maxOfAnyCoordinate, 0.0d);
-        Point2D p3 = new Point2D(-3.0d * maxOfAnyCoordinate, -3.0d * maxOfAnyCoordinate);
+        Point2D p1 = new Point2D.Double(0.0d, 3.0d * maxOfAnyCoordinate);
+        Point2D p2 = new Point2D.Double(3.0d * maxOfAnyCoordinate, 0.0d);
+        Point2D p3 = new Point2D.Double(-3.0d * maxOfAnyCoordinate, -3.0d * maxOfAnyCoordinate);
 
         Triangle2D superTriangle = new Triangle2D(p1, p2, p3);
 

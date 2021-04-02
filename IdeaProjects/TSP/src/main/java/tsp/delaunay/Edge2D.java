@@ -1,6 +1,7 @@
 package tsp.delaunay;
 
-import javafx.geometry.Point2D;
+
+import java.awt.geom.Point2D;
 
 public class Edge2D {
     public Point2D a;

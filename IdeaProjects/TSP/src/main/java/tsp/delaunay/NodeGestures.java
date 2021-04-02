@@ -4,7 +4,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 
 //Make Nodes draggable
 public class NodeGestures {
@@ -13,26 +12,11 @@ public class NodeGestures {
     private static final double MIN_SCALE = .1d;
 
 
-    private DragContext nodeDragContext = new DragContext();
+    private final DragContext nodeDragContext = new DragContext();
 
     PannableCanvas canvas;
     Group group;
-
-    public NodeGestures(PannableCanvas canvas) {
-        this.canvas = canvas;
-        this.group= group;
-    }
-
-    public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
-        return onMousePressedEventHandler;
-    }
-
-    public EventHandler<MouseEvent> getOnMouseDraggedEventHandler() {
-        return onMouseDraggedEventHandler;
-    }
-
-
-    private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
 
         public void handle(MouseEvent event) {
 
@@ -52,7 +36,15 @@ public class NodeGestures {
 
     };
 
-    private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+    public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
+        return onMousePressedEventHandler;
+    }
+
+    public EventHandler<MouseEvent> getOnMouseDraggedEventHandler() {
+        return onMouseDraggedEventHandler;
+    }
+
+    private final EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
         public void handle(MouseEvent event) {
 
             // left mouse button => dragging
@@ -71,8 +63,10 @@ public class NodeGestures {
         }
     };
 
-
-
+    public NodeGestures(PannableCanvas canvas) {
+        this.canvas = canvas;
+        group = group;
+    }
 
 
 }
