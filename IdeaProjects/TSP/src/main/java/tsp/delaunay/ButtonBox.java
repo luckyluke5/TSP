@@ -5,23 +5,25 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 
-public class ButtonBox extends VBox implements ButtonBoxInterface {
+class ButtonBox extends VBox implements ButtonBoxInterface {
 
 
-    Button browseButton;
-    Button mstButton;
-    Button triangulationButton;
+    private Button browseButton;
+    private Button mstButton;
+    private Button triangulationButton;
+    private CheckBox convexHullCheckBox;
     private CheckBox tourCheckbox;
     private Button twoOptButton;
 
-    ButtonBoxController controller;
+    private final ButtonBoxController controller;
 
-    public ButtonBox() {
+    ButtonBox() {
         controller = new ButtonBoxController();
         controller.setView(this);
 
         createBrowseButton();
         createMSTButton();
+        createConvexHullButton();
         createTriangulationButton();
         createTourCheckbox();
         createTwoOptButton();
@@ -29,6 +31,7 @@ public class ButtonBox extends VBox implements ButtonBoxInterface {
         getChildren().add(browseButton);
         getChildren().add(mstButton);
         getChildren().add(triangulationButton);
+        getChildren().add(convexHullCheckBox);
         getChildren().add(tourCheckbox);
         getChildren().add(twoOptButton);
 
@@ -38,26 +41,31 @@ public class ButtonBox extends VBox implements ButtonBoxInterface {
 
     }
 
-    void createTourCheckbox() {
+    private void createConvexHullButton() {
+        convexHullCheckBox = new CheckBox("Convex Hull");
+        convexHullCheckBox.setOnAction(actionEvent -> controller.pushConvexHullCheckBox());
+    }
+
+    private void createTourCheckbox() {
         tourCheckbox = new CheckBox("Tour");
         tourCheckbox.setOnAction(actionEvent -> controller.pushTourCheckBox());
     }
 
-    void createBrowseButton() {
+    private void createBrowseButton() {
 
         browseButton = new Button("Choose file");
-        browseButton.setOnAction(e -> controller.pushBrowseButton());
+        browseButton.setOnAction(actionEvent -> controller.pushBrowseButton());
 
     }
 
-    void createMSTButton() {
+    private void createMSTButton() {
 
         mstButton = new Button("Calculate MST");
         mstButton.setOnAction(actionEvent -> controller.pushMSTButton());
 
     }
 
-    void createTriangulationButton() {
+    private void createTriangulationButton() {
         triangulationButton = new Button("Triangulation");
         triangulationButton.setOnAction(actionEvent -> controller.pushTriangulationButton());
 
@@ -65,10 +73,10 @@ public class ButtonBox extends VBox implements ButtonBoxInterface {
 
     private void createTwoOptButton() {
         twoOptButton = new Button("Two Optimisation Tour/ Eliminate Crossing");
-        twoOptButton.setOnAction(e -> controller.pushTwoOpt());
+        twoOptButton.setOnAction(actionEvent -> controller.pushTwoOpt());
     }
 
-    public ButtonBoxControllerInterface getController() {
+    ButtonBoxControllerInterface getController() {
         return controller;
     }
 }

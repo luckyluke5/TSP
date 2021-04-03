@@ -19,6 +19,12 @@ public class MainGroup extends Group implements MainGroupInterface {
         mainGroupController.setPannableCanvasController(pannableCanvas.getController());
         mainGroupController.setButtonBoxController(buttonBox.getController());
 
+        //setAlignment(pannableCanvas, Pos.TOP_RIGHT);
+        //setMargin(pannableCanvas, new Insets(12,12,12,12));
+        //setLeft(buttonBox);
+        //setCenter(pannableCanvas);
+
+
         getChildren().add(pannableCanvas);
         getChildren().add(buttonBox);
     }

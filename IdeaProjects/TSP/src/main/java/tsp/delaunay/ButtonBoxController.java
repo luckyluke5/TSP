@@ -20,19 +20,23 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
 
     }
 
-    public void setView(ButtonBoxInterface view) {
-        this.view = view;
-    }
-
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
-
     public void pushTourCheckBox() {
         mainController.showTourUpdate();
     }
 
     public void pushTwoOpt() {
         mainController.makeTwoOptOptimization();
+    }
+
+    public void pushConvexHullCheckBox() {
+        mainController.showConvexHull();
+    }
+
+    public void setView(ButtonBoxInterface view) {
+        this.view = view;
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 }

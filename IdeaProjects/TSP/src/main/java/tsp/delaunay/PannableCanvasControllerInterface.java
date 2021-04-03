@@ -8,4 +8,6 @@ public interface PannableCanvasControllerInterface extends Controller {
     void clearOldInstance();
 
     void showTourUpdate();
+
+    void showConvexHull();
 }

@@ -34,6 +34,10 @@ public class MainController {
         setFile(file);
     }
 
+    public void showConvexHull() {
+        pannableCanvasController.showConvexHull();
+    }
+
 
     public Vertex getVertex() {
         return graph.getVertex();
