@@ -1,6 +1,7 @@
 package tsp.delaunay;
 
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 
@@ -166,9 +167,14 @@ public class Triangle2D {
     public EdgeDistancePack findNearestEdge(Point2D point) {
         EdgeDistancePack[] edges = new EdgeDistancePack[3];
 
-        edges[0] = new EdgeDistancePack(new Edge2D(a, b), computeClosestPoint(new Edge2D(a, b), point).subtract(point).magnitude());
-        edges[1] = new EdgeDistancePack(new Edge2D(b, c), computeClosestPoint(new Edge2D(b, c), point).subtract(point).magnitude());
-        edges[2] = new EdgeDistancePack(new Edge2D(c, a), computeClosestPoint(new Edge2D(c, a), point).subtract(point).magnitude());
+        //edges[0] = new EdgeDistancePack(new Edge2D(a, b), computeClosestPoint(new Edge2D(a, b), point).distance(point));
+        //edges[1] = new EdgeDistancePack(new Edge2D(b, c), computeClosestPoint(new Edge2D(b, c), point).distance(point));
+        //edges[2] = new EdgeDistancePack(new Edge2D(c, a), computeClosestPoint(new Edge2D(c, a), point).distance(point));
+
+        edges[0] = new EdgeDistancePack(new Edge2D(a, b), new Line2D.Double(a, b).ptSegDist(point));
+        edges[1] = new EdgeDistancePack(new Edge2D(b, c), new Line2D.Double(b, c).ptSegDist(point));
+        edges[2] = new EdgeDistancePack(new Edge2D(c, a), new Line2D.Double(c, a).ptSegDist(point));
+
 
         Arrays.sort(edges);
         return edges[0];
@@ -182,8 +188,9 @@ public class Triangle2D {
      * @param point The point to which we search the closest point on the edge
      * @return The closest point on the given edge to the specified point
      */
-    private javafx.geometry.Point2D computeClosestPoint(Edge2D edge, Point2D point) {
-        javafx.geometry.Point2D ab = edge.b.subtract(edge.a);
+
+    /*private Point2D computeClosestPoint(Edge2D edge, Point2D point) {
+        Point2D ab = edge.b.subtract(edge.a);
         double t = point.subtract(edge.a).dotProduct(ab) / ab.dotProduct(ab);
 
         if (t < 0.0d) {
@@ -193,7 +200,7 @@ public class Triangle2D {
         }
 
         return edge.a.add(ab.multiply(t));
-    }
+    }*/
 
     /**
      * Tests if the two arguments have the same sign.

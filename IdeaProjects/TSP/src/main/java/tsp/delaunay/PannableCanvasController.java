@@ -13,7 +13,7 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     public void showTriangulationAnimation() {
 
         //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
-        getMainController().getGraph().triangulate();
+        getMainController().getGraph().triangulate2();
         //getMainController().getGraph().convexHull();
 
         view.playTimelineFromStart();
