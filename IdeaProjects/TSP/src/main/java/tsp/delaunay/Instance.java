@@ -22,8 +22,11 @@ public class Instance {
 
     ArrayList<DefaultEdge> edges = new ArrayList<>();
     DefaultUndirectedWeightedGraph<Point2D, ModifiedWeightedEdge> graph;
-    ArrayList<Point2D> hull = new ArrayList<>();
+    ArrayList<Point2D> pointsFromConvexHull = new ArrayList<>();
     ArrayList<Line2D> lines = new ArrayList<>();
+
+    ArrayList<Line2D> trianagulationLines = new ArrayList<>();
+    ArrayList<Line2D> convexHullLines = new ArrayList<>();
     Group group = new Group();
     MaskSubgraph<Point2D, ModifiedWeightedEdge> tourSubgraphMask;
 
@@ -79,12 +82,6 @@ public class Instance {
 
     }
 
-    public Vertex getVertex() {
-        return vertex;
-    }
-
-    // Prints convex hull of a set of n points.
-
     public void triangulate1() {
         DelaunayTriangulator delaunayTriangulator = new DelaunayTriangulator(getPoints());
         delaunayTriangulator.triangulate();
@@ -104,7 +101,6 @@ public class Instance {
         }
 
     }
-
 
     public void convexHull() {
 
@@ -128,7 +124,7 @@ public class Instance {
         do
         {
             // Add current point to result
-            hull.add(getPoints().get(p));
+            pointsFromConvexHull.add(getPoints().get(p));
 
             // Search for a point 'q' such that
             // orientation(p, x, q) is counterclockwise
@@ -155,21 +151,23 @@ public class Instance {
         // point
 
         // Print Result
-        int size = hull.size();
+        int size = pointsFromConvexHull.size();
         // Add last line
-        lines.add(new Line2D.Double(hull.get(0),hull.get(size-1)));
-        graph.addEdge(hull.get(0),hull.get(size-1) );
-        //Add the lines of convex Hull
-        for(int i=0;i< hull.size()-1;i++){
-            Point2D temp1 = new Point2D.Double(hull.get(i).getX(), hull.get(i).getY());
-            Point2D temp2 = new Point2D.Double(hull.get(i + 1).getX(), hull.get(i + 1).getY());
+        convexHullLines.add(new Line2D.Double(pointsFromConvexHull.get(0), pointsFromConvexHull.get(size - 1)));
+        graph.addEdge(pointsFromConvexHull.get(0), pointsFromConvexHull.get(size - 1));
+        //Add the convexHullLines of convex Hull
+        for (int i = 0; i < pointsFromConvexHull.size() - 1; i++) {
+            Point2D temp1 = new Point2D.Double(pointsFromConvexHull.get(i).getX(), pointsFromConvexHull.get(i).getY());
+            Point2D temp2 = new Point2D.Double(pointsFromConvexHull.get(i + 1).getX(), pointsFromConvexHull.get(i + 1).getY());
 
-            lines.add(new Line2D.Double(temp1, temp2));
+            convexHullLines.add(new Line2D.Double(temp1, temp2));
             graph.addEdge(temp1, temp2);
 
         }
 
     }
+
+    // Prints convex hull of a set of n points.
 
     public double orientation(Point2D p, Point2D q, Point2D r) {
         double val = (q.getY() - p.getY()) * (r.getX() - q.getX()) -
@@ -189,52 +187,52 @@ public class Instance {
 
 
             graph.addEdge(a, b);
-            lines.add(new Line2D.Double(a, b));
+            trianagulationLines.add(new Line2D.Double(a, b));
 
             graph.addEdge(a, c);
             Line2D ac = new Line2D.Double(a, c);
-            lines.add(ac);
+            trianagulationLines.add(ac);
 
             graph.addEdge(a, d);
-            Line2D ad = new Line2D.Double(a,d);
-            lines.add(ad);
+            Line2D ad = new Line2D.Double(a, d);
+            trianagulationLines.add(ad);
 
-            graph.addEdge(b,d);
-            Line2D bd = new Line2D.Double(b,d);
-            lines.add(bd);
+            graph.addEdge(b, d);
+            Line2D bd = new Line2D.Double(b, d);
+            trianagulationLines.add(bd);
 
-            graph.addEdge(c,d);
-            lines.add(new Line2D.Double(c,d));
+            graph.addEdge(c, d);
+            trianagulationLines.add(new Line2D.Double(c, d));
 
-            graph.addEdge(b,c);
-            Line2D bc = new Line2D.Double(b,c);
-            lines.add(bc);
+            graph.addEdge(b, c);
+            Line2D bc = new Line2D.Double(b, c);
+            trianagulationLines.add(bc);
 
 
-            if(isPointInsideCircle(a,b,c,d)){
+            if (isPointInsideCircle(a, b, c, d)) {
 
                 //Two cases to flip the edge and form other triangle
-                if(ac.intersectsLine(bd)){
-                    lines.remove(ac);
+                if (ac.intersectsLine(bd)) {
+                    trianagulationLines.remove(ac);
                     //graph.removeEdge(ac);
                 }
                 if(bc.intersectsLine(ad)){
-                    lines.remove(bc);
+                    trianagulationLines.remove(bc);
                 }
 
 
 
-            }else{
-                graph.addEdge(b,c);
-                lines.add(new Line2D.Double(b,c));
-                graph.addEdge(c,d);
-                lines.add(new Line2D.Double(c,d));
-                if (Point2D.distance(a.getX(),a.getY(),d.getX(),d.getY())>Point2D.distance(b.getX(),b.getY(),d.getX(),d.getY())){
-                    graph.addEdge(b,d);
-                    lines.add(new Line2D.Double(b,d));
-                }else{
-                    graph.addEdge(a,d);
-                    lines.add(new Line2D.Double(a,d));
+            }else {
+                graph.addEdge(b, c);
+                trianagulationLines.add(new Line2D.Double(b, c));
+                graph.addEdge(c, d);
+                trianagulationLines.add(new Line2D.Double(c, d));
+                if (Point2D.distance(a.getX(), a.getY(), d.getX(), d.getY()) > Point2D.distance(b.getX(), b.getY(), d.getX(), d.getY())) {
+                    graph.addEdge(b, d);
+                    trianagulationLines.add(new Line2D.Double(b, d));
+                } else {
+                    graph.addEdge(a, d);
+                    trianagulationLines.add(new Line2D.Double(a, d));
                 }
             }
           //  System.out.println("LOG: Determinante: "+ isPointInsideCircle(a,b,c,d));
@@ -265,14 +263,22 @@ public class Instance {
         return determinant > 0;
     }
 
+    public ArrayList<Line2D> getConvexHullLines() {
+        return convexHullLines;
+    }
+
+    public Vertex getVertex() {
+        return vertex;
+    }
+
     public Group getGroup() {
-        getLines();
+        //getLines();
         return group;
     }
 
-    public ArrayList<Line2D> getLines() {
+    public ArrayList<Line2D> getTrianagulationLines() {
 
-        return lines;
+        return trianagulationLines;
 
     }
 

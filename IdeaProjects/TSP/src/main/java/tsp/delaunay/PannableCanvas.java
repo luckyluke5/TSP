@@ -183,7 +183,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     void createStrokes() {
         strokes = new ArrayList();
-        for (Line2D line : controller.getMainController().getInstance().getLines()) {
+        for (Line2D line : controller.getMainController().getInstance().getTrianagulationLines()) {
 
             Line l = convertLine(line);
 
@@ -207,7 +207,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     public void getTimeline() {
         timeline = new Timeline();
         final int STARTTIME = 0;
-        System.out.println("STARTTIME " + controller.getMainController().getInstance().getLines().size());
+        System.out.println("STARTTIME " + controller.getMainController().getInstance().getTrianagulationLines().size());
         Integer[] length = {STARTTIME};
         timeline.setCycleCount(Timeline.INDEFINITE);
 
