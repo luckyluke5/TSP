@@ -92,7 +92,7 @@ public class Instance {
             Point2D c = triangle.c;
 
             ModifiedWeightedEdge ab = graph.addEdge(a, b);
-            //graph.setEdgeWeight(ab,a.distance(b));
+            // graph.setEdgeWeight(ab,a.distance(b));
             ModifiedWeightedEdge bc = graph.addEdge(b, c);
             // graph.setEdgeWeight(bc,b.distance(c));
             ModifiedWeightedEdge ac = graph.addEdge(a, c);

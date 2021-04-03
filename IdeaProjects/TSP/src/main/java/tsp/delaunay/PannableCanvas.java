@@ -183,11 +183,14 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     void createStrokes() {
         strokes = new ArrayList();
-        for (Line2D line : controller.getMainController().getInstance().getTrianagulationLines()) {
+        Instance graph = controller.getMainController().getInstance();
 
-            Line l = convertLine(line);
+        for (ModifiedWeightedEdge line : graph.graph.edgeSet()) {
 
+            Line l = new Line(graph.graph.getEdgeSource(line).getX(), graph.graph.getEdgeSource(line).getY(), graph.graph.getEdgeTarget(line).getX(), graph.graph.getEdgeTarget(line).getY());
             l.setStrokeWidth(getDefaultLineStrokeWidth());
+
+
             l.strokeWidthProperty().bind(revScale);
             l.setStroke(Color.ORANGE.deriveColor(1, 1, 1, 0.5));
             strokes.add(l);

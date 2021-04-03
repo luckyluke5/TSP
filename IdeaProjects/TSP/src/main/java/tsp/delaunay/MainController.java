@@ -58,7 +58,7 @@ public class MainController {
         vertex = FileReader.readPointsFromFile(file);
         instance = new Instance(vertex);
         instance.convexHull();
-        instance.triangulate2();
+        instance.triangulate1();
         pannableCanvasController.updateTour();
 
 
