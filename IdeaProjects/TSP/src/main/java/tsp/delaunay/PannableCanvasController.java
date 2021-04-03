@@ -13,7 +13,7 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     public void showTriangulationAnimation() {
 
         //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
-        mainController.getGraph().triangulate2();
+        mainController.getInstance().triangulate2();
         //getMainController().getGraph().convexHull();
 
         view.playTimelineFromStart();
@@ -37,15 +37,22 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     }
 
     @Override
-    public void showTourUpdate() {
-        view.showTourUpdate();
+    public void showTour() {
+
+        view.showTour();
     }
+
 
     @Override
     public void showConvexHull() {
-        mainController.getGraph().convexHull();
+        mainController.getInstance().convexHull();
         view.showConvexHull();
 
+    }
+
+    @Override
+    public void updateTour() {
+        view.updateTour();
     }
 
     public void showMST() {
@@ -53,14 +60,14 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     }
 
     public ArrayList<Line2D> getTourLines() {
-        Set<ModifiedWeightedEdge> edgeSet = mainController.getGraph().tourSubgraphMask.edgeSet();
+        Set<ModifiedWeightedEdge> edgeSet = mainController.getInstance().tourSubgraphMask.edgeSet();
 
         ArrayList<Line2D> result = new ArrayList<Line2D>();
 
         for (ModifiedWeightedEdge edge : edgeSet
         ) {
-            Point2D source = mainController.getGraph().graph.getEdgeSource(edge);
-            Point2D target = mainController.getGraph().graph.getEdgeTarget(edge);
+            Point2D source = mainController.getInstance().graph.getEdgeSource(edge);
+            Point2D target = mainController.getInstance().graph.getEdgeTarget(edge);
 
             result.add(new Line2D.Double(source, target));
         }

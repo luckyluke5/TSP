@@ -14,7 +14,7 @@ public class MainController {
 
     private final Application application;
     private Vertex vertex;
-    private Instance graph;
+    private Instance instance;
 
     PannableCanvasControllerInterface pannableCanvasController;
 
@@ -40,7 +40,7 @@ public class MainController {
 
 
     public Vertex getVertex() {
-        return graph.getVertex();
+        return instance.getVertex();
     }
 
     void newInstance() {
@@ -56,16 +56,19 @@ public class MainController {
 
     void setFile(File file) {
         vertex = FileReader.readPointsFromFile(file);
-        graph = new Instance(vertex);
-        graph.convexHull();
-        graph.triangulate2();
+        instance = new Instance(vertex);
+        instance.convexHull();
+        instance.triangulate2();
+        pannableCanvasController.updateTour();
+
+
         //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
     }
 
 
-    Instance getGraph() {
+    Instance getInstance() {
 
-        return graph;
+        return instance;
     }
 
 
@@ -81,8 +84,8 @@ public class MainController {
         pannableCanvasController.showTriangulationAnimation();
     }
 
-    void showTourUpdate() {
-        pannableCanvasController.showTourUpdate();
+    void showTour() {
+        pannableCanvasController.showTour();
     }
 
     public void showNewInstanceWindow() {
@@ -97,8 +100,9 @@ public class MainController {
 
     void makeTwoOptOptimization() {
 
-        TwoOptSolver solver = new TwoOptSolver(graph.graph);
+        TwoOptSolver solver = new TwoOptSolver(instance.graph);
         solver.towOptForNonIntersectingEdges();
+        pannableCanvasController.updateTour();
 
     }
 }

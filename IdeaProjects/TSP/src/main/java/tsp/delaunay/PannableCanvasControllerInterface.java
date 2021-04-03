@@ -7,7 +7,9 @@ public interface PannableCanvasControllerInterface extends Controller {
 
     void clearOldInstance();
 
-    void showTourUpdate();
+    void showTour();
 
     void showConvexHull();
+
+    void updateTour();
 }

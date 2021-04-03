@@ -21,7 +21,7 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
     }
 
     public void pushTourCheckBox() {
-        mainController.showTourUpdate();
+        mainController.showTour();
     }
 
     public void pushTwoOpt() {

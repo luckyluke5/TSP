@@ -7,7 +7,9 @@ public interface PannableCanvasInterface {
 
     void playTimelineFromStart();
 
-    void showTourUpdate();
+    void updateTour();
 
     void showConvexHull();
+
+    void showTour();
 }
