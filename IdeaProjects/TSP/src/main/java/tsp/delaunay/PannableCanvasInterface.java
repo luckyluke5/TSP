@@ -12,4 +12,8 @@ public interface PannableCanvasInterface {
     void showConvexHull();
 
     void showTour();
+
+    void showTriangulation();
+
+    void updateTriangulation();
 }

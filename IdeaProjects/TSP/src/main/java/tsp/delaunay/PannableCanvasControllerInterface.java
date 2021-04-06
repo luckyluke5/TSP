@@ -12,4 +12,8 @@ public interface PannableCanvasControllerInterface extends Controller {
     void showConvexHull();
 
     void updateTour();
+
+    void updateTriangulation();
+
+    void showTriangulation();
 }

@@ -28,6 +28,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     private final Group inTourLines;
     private final Group strokesGroup;
+    private final Group triangLines;
     // das ist nicht die main group die in der scene verankert ist
     // sondern die erste gruppe, an der circle, strokes und tourLines enthalten ist
     private final Group mainGroup;
@@ -57,14 +58,20 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         });
 
         mainGroup = new Group();
+
         inTourLines = new Group();
         inTourLines.setVisible(false);
+
         circleGroup = new Group();
         strokesGroup = new Group();
+
+        triangLines = new Group();
+        triangLines.setVisible(false);
 
         getChildren().add(mainGroup);
         mainGroup.getChildren().add(strokesGroup);
         mainGroup.getChildren().add(inTourLines);
+        mainGroup.getChildren().add(triangLines);
 
 
     }
@@ -103,6 +110,22 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     }
 
+    @Override
+    public void updateTriangulation(){
+        triangLines.getChildren().clear();
+        ArrayList <Line2D> lines = controller.getTriangulationLines();
+
+        lines.forEach(line ->{
+            Line javaFXLine = convertLine(line);
+            javaFXLine.setStrokeWidth(getDefaultLineStrokeWidth());
+            javaFXLine.strokeWidthProperty().bind(revScale);
+            javaFXLine.setStroke(Color.ORANGE);
+            triangLines.getChildren().add(javaFXLine);
+
+        } );
+
+    }
+
 
     private Line convertLine(Line2D line) {
         return new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
@@ -121,6 +144,10 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     public void showTour() {
         inTourLines.setVisible(!inTourLines.isVisible());
     }
+
+    @Override
+    public void showTriangulation() {triangLines.setVisible(!triangLines.isVisible());}
+
 
     public void showMST() {
         SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> mst = controller.getMainController().getInstance().getMST();
@@ -183,11 +210,11 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     void createStrokes() {
         strokes = new ArrayList();
-        Instance graph = controller.getMainController().getInstance();
+        ArrayList<Line2D> lines = controller.getMainController().getInstance().getTrianagulationLines();
 
-        for (ModifiedWeightedEdge line : graph.graph.edgeSet()) {
+        for (Line2D line : lines) {
 
-            Line l = new Line(graph.graph.getEdgeSource(line).getX(), graph.graph.getEdgeSource(line).getY(), graph.graph.getEdgeTarget(line).getX(), graph.graph.getEdgeTarget(line).getY());
+            Line l = convertLine(line);
             l.setStrokeWidth(getDefaultLineStrokeWidth());
 
 

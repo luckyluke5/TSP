@@ -13,6 +13,7 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
     private Button triangulationButton;
     private CheckBox convexHullCheckBox;
     private CheckBox tourCheckbox;
+    private CheckBox triangCheckbox;
     private Button twoOptButton;
 
     private final ButtonBoxController controller;
@@ -26,6 +27,7 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         createConvexHullButton();
         createTriangulationButton();
         createTourCheckbox();
+        createTriangulationCheckbox();
         createTwoOptButton();
 
         getChildren().add(browseButton);
@@ -34,6 +36,7 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         getChildren().add(convexHullCheckBox);
         getChildren().add(tourCheckbox);
         getChildren().add(twoOptButton);
+        getChildren().add(triangCheckbox);
 
         autosize();
         setAlignment(Pos.BASELINE_RIGHT);
@@ -51,6 +54,10 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         tourCheckbox.setOnAction(actionEvent -> controller.pushTourCheckBox());
     }
 
+    private void createTriangulationCheckbox() {
+        triangCheckbox = new CheckBox("Triangulation");
+        triangCheckbox.setOnAction(actionEvent -> controller.pushTriangulationCheckbox());
+    }
     private void createBrowseButton() {
 
         browseButton = new Button("Choose file");

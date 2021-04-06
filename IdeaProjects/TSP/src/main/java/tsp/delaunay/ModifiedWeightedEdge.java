@@ -5,9 +5,11 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 public class ModifiedWeightedEdge extends DefaultWeightedEdge {
 
     boolean inTour;
+    boolean inTriangulation;
 
     public ModifiedWeightedEdge() {
         inTour = false;
+        inTriangulation = false;
 
     }
 
@@ -19,5 +21,11 @@ public class ModifiedWeightedEdge extends DefaultWeightedEdge {
         this.inTour = inTour;
     }
 
+    public boolean isInTriangulation() {
+        return inTriangulation;
+    }
 
+    public void setInTriangulation(boolean inTriangulation) {
+        this.inTriangulation = inTriangulation;
+    }
 }
