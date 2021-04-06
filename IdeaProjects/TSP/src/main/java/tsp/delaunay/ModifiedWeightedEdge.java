@@ -8,10 +8,20 @@ import java.awt.geom.Point2D;
 public class ModifiedWeightedEdge extends DefaultWeightedEdge {
 
     boolean inTour;
+    boolean inTriangulation;
 
     public ModifiedWeightedEdge() {
         inTour = false;
+        inTriangulation = false;
 
+    }
+
+    public boolean isInTriangulation() {
+        return inTriangulation;
+    }
+
+    public void setInTriangulation(boolean inTriangulation) {
+        this.inTriangulation = inTriangulation;
     }
 
     public boolean isInTour() {
