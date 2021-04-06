@@ -9,11 +9,20 @@ public class ModifiedWeightedEdge extends DefaultWeightedEdge {
 
     boolean inTour;
     boolean inTriangulation;
+    int usefulDelaunayOrder;
 
     public ModifiedWeightedEdge() {
         inTour = false;
         inTriangulation = false;
 
+    }
+
+    public int getUsefulDelaunayOrder() {
+        return usefulDelaunayOrder;
+    }
+
+    public void setUsefulDelaunayOrder(int usefulDelaunayOrder) {
+        this.usefulDelaunayOrder = usefulDelaunayOrder;
     }
 
     public boolean isInTriangulation() {
