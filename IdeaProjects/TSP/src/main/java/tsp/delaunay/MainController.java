@@ -39,7 +39,16 @@ public class MainController {
     }
 
     public void makeKOptimization() {
+
+
         //TODO aufrufen des algorithmusses und erzeugen des notwendigen graphens
+    }
+
+    public void syncTourAndTriangulation() {
+        TriangulationBuilder triangulationBuilder = new TriangulationBuilder(instance.graph);
+        triangulationBuilder.initialTriangulationWithSetEdges();
+
+        pannableCanvasController.updateTriangulation();
     }
 
 
@@ -57,20 +66,13 @@ public class MainController {
 
     }
 
+    public void showNewInstanceWindow() {
+        //pannableCanvasController.clearOldInstance();
 
-    void setFile(File file) {
-        vertex = FileReader.readPointsFromFile(file);
-        instance = new Instance(vertex);
-        instance.convexHull();
-        instance.triangulate1();
-        pannableCanvasController.updateTour();
-        pannableCanvasController.updateTriangulation();
-
-
-        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
+        newInstance();
     }
 
-    void showTriangCheckbox(){
+    void showTriangCheckbox() {
         pannableCanvasController.showTriangulation();
 
     }
@@ -97,10 +99,16 @@ public class MainController {
         pannableCanvasController.showTour();
     }
 
-    public void showNewInstanceWindow() {
-        pannableCanvasController.clearOldInstance();
+    void setFile(File file) {
+        vertex = FileReader.readPointsFromFile(file);
+        instance = new Instance(vertex);
+        instance.convexHull();
+        instance.triangulate();
+        pannableCanvasController.updateTour();
+        pannableCanvasController.updateTriangulation();
 
-        newInstance();
+
+        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
     }
 
     void computeShortTour() {

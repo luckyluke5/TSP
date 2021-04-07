@@ -1,7 +1,6 @@
 package tsp.delaunay;
 
 
-import javafx.scene.Group;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
@@ -15,6 +14,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 
 public class Instance {
@@ -25,9 +25,10 @@ public class Instance {
     ArrayList<Point2D> pointsFromConvexHull = new ArrayList<>();
     ArrayList<Line2D> lines = new ArrayList<>();
 
-    ArrayList<Line2D> trianagulationLines = new ArrayList<>();
-    ArrayList<Line2D> convexHullLines = new ArrayList<>();
-    MaskSubgraph<Point2D, ModifiedWeightedEdge> tourSubgraphMask;
+    private final ArrayList<Line2D> trianagulationLines = new ArrayList<>();
+    private final ArrayList<Line2D> convexHullLines = new ArrayList<>();
+    private final MaskSubgraph<Point2D, ModifiedWeightedEdge> tour;
+    private final MaskSubgraph<Point2D, ModifiedWeightedEdge> triangulation;
 
     public Instance(Vertex vertex) {
         graph = new DefaultUndirectedWeightedGraph(ModifiedWeightedEdge.class);
@@ -50,13 +51,13 @@ public class Instance {
         /**
          * Initialise a tour
          */
-        tourSubgraphMask = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTour());
+        tour = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTour());
+        triangulation = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTriangulation());
 
         GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
         GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
 
         setTour(mstTour.getEdgeList());
-
 
 
     }
@@ -87,13 +88,13 @@ public class Instance {
     }
 
     /**
-     *This method generates a Delaunay triangulation from the specified point
-     *set.
+     * This method generates a Delaunay triangulation from the specified point
+     * set.
      * Iterate all triangles to note the edges in the graph and save the corresponding lines to trianagulationLines
      */
 
 
-    public void triangulate1() {
+    public void triangulate() {
         DelaunayTriangulator delaunayTriangulator = new DelaunayTriangulator(getPoints());
         delaunayTriangulator.triangulate();
         //Set alle edges not in triangulation
@@ -106,13 +107,13 @@ public class Instance {
             Point2D c = triangle.c;
 
             graph.getEdge(a,b).setInTriangulation(true);
-            trianagulationLines.add(new Line2D.Double(a,b));
+            //trianagulationLines.add(new Line2D.Double(a,b));
 
             graph.getEdge(b,c).setInTriangulation(true);
-            trianagulationLines.add(new Line2D.Double(b,c));
+            //trianagulationLines.add(new Line2D.Double(b,c));
 
             graph.getEdge(a,c).setInTriangulation(true);
-            trianagulationLines.add(new Line2D.Double(a,c));
+            //trianagulationLines.add(new Line2D.Double(a,c));
 
         }
 
@@ -204,8 +205,42 @@ public class Instance {
         return (val > 0) ? 1 : 2; // clock or counterclock wise
     }
 
+    public ArrayList<Line2D> getTriangulationLines() {
+        Set<ModifiedWeightedEdge> edgeSet = triangulation.edgeSet();
+
+        ArrayList<Line2D> result = new ArrayList<>();
+
+        for (ModifiedWeightedEdge edge : edgeSet
+        ) {
+            Point2D source = edge.getSource();
+            Point2D target = edge.getTarget();
+
+            result.add(new Line2D.Double(source, target));
+        }
+
+        return result;
+
+
+    }
+
+    public ArrayList<Line2D> getTourLines() {
+        Set<ModifiedWeightedEdge> edgeSet = tour.edgeSet();
+
+        ArrayList<Line2D> result = new ArrayList<>();
+
+        for (ModifiedWeightedEdge edge : edgeSet
+        ) {
+            Point2D source = edge.getSource();
+            Point2D target = edge.getTarget();
+
+            result.add(new Line2D.Double(source, target));
+        }
+
+        return result;
+
+    }
+
     /**
-     *
      * @return Convex Hull lines
      */
     public ArrayList<Line2D> getConvexHullLines() {

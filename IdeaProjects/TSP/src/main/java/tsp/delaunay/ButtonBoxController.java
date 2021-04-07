@@ -39,6 +39,10 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
         mainController.makeKOptimization();
     }
 
+    public void pushSyncTourAndTriangualtion() {
+        mainController.syncTourAndTriangulation();
+    }
+
     public void setView(ButtonBoxInterface view) {
         this.view = view;
     }
