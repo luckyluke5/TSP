@@ -28,11 +28,15 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
     }
 
     public void pushTwoOpt() {
-        mainController.makeTwoOptOptimization();
+        mainController.makeTwoOptimization();
     }
 
     public void pushConvexHullCheckBox() {
         mainController.showConvexHull();
+    }
+
+    public void pushKOpt() {
+        mainController.makeKOptimization();
     }
 
     public void setView(ButtonBoxInterface view) {

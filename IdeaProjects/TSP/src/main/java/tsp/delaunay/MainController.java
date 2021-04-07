@@ -38,6 +38,10 @@ public class MainController {
         pannableCanvasController.showConvexHull();
     }
 
+    public void makeKOptimization() {
+        //TODO aufrufen des algorithmusses und erzeugen des notwendigen graphens
+    }
+
 
     public Vertex getVertex() {
         return instance.getVertex();
@@ -103,7 +107,7 @@ public class MainController {
 
     }
 
-    void makeTwoOptOptimization() {
+    void makeTwoOptimization() {
 
         TwoOptSolver solver = new TwoOptSolver(instance.graph);
         solver.towOptForNonIntersectingEdges();

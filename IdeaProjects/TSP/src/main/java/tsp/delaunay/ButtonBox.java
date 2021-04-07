@@ -17,6 +17,7 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
     private Button twoOptButton;
 
     private final ButtonBoxController controller;
+    private Button kOptButton;
 
     ButtonBox() {
         controller = new ButtonBoxController();
@@ -29,6 +30,7 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         createTourCheckbox();
         createTriangulationCheckbox();
         createTwoOptButton();
+        createKOptTriangulationButton();
 
         getChildren().add(browseButton);
         getChildren().add(mstButton);
@@ -44,6 +46,13 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     }
 
+    //TODO eindeutigere Funktionsbezeichner und Labels
+    private void createTriangulationButton() {
+        triangulationButton = new Button("Triangulation");
+        triangulationButton.setOnAction(actionEvent -> controller.pushTriangulationButton());
+
+    }
+
     private void createConvexHullButton() {
         convexHullCheckBox = new CheckBox("Convex Hull");
         convexHullCheckBox.setOnAction(actionEvent -> controller.pushConvexHullCheckBox());
@@ -54,6 +63,7 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         tourCheckbox.setOnAction(actionEvent -> controller.pushTourCheckBox());
     }
 
+    //TODO eindeutigere Funktionsbezeichner und Labels
     private void createTriangulationCheckbox() {
         triangCheckbox = new CheckBox("Triangulation");
         triangCheckbox.setOnAction(actionEvent -> controller.pushTriangulationCheckbox());
@@ -72,10 +82,9 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     }
 
-    private void createTriangulationButton() {
-        triangulationButton = new Button("Triangulation");
-        triangulationButton.setOnAction(actionEvent -> controller.pushTriangulationButton());
-
+    private void createKOptTriangulationButton() {
+        kOptButton = new Button("K Optimisation Tour and Triangulation");
+        kOptButton.setOnAction(actionEvent -> controller.pushKOpt());
     }
 
     private void createTwoOptButton() {
