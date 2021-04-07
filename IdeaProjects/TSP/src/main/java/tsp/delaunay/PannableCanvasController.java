@@ -38,8 +38,12 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
 
     @Override
     public void showTour() {
-
         view.showTour();
+    }
+
+    public void showTriangulation(){
+
+        view.showTriangulation();
     }
 
 
@@ -53,6 +57,11 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     @Override
     public void updateTour() {
         view.updateTour();
+    }
+
+    @Override
+    public void updateTriangulation() {
+        view.updateTriangulation();
     }
 
     public void showMST() {
@@ -75,4 +84,11 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
         return result;
 
     }
+
+    public ArrayList<Line2D> getTriangulationLines(){
+        return mainController.getInstance().trianagulationLines;
+    }
+
+
+
 }

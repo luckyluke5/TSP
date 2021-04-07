@@ -60,11 +60,16 @@ public class MainController {
         instance.convexHull();
         instance.triangulate1();
         pannableCanvasController.updateTour();
+        pannableCanvasController.updateTriangulation();
 
 
         //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
     }
 
+    void showTriangCheckbox(){
+        pannableCanvasController.showTriangulation();
+
+    }
 
     Instance getInstance() {
 
@@ -105,4 +110,9 @@ public class MainController {
         pannableCanvasController.updateTour();
 
     }
+
+
+
+
+
 }

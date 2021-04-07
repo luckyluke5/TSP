@@ -9,7 +9,9 @@ public class ModifiedWeightedEdge extends DefaultWeightedEdge {
 
     boolean inTour;
     boolean inTriangulation;
+
     int usefulDelaunayOrder;
+
 
     public ModifiedWeightedEdge() {
         inTour = false;
@@ -24,6 +26,7 @@ public class ModifiedWeightedEdge extends DefaultWeightedEdge {
     public void setUsefulDelaunayOrder(int usefulDelaunayOrder) {
         this.usefulDelaunayOrder = usefulDelaunayOrder;
     }
+
 
     public boolean isInTriangulation() {
         return inTriangulation;
@@ -41,6 +44,7 @@ public class ModifiedWeightedEdge extends DefaultWeightedEdge {
         this.inTour = inTour;
     }
 
+
     Line2D getLine2D() {
 
         return new Line2D.Double(getSource(), getTarget());
@@ -55,5 +59,6 @@ public class ModifiedWeightedEdge extends DefaultWeightedEdge {
     @Override
     protected Point2D getTarget() {
         return (Point2D) super.getTarget();
+
     }
 }
