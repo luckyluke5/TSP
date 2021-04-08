@@ -6,7 +6,6 @@ import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.tour.ChristofidesThreeHalvesApproxMetricTSP;
 import org.jgrapht.alg.tour.TwoApproxMetricTSP;
-
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.MaskSubgraph;
 
@@ -61,9 +60,17 @@ public class Instance {
 
         GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
         GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
+
         benchmarkClass.step();
+
         setTour(mstTour.getEdgeList());
         benchmarkClass.step();
+
+
+        DelaunayOrderCalculator delaunayOrderCalculator = new DelaunayOrderCalculator(getPoints());
+
+        graph.edgeSet().forEach(delaunayOrderCalculator::calculateAndSetUsefulDelaunayOrder);
+
 
     }
 
