@@ -12,6 +12,34 @@ public class KOptEdge implements ModifiedWeightedEdgeInterface {
 
     public KOptEdge(ModifiedWeightedEdge edge) {
         this.edge = edge;
+
+        reset();
+    }
+
+    void reset() {
+        inModifiedTour = isInTour();
+        inModifiedTriangulation = isInTriangulation();
+        inAugmentingCircle = false;
+    }
+
+    @Override
+    public boolean isInTour() {
+        return edge.isInTour();
+    }
+
+    @Override
+    public boolean isInTriangulation() {
+        return edge.isInTriangulation();
+    }
+
+    @Override
+    public void setInTriangulation(boolean inTriangulation) {
+        edge.setInTriangulation(inTriangulation);
+    }
+
+    @Override
+    public void setInTour(boolean inTour) {
+        edge.setInTour(inTour);
     }
 
     public boolean isInModifiedTour() {
@@ -46,26 +74,6 @@ public class KOptEdge implements ModifiedWeightedEdgeInterface {
     @Override
     public void setUsefulDelaunayOrder(int usefulDelaunayOrder) {
         edge.setUsefulDelaunayOrder(usefulDelaunayOrder);
-    }
-
-    @Override
-    public boolean isInTriangulation() {
-        return edge.isInTriangulation();
-    }
-
-    @Override
-    public void setInTriangulation(boolean inTriangulation) {
-        edge.setInTriangulation(inTriangulation);
-    }
-
-    @Override
-    public boolean isInTour() {
-        return edge.isInTour();
-    }
-
-    @Override
-    public void setInTour(boolean inTour) {
-        edge.setInTour(inTour);
     }
 
     @Override
