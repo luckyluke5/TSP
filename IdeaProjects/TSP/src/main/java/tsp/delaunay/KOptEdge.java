@@ -1,11 +1,12 @@
 package tsp.delaunay;
 
+import org.jgrapht.graph.DefaultWeightedEdge;
+
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
-public class KOptEdge implements ModifiedWeightedEdgeInterface {
-    private final ModifiedWeightedEdge edge;
-
+public class KOptEdge extends DefaultWeightedEdge implements ModifiedWeightedEdgeInterface {
+    private ModifiedWeightedEdge edge;
     private boolean inModifiedTour;
     private boolean inModifiedTriangulation;
     private boolean inAugmentingCircle;
@@ -40,6 +41,16 @@ public class KOptEdge implements ModifiedWeightedEdgeInterface {
     @Override
     public void setInTour(boolean inTour) {
         edge.setInTour(inTour);
+    }
+
+    public ModifiedWeightedEdge getEdge() {
+        return edge;
+    }
+
+    public void setEdge(ModifiedWeightedEdge edge) {
+        this.edge = edge;
+
+        reset();
     }
 
     public boolean isInModifiedTour() {

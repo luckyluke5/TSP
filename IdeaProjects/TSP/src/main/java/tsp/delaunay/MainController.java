@@ -4,7 +4,9 @@ import javafx.application.Application;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
+import java.awt.geom.Point2D;
 import java.io.File;
 
 public class MainController {
@@ -40,14 +42,23 @@ public class MainController {
 
     public void makeKOptimization() {
 
+        KOptSolverGraphCreator creator = new KOptSolverGraphCreator(instance.graph);
 
-        //TODO aufrufen des algorithmusses und erzeugen des notwendigen graphens
+        DefaultUndirectedWeightedGraph<Point2D, KOptEdge> kOptGraph = creator.createKOptGraph();
+
+        KOpt solver = new KOpt(kOptGraph);
+
+        solver.solve();
+
+        pannableCanvasController.updateTour();
+        pannableCanvasController.updateTriangulation();
     }
 
     public void syncTourAndTriangulation() {
         TriangulationBuilder triangulationBuilder = new TriangulationBuilder(instance.graph);
         triangulationBuilder.initialTriangulationWithSetEdges();
 
+        pannableCanvasController.updateTour();
         pannableCanvasController.updateTriangulation();
     }
 
@@ -114,7 +125,6 @@ public class MainController {
         benchmarkClass.step();
         pannableCanvasController.updateTriangulation();
         benchmarkClass.step();
-
 
 
         //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.

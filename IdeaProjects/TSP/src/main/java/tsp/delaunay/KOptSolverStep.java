@@ -9,36 +9,43 @@ import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class KOptSolver {
+public class KOptSolverStep {
 
 
     //public final Instance instance;
+    DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph;
 
     private final MaskSubgraph<Point2D, KOptEdge> modifiedTour;
     private final MaskSubgraph<Point2D, KOptEdge> modifiedTriangulation;
-    DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph;
+
     int k = 5 * 2;
+
     KOptEdge addingEdge;
+
     ArrayList<KOptEdge> deletedTourEdges;
+
     Collection<KOptEdge> modifiedEdges;
+
     ArrayList<Point2D> points;
 
-    public KOptSolver(DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph) {
+    public KOptSolverStep(DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph) {
         this.graph = graph;
 
         modifiedTour = new MaskSubgraph<Point2D, KOptEdge>(graph, (Point2D p) -> false, (KOptEdge edge) -> !edge.isInModifiedTour());
         modifiedTriangulation = new MaskSubgraph<Point2D, KOptEdge>(graph, (Point2D p) -> false, (KOptEdge edge) -> !edge.isInModifiedTriangulation());
 
+        deletedTourEdges = new ArrayList<>();
+        modifiedEdges = new ArrayList<>();
     }
 
     AugmentingCircle cheapestAugmentingCircle() {
 
-        ArrayList<Point2D> array = new ArrayList<>();
+        points = new ArrayList<>();
 
         KOptEdge edge = deletedTourEdges.get(0);
 
-        array.add(edge.getSource());
-        array.add(edge.getTarget());
+        points.add(edge.getSource());
+        points.add(edge.getTarget());
         edge.setInTour(false);
         edge.setInAugmentingCircle(true);
         AugmentingCircle result = searchFromWithEdges(0.0 - edge.getWeight());
@@ -289,6 +296,7 @@ public class KOptSolver {
         }
         //return result;
     }
+
 
     public void setAddingEdge(KOptEdge addingEdge) {
         this.addingEdge = addingEdge;
