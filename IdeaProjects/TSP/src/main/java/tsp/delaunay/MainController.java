@@ -38,6 +38,19 @@ public class MainController {
         pannableCanvasController.showConvexHull();
     }
 
+    public void makeKOptimization() {
+
+
+        //TODO aufrufen des algorithmusses und erzeugen des notwendigen graphens
+    }
+
+    public void syncTourAndTriangulation() {
+        TriangulationBuilder triangulationBuilder = new TriangulationBuilder(instance.graph);
+        triangulationBuilder.initialTriangulationWithSetEdges();
+
+        pannableCanvasController.updateTriangulation();
+    }
+
 
     public Vertex getVertex() {
         return instance.getVertex();
@@ -53,20 +66,13 @@ public class MainController {
 
     }
 
+    public void showNewInstanceWindow() {
+        //pannableCanvasController.clearOldInstance();
 
-    void setFile(File file) {
-        vertex = FileReader.readPointsFromFile(file);
-        instance = new Instance(vertex);
-        instance.convexHull();
-        instance.triangulate1();
-        pannableCanvasController.updateTour();
-        pannableCanvasController.updateTriangulation();
-
-
-        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
+        newInstance();
     }
 
-    void showTriangCheckbox(){
+    void showTriangCheckbox() {
         pannableCanvasController.showTriangulation();
 
     }
@@ -93,17 +99,30 @@ public class MainController {
         pannableCanvasController.showTour();
     }
 
-    public void showNewInstanceWindow() {
-        pannableCanvasController.clearOldInstance();
+    void setFile(File file) {
+        TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("MainController::setFile");
+        vertex = FileReader.readPointsFromFile(file);
+        benchmarkClass.step();
+        instance = new Instance(vertex);
+        benchmarkClass.step();
+        instance.convexHull();
+        benchmarkClass.step();
+        instance.triangulate();
+        benchmarkClass.step();
+        pannableCanvasController.updateTour();
+        benchmarkClass.step();
+        pannableCanvasController.updateTriangulation();
+        benchmarkClass.step();
 
-        newInstance();
+
+        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
     }
 
     void computeShortTour() {
 
     }
 
-    void makeTwoOptOptimization() {
+    void makeTwoOptimization() {
 
         TwoOptSolver solver = new TwoOptSolver(instance.graph);
         solver.towOptForNonIntersectingEdges();

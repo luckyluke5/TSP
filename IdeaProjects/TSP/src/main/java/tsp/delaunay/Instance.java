@@ -15,6 +15,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 
 public class Instance {
@@ -30,11 +31,14 @@ public class Instance {
     MaskSubgraph<Point2D, ModifiedWeightedEdge> tourSubgraphMask;
 
     public Instance(Vertex vertex) {
+        TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("Instance::Instance");
         graph = new DefaultUndirectedWeightedGraph(ModifiedWeightedEdge.class);
         this.vertex = vertex;
+        benchmarkClass.step();
         for (Point2D point : getPoints()) {
             graph.addVertex(point);
         }
+        benchmarkClass.step();
         /**
          * Make graph complete and distance between two points as the weight of that edge
          */
@@ -46,17 +50,18 @@ public class Instance {
                 //edge.setUsefulDelaunayOrder(order);
             }
         }
-
+        benchmarkClass.step();
         /**
          * Initialise a tour
          */
-        tourSubgraphMask = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTour());
-
+        tour = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTour());
+        triangulation = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTriangulation());
+        benchmarkClass.step();
         GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
         GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
-
+        benchmarkClass.step();
         setTour(mstTour.getEdgeList());
-
+        benchmarkClass.step();
 
 
     }
@@ -87,18 +92,22 @@ public class Instance {
     }
 
     /**
-     *This method generates a Delaunay triangulation from the specified point
-     *set.
+     * This method generates a Delaunay triangulation from the specified point
+     * set.
      * Iterate all triangles to note the edges in the graph and save the corresponding lines to trianagulationLines
      */
 
 
-    public void triangulate1() {
+    public void triangulate() {
+        TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("Instance::triangulate");
+
         DelaunayTriangulator delaunayTriangulator = new DelaunayTriangulator(getPoints());
+        benchmarkClass.step();
         delaunayTriangulator.triangulate();
+        benchmarkClass.step();
         //Set alle edges not in triangulation
         graph.edgeSet().stream().forEach((ModifiedWeightedEdge edge) -> edge.setInTriangulation(false));
-
+        benchmarkClass.step();
         for (int i = 0; i < delaunayTriangulator.getTriangles().size(); i++) {
             Triangle2D triangle = delaunayTriangulator.getTriangles().get(i);
             Point2D a = triangle.a;
@@ -106,15 +115,16 @@ public class Instance {
             Point2D c = triangle.c;
 
             graph.getEdge(a,b).setInTriangulation(true);
-            trianagulationLines.add(new Line2D.Double(a,b));
+            //trianagulationLines.add(new Line2D.Double(a,b));
 
             graph.getEdge(b,c).setInTriangulation(true);
-            trianagulationLines.add(new Line2D.Double(b,c));
+            //trianagulationLines.add(new Line2D.Double(b,c));
 
             graph.getEdge(a,c).setInTriangulation(true);
-            trianagulationLines.add(new Line2D.Double(a,c));
+            //trianagulationLines.add(new Line2D.Double(a,c));
 
         }
+        benchmarkClass.step();
 
     }
 
@@ -124,8 +134,9 @@ public class Instance {
 
     public void convexHull() {
 
+        TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("Instance::convexHull");
         int n = getPoints().size();
-
+        benchmarkClass.step();
         // There must be at least 3 points
         if (n < 3) return;
 
@@ -139,7 +150,7 @@ public class Instance {
         // Start from leftmost point, keep moving
         // counterclockwise until reach the start point
         // again. This loop runs O(n)
-
+        benchmarkClass.step();
         int p = l, q;
         do
         {
@@ -169,12 +180,12 @@ public class Instance {
 
         } while (p != l);  // While we don't come to first
         // point
-
+        benchmarkClass.step();
         // Print Result
         int size = pointsFromConvexHull.size();
         // Add last line
         convexHullLines.add(new Line2D.Double(pointsFromConvexHull.get(0), pointsFromConvexHull.get(size - 1)));
-
+        benchmarkClass.step();
         //Add the convexHullLines of convex Hull
         for (int i = 0; i < pointsFromConvexHull.size() - 1; i++) {
             Point2D temp1 = new Point2D.Double(pointsFromConvexHull.get(i).getX(), pointsFromConvexHull.get(i).getY());
@@ -184,6 +195,7 @@ public class Instance {
 
 
         }
+        benchmarkClass.step();
 
     }
 
@@ -204,8 +216,42 @@ public class Instance {
         return (val > 0) ? 1 : 2; // clock or counterclock wise
     }
 
+    public ArrayList<Line2D> getTriangulationLines() {
+        Set<ModifiedWeightedEdge> edgeSet = triangulation.edgeSet();
+
+        ArrayList<Line2D> result = new ArrayList<>();
+
+        for (ModifiedWeightedEdge edge : edgeSet
+        ) {
+            Point2D source = edge.getSource();
+            Point2D target = edge.getTarget();
+
+            result.add(new Line2D.Double(source, target));
+        }
+
+        return result;
+
+
+    }
+
+    public ArrayList<Line2D> getTourLines() {
+        Set<ModifiedWeightedEdge> edgeSet = tour.edgeSet();
+
+        ArrayList<Line2D> result = new ArrayList<>();
+
+        for (ModifiedWeightedEdge edge : edgeSet
+        ) {
+            Point2D source = edge.getSource();
+            Point2D target = edge.getTarget();
+
+            result.add(new Line2D.Double(source, target));
+        }
+
+        return result;
+
+    }
+
     /**
-     *
      * @return Convex Hull lines
      */
     public ArrayList<Line2D> getConvexHullLines() {
