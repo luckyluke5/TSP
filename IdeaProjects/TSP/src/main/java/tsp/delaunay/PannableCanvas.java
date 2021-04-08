@@ -107,7 +107,6 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
             javaFXLine.setStroke(Color.GREEN);
             inTourLines.getChildren().add(javaFXLine);
         });
-
     }
 
     @Override
@@ -158,10 +157,12 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
             Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
             line.setStrokeWidth(getDefaultLineStrokeWidth());
+            line.strokeWidthProperty().bind(revScale);
             line.setStroke(Color.GRAY);
             circleGroup.getChildren().add(line);
 
         }
+
     }
 
     /**
@@ -210,7 +211,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     void createStrokes() {
         strokes = new ArrayList();
-        ArrayList<Line2D> lines = controller.getMainController().getInstance().getTrianagulationLines();
+        ArrayList<Line2D> lines = controller.getMainController().getInstance().getTriangulationLines();
 
         for (Line2D line : lines) {
 
@@ -223,6 +224,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
             strokes.add(l);
 
         }
+
 
     }
 
@@ -237,7 +239,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     public void getTimeline() {
         timeline = new Timeline();
         final int STARTTIME = 0;
-        System.out.println("STARTTIME " + controller.getMainController().getInstance().getTrianagulationLines().size());
+        System.out.println("STARTTIME " + controller.getMainController().getInstance().getTriangulationLines().size());
         Integer[] length = {STARTTIME};
         timeline.setCycleCount(Timeline.INDEFINITE);
 
@@ -251,6 +253,8 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
             }
 
         }));
+
+
 
     }
 

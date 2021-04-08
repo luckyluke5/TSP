@@ -1,13 +1,12 @@
 package tsp.delaunay;
 
 
-import javafx.scene.Group;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.tour.ChristofidesThreeHalvesApproxMetricTSP;
 import org.jgrapht.alg.tour.TwoApproxMetricTSP;
-import org.jgrapht.graph.DefaultEdge;
+
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.MaskSubgraph;
 
@@ -21,14 +20,15 @@ import java.util.Set;
 public class Instance {
     private final Vertex vertex;
 
-    ArrayList<DefaultEdge> edges = new ArrayList<>();
+
     DefaultUndirectedWeightedGraph<Point2D, ModifiedWeightedEdge> graph;
     ArrayList<Point2D> pointsFromConvexHull = new ArrayList<>();
-    ArrayList<Line2D> lines = new ArrayList<>();
 
-    ArrayList<Line2D> trianagulationLines = new ArrayList<>();
-    ArrayList<Line2D> convexHullLines = new ArrayList<>();
-    MaskSubgraph<Point2D, ModifiedWeightedEdge> tourSubgraphMask;
+
+
+    private final ArrayList<Line2D> convexHullLines = new ArrayList<>();
+    private final MaskSubgraph<Point2D, ModifiedWeightedEdge> tour;
+    private final MaskSubgraph<Point2D, ModifiedWeightedEdge> triangulation;
 
     public Instance(Vertex vertex) {
         TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("Instance::Instance");
@@ -56,13 +56,14 @@ public class Instance {
          */
         tour = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTour());
         triangulation = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTriangulation());
+
         benchmarkClass.step();
+
         GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
         GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
         benchmarkClass.step();
         setTour(mstTour.getEdgeList());
         benchmarkClass.step();
-
 
     }
 
@@ -94,12 +95,16 @@ public class Instance {
     /**
      * This method generates a Delaunay triangulation from the specified point
      * set.
-     * Iterate all triangles to note the edges in the graph and save the corresponding lines to trianagulationLines
+
+     * Iterate all triangles to note the edges in the graph.
+
      */
 
 
     public void triangulate() {
+
         TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("Instance::triangulate");
+
 
         DelaunayTriangulator delaunayTriangulator = new DelaunayTriangulator(getPoints());
         benchmarkClass.step();
@@ -115,16 +120,19 @@ public class Instance {
             Point2D c = triangle.c;
 
             graph.getEdge(a,b).setInTriangulation(true);
-            //trianagulationLines.add(new Line2D.Double(a,b));
+
+
 
             graph.getEdge(b,c).setInTriangulation(true);
-            //trianagulationLines.add(new Line2D.Double(b,c));
+
 
             graph.getEdge(a,c).setInTriangulation(true);
-            //trianagulationLines.add(new Line2D.Double(a,c));
 
         }
+        System.out.println("triangulate() wurde gerufen");
+
         benchmarkClass.step();
+
 
     }
 
@@ -265,11 +273,7 @@ public class Instance {
     }
 
 
-    public ArrayList<Line2D> getTrianagulationLines() {
 
-        return trianagulationLines;
-
-    }
 
     public SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> getMST() {
         return new KruskalMinimumSpanningTree<>(graph).getSpanningTree();

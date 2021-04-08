@@ -5,13 +5,11 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
-public class ModifiedWeightedEdge extends DefaultWeightedEdge {
+public class ModifiedWeightedEdge extends DefaultWeightedEdge implements ModifiedWeightedEdgeInterface {
 
-    boolean inTour;
-    boolean inTriangulation;
-
-    int usefulDelaunayOrder;
-
+    private boolean inTour;
+    private boolean inTriangulation;
+    private int usefulDelaunayOrder;
 
     public ModifiedWeightedEdge() {
         inTour = false;
@@ -19,46 +17,55 @@ public class ModifiedWeightedEdge extends DefaultWeightedEdge {
 
     }
 
+    @Override
     public int getUsefulDelaunayOrder() {
         return usefulDelaunayOrder;
     }
 
+    @Override
     public void setUsefulDelaunayOrder(int usefulDelaunayOrder) {
         this.usefulDelaunayOrder = usefulDelaunayOrder;
     }
 
-
+    @Override
     public boolean isInTriangulation() {
         return inTriangulation;
     }
 
+    @Override
     public void setInTriangulation(boolean inTriangulation) {
         this.inTriangulation = inTriangulation;
     }
 
+    @Override
     public boolean isInTour() {
         return inTour;
     }
 
+    @Override
     public void setInTour(boolean inTour) {
         this.inTour = inTour;
     }
 
-
-    Line2D getLine2D() {
+    @Override
+    public Line2D getLine2D() {
 
         return new Line2D.Double(getSource(), getTarget());
 
     }
 
     @Override
-    protected Point2D getSource() {
+    public Point2D getSource() {
         return (Point2D) super.getSource();
     }
 
     @Override
-    protected Point2D getTarget() {
+    public Point2D getTarget() {
         return (Point2D) super.getTarget();
+    }
 
+    @Override
+    public double getWeight() {
+        return super.getWeight();
     }
 }

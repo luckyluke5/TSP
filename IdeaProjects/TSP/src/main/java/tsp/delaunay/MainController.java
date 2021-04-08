@@ -100,12 +100,13 @@ public class MainController {
     }
 
     void setFile(File file) {
+
         TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("MainController::setFile");
         vertex = FileReader.readPointsFromFile(file);
         benchmarkClass.step();
         instance = new Instance(vertex);
         benchmarkClass.step();
-        instance.convexHull();
+        //instance.convexHull();
         benchmarkClass.step();
         instance.triangulate();
         benchmarkClass.step();
@@ -113,6 +114,7 @@ public class MainController {
         benchmarkClass.step();
         pannableCanvasController.updateTriangulation();
         benchmarkClass.step();
+
 
 
         //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
