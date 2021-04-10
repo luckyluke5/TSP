@@ -26,7 +26,7 @@ public class KOpt {
 
                     KOptSolverStep kOptSplver = new KOptSolverStep(graph);
                     kOptSplver.setAddingEdge(edge);
-                    kOptSplver.modifyTriangulationAndForceEdge();
+                    kOptSplver.solve();
                     //} catch (InterruptedException e) {
                     //    e.printStackTrace();
                     //}

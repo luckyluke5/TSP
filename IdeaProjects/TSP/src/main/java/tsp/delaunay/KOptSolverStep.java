@@ -6,18 +6,18 @@ import org.jgrapht.graph.MaskSubgraph;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class KOptSolverStep {
 
 
-    //public final Instance instance;
-    DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph;
-
     private final MaskSubgraph<Point2D, KOptEdge> modifiedTour;
     private final MaskSubgraph<Point2D, KOptEdge> modifiedTriangulation;
-
+    //public final Instance instance;
+    DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph;
     int k = 5 * 2;
 
     KOptEdge addingEdge;
@@ -31,14 +31,14 @@ public class KOptSolverStep {
     public KOptSolverStep(DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph) {
         this.graph = graph;
 
-        modifiedTour = new MaskSubgraph<Point2D, KOptEdge>(graph, (Point2D p) -> false, (KOptEdge edge) -> !edge.isInModifiedTour());
-        modifiedTriangulation = new MaskSubgraph<Point2D, KOptEdge>(graph, (Point2D p) -> false, (KOptEdge edge) -> !edge.isInModifiedTriangulation());
+        modifiedTour = new MaskSubgraph<>(graph, (Point2D p) -> false, (KOptEdge edge) -> !edge.isInModifiedTour());
+        modifiedTriangulation = new MaskSubgraph<>(graph, (Point2D p) -> false, (KOptEdge edge) -> !edge.isInModifiedTriangulation());
 
         deletedTourEdges = new ArrayList<>();
         modifiedEdges = new ArrayList<>();
     }
 
-    AugmentingCircle cheapestAugmentingCircle() {
+    private AugmentingCircle cheapestAugmentingCircle() {
 
         points = new ArrayList<>();
 
@@ -46,10 +46,10 @@ public class KOptSolverStep {
 
         points.add(edge.getSource());
         points.add(edge.getTarget());
-        edge.setInTour(false);
+        edge.setInModifiedTour(false);
         edge.setInAugmentingCircle(true);
         AugmentingCircle result = searchFromWithEdges(0.0 - edge.getWeight());
-        edge.setInTour(true);
+        edge.setInModifiedTour(true);
         edge.setInAugmentingCircle(false);
         if (result.points.isEmpty()) {
             //throw new Exception("no optimisation possible");
@@ -65,7 +65,7 @@ public class KOptSolverStep {
     }
 
 
-    AugmentingCircle searchFromWithEdges(Double length) {
+    private AugmentingCircle searchFromWithEdges(Double length) {
         int numberOfPoints = points.size();
         boolean isOdd = numberOfPoints % 2 == 1;
 
@@ -84,7 +84,7 @@ public class KOptSolverStep {
 
                         length -= graph.getEdgeWeight(edge);
                         edge.setInAugmentingCircle(true);
-                        edge.setInTour(false);
+                        edge.setInModifiedTour(false);
 
                         if (graph.getEdgeSource(edge).equals(points.get(numberOfPoints - 1))) {
                             points.add(graph.getEdgeTarget(edge));
@@ -103,7 +103,7 @@ public class KOptSolverStep {
 
                         length += graph.getEdgeWeight(edge);
                         edge.setInAugmentingCircle(false);
-                        edge.setInTour(true);
+                        edge.setInModifiedTour(true);
                     }
 
                 } else {
@@ -111,7 +111,7 @@ public class KOptSolverStep {
 
                         length += graph.getEdgeWeight(edge);
                         edge.setInAugmentingCircle(true);
-                        edge.setInTour(true);
+                        edge.setInModifiedTour(true);
 
                         if (graph.getEdgeSource(edge).equals(points.get(numberOfPoints - 1))) {
                             points.add(graph.getEdgeTarget(edge));
@@ -141,7 +141,7 @@ public class KOptSolverStep {
 
                         length -= graph.getEdgeWeight(edge);
                         edge.setInAugmentingCircle(false);
-                        edge.setInTour(false);
+                        edge.setInModifiedTour(false);
                     }
 
                 }
@@ -152,7 +152,7 @@ public class KOptSolverStep {
 
     }
 
-    void augmentTour(ArrayList<Point2D> tour) {
+    private void augmentTour(ArrayList<Point2D> tour) {
         for (int i = 0; i < tour.size() - 1; i++) {
             KOptEdge edge = graph.getEdge(tour.get(i), tour.get(i + 1));
             edge.setInTour(!edge.isInTour());
@@ -167,9 +167,19 @@ public class KOptSolverStep {
 
     }
 
-    void modifyTriangulationAndForceEdge() {
+    /**
+     * Main Function of a solving step
+     * <p>
+     * first adding edge to triangulation
+     * <p>
+     * then deleting edges off triangulation witch are crossing the new edge
+     * <p>
+     * then completing sub-triangulation to triangulation
+     * <p>
+     * then if deleted edges were part of the tour, make local optimisation
+     */
 
-
+    void solve() {
         addingEdge.setInModifiedTriangulation(true);
         //ArrayList<ModifiedWeightedEdge> modifiedEdges = new ArrayList<>();
         //ArrayList<ModifiedWeightedEdge> deletedEdges = new ArrayList<>();
@@ -181,24 +191,41 @@ public class KOptSolverStep {
         completeTriangulationWithValidEdges();
 
 
-        ArrayList<AugmentingCircle> results = new ArrayList<>();
-        k = 5 * 2;
+        //ArrayList<AugmentingCircle> results = new ArrayList<>();
 
-        for (KOptEdge edge : deletedTourEdges
+        // k = 5 * 2;
+
+        if (deletedTourEdges.size() > 0) {
+            AugmentingCircle result = cheapestAugmentingCircle();
+
+            augmentTour(result.points);
+        }
+
+
+        modifyTriangulationAndForceEdge();
+
+    }
+
+    private void modifyTriangulationAndForceEdge() {
+
+
+
+
+        /*for (KOptEdge edge : deletedTourEdges
         ) {
 
 
-            AugmentingCircle result = cheapestAugmentingCircle();
+
             if (!result.points.isEmpty()) {
                 //augment_tour(result.points);
                 results.add(result);
             }
             //augment_tour(result.points);
 
-        }
+        }*/
 
 
-        try {
+        /*try {
             AugmentingCircle circle = results.stream().min(Comparator.comparing(AugmentingCircle::getLength)).orElseThrow(NoSuchElementException::new);
             if (circle.length < 100) {
                 augmentTour(circle.points);
@@ -259,9 +286,13 @@ public class KOptSolverStep {
 
             }
 
-        }
+        }*/
 
     }
+
+    /**
+     * Delete all Edges of the Triangulation with are intersecting the addingEdge witch is adding in this KOptStep
+     */
 
     private void deleteTriangulationEdges() {
         for (KOptEdge edge : modifiedTriangulation.edgeSet()
@@ -275,21 +306,38 @@ public class KOptSolverStep {
                     deletedTourEdges.add(edge);
                 }
 
+                modifiedEdges.add(edge);
+
 
             }
         }
     }
 
+    /**
+     * Complete Triangulation considering sub-triangulation
+     * <p>
+     * Some Edges are already part of the triangulation. this function find an mark is inModifiedTriangulation
+     * additional Edges so the the resulting modified triangulation is a complete triangulation and no more a incomplete
+     * sub-triangulation
+     */
+
     private void completeTriangulationWithValidEdges() {
         //ArrayList<MyEdge> result = new ArrayList<>();
+        List<Line2D> lineArray = modifiedTriangulation.edgeSet()
+                .stream()
+                .map(KOptEdge::getLine2D)
+                .collect(Collectors.toList());
+
         for (KOptEdge edge : graph.edgeSet()) {
             Line2D line = edge.getLine2D();
-            List<Line2D> lineArray = modifiedTriangulation.edgeSet().stream().map(KOptEdge::getLine2D).collect(Collectors.toList());
 
             if (!TriangulationBuilder.isLineIntersectAnyOtherLine(line, lineArray)) {
 
 
                 edge.setInModifiedTriangulation(true);
+                lineArray.add(line);
+
+                modifiedEdges.add(edge);
 
             }
 
