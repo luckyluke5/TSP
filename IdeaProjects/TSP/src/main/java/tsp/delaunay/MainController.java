@@ -42,6 +42,8 @@ public class MainController {
 
     public void makeKOptimization() {
 
+        double previous = instance.getTourLength();
+
         KOptSolverGraphCreator creator = new KOptSolverGraphCreator(instance.graph);
 
         DefaultUndirectedWeightedGraph<Point2D, KOptEdge> kOptGraph = creator.createKOptGraph();
@@ -49,6 +51,10 @@ public class MainController {
         KOpt solver = new KOpt(kOptGraph);
 
         solver.solve();
+
+        double after = instance.getTourLength();
+
+        System.out.println("vorher " + previous + " nachher " + after);
 
         pannableCanvasController.updateTour();
         pannableCanvasController.updateTriangulation();

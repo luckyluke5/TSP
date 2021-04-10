@@ -74,7 +74,17 @@ public class Instance {
 
     }
 
-    /**+
+    public double getTourLength() {
+        return tour
+                .edgeSet()
+                .stream()
+                .mapToDouble(ModifiedWeightedEdge::getWeight)
+                .sum();
+    }
+
+
+    /**
+     * +
      *
      * @return The Points from class Vertex
      */

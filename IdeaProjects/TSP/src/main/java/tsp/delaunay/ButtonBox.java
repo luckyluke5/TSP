@@ -34,6 +34,8 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         createKOptTriangulationButton();
         createTourTriangualtionSyncButton();
 
+        createTourLenghtLabel();
+
         getChildren().add(browseButton);
         getChildren().add(mstButton);
         getChildren().add(triangulationButton);
@@ -48,6 +50,9 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         setAlignment(Pos.BASELINE_RIGHT);
         setSpacing(10);
 
+    }
+
+    private void createTourLenghtLabel() {
     }
 
     //TODO eindeutigere Funktionsbezeichner und Labels
