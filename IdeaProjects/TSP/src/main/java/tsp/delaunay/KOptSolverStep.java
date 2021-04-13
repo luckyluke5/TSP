@@ -337,7 +337,7 @@ public class KOptSolverStep {
         ) {
             if (edge.equals(addingEdge)) {
 
-                throw new ArithmeticException("die hinzugfügte kannte sollte eigentlich nicht in der triangulation sein");
+                //throw new ArithmeticException("die hinzugfügte kannte sollte eigentlich nicht in der triangulation sein");
 
             }
             if (TriangulationBuilder.areLinesIntersectingWithoutEndpoints(addingEdge.getLine2D(), edge.getLine2D())) {
@@ -356,6 +356,8 @@ public class KOptSolverStep {
 
             }
         }
+
+
     }
 
     /**
