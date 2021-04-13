@@ -3,6 +3,7 @@ package tsp.delaunay;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 class ButtonBox extends VBox implements ButtonBoxInterface {
@@ -18,7 +19,8 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     private final ButtonBoxController controller;
     private Button kOptButton;
-    private Button tourTriangualtionSyncButton;
+    private Button tourTriangulationSyncButton;
+    private Label tourLengthLabel;
 
     ButtonBox() {
         controller = new ButtonBoxController();
@@ -43,16 +45,21 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         getChildren().add(tourCheckbox);
         getChildren().add(twoOptButton);
         getChildren().add(kOptButton);
-        getChildren().add(tourTriangualtionSyncButton);
+        getChildren().add(tourTriangulationSyncButton);
         getChildren().add(triangCheckbox);
+        getChildren().add(tourLengthLabel);
 
         autosize();
         setAlignment(Pos.BASELINE_RIGHT);
         setSpacing(10);
 
+        updateTourLengthLabel();
+
     }
 
-    private void createTourLenghtLabel() {
+    private void createTourTriangualtionSyncButton() {
+        tourTriangulationSyncButton = new Button("3. Sync Tour and Triangulation");
+        tourTriangulationSyncButton.setOnAction(actionEvent -> controller.pushSyncTourAndTriangualtion());
     }
 
     //TODO eindeutigere Funktionsbezeichner und Labels
@@ -101,9 +108,18 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         kOptButton.setOnAction(actionEvent -> controller.pushKOpt());
     }
 
-    private void createTourTriangualtionSyncButton() {
-        tourTriangualtionSyncButton = new Button("3. Sync Tour and Triangulation");
-        tourTriangualtionSyncButton.setOnAction(actionEvent -> controller.pushSyncTourAndTriangualtion());
+    private void createTourLenghtLabel() {
+        tourLengthLabel = new Label();
+    }
+
+    @Override
+    public void updateTourLengthLabel() {
+        try {
+
+            tourLengthLabel.setText(String.valueOf(controller.mainController.getInstance().getTourLength()));
+        } catch (NullPointerException e) {
+            tourLengthLabel.setText("Noch keine Tour berechnet");
+        }
     }
 
     ButtonBoxControllerInterface getController() {

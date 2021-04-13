@@ -15,18 +15,21 @@ public class MainController {
 
 
     private final Application application;
-    private Vertex vertex;
     private Instance instance;
 
-    PannableCanvasControllerInterface pannableCanvasController;
+    private PannableCanvasControllerInterface pannableCanvasController;
+    private ButtonBoxControllerInterface buttonBoxController;
 
-
-    public MainController(Application application) {
+    MainController(Application application) {
         this.application = application;
 
         //mainSceneController = new MainSceneController(this);
 
 
+    }
+
+    void showConvexHull() {
+        pannableCanvasController.showConvexHull();
     }
 
     void getFileWithFileLoaderPopUp() {
@@ -36,11 +39,7 @@ public class MainController {
         setFile(file);
     }
 
-    public void showConvexHull() {
-        pannableCanvasController.showConvexHull();
-    }
-
-    public void makeKOptimization() {
+    void makeKOptimization() {
 
         double previous = instance.getTourLength();
 
@@ -56,24 +55,33 @@ public class MainController {
 
         System.out.println("vorher " + previous + " nachher " + after);
 
-        pannableCanvasController.updateTour();
+        updateTour();
         pannableCanvasController.updateTriangulation();
     }
 
-    public void syncTourAndTriangulation() {
+    private void updateTour() {
+        pannableCanvasController.updateTour();
+
+        buttonBoxController.updateTourLength();
+    }
+
+    void syncTourAndTriangulation() {
         TriangulationBuilder triangulationBuilder = new TriangulationBuilder(instance.graph);
         triangulationBuilder.initialTriangulationWithSetEdges();
 
-        pannableCanvasController.updateTour();
+        updateTour();
+
+
         pannableCanvasController.updateTriangulation();
     }
 
+    void showNewInstanceWindow() {
+        //pannableCanvasController.clearOldInstance();
 
-    public Vertex getVertex() {
-        return instance.getVertex();
+        newInstance();
     }
 
-    void newInstance() {
+    private void newInstance() {
 
         try {
             application.start(new Stage());
@@ -83,10 +91,16 @@ public class MainController {
 
     }
 
-    public void showNewInstanceWindow() {
-        //pannableCanvasController.clearOldInstance();
+    void makeTwoOptimization() {
 
-        newInstance();
+        TwoOptSolver solver = new TwoOptSolver(instance.graph);
+        solver.towOptForNonIntersectingEdges();
+        updateTour();
+
+    }
+
+    void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
+        this.buttonBoxController = buttonBoxController;
     }
 
     void showTriangCheckbox() {
@@ -116,10 +130,10 @@ public class MainController {
         pannableCanvasController.showTour();
     }
 
-    void setFile(File file) {
+    private void setFile(File file) {
 
         TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("MainController::setFile");
-        vertex = FileReader.readPointsFromFile(file);
+        Vertex vertex = FileReader.readPointsFromFile(file);
         benchmarkClass.step();
         instance = new Instance(vertex);
         benchmarkClass.step();
@@ -127,7 +141,7 @@ public class MainController {
         benchmarkClass.step();
         instance.triangulate();
         benchmarkClass.step();
-        pannableCanvasController.updateTour();
+        updateTour();
         benchmarkClass.step();
         pannableCanvasController.updateTriangulation();
         benchmarkClass.step();
@@ -140,16 +154,9 @@ public class MainController {
 
     }
 
-    void makeTwoOptimization() {
-
-        TwoOptSolver solver = new TwoOptSolver(instance.graph);
-        solver.towOptForNonIntersectingEdges();
-        pannableCanvasController.updateTour();
-
+    Vertex getVertex() {
+        return instance.getVertex();
     }
-
-
-
 
 
 }

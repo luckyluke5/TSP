@@ -73,10 +73,12 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
 
     }
 
-    public ArrayList<Line2D> getTriangulationLines(){
+    public ArrayList<Line2D> getTriangulationLines() {
         return mainController.getInstance().getTriangulationLines();
     }
 
 
-
+    double getRadiusOfInstance() {
+        return mainController.getVertex().getRadius() / 2;
+    }
 }

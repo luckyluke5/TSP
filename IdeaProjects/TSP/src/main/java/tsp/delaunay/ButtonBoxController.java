@@ -6,6 +6,7 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
 
     void pushMSTButton() {
         mainController.showMST();
+
     }
 
     void pushTriangulationButton() {
@@ -43,11 +44,17 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
         mainController.syncTourAndTriangulation();
     }
 
+    @Override
+    public void updateTourLength() {
+        view.updateTourLengthLabel();
+    }
+
     public void setView(ButtonBoxInterface view) {
         this.view = view;
     }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+        mainController.setButtonBoxController(this);
     }
 }

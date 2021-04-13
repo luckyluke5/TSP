@@ -131,7 +131,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     }
 
     private double getDefaultLineStrokeWidth() {
-        return controller.getMainController().getVertex().getRadius() / 2;
+        return controller.getRadiusOfInstance();
     }
 
     @Override
