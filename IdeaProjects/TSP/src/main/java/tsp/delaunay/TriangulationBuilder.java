@@ -5,6 +5,7 @@ import org.jgrapht.graph.MaskSubgraph;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,37 +52,27 @@ public class TriangulationBuilder {
         return false;
     }
 
-    static boolean areLinesIntersectingWithoutEndpoints(Line2D line1, Line2D line2) {
+    void deleteAllEdgesOfTriangulationWitchAreCrossingAnEdgeOfTour() {
 
+        ArrayList<ModifiedWeightedEdge> traingulationEdgesToDelete = new ArrayList<>();
 
-        boolean result;
-        boolean sameAtP1 = false;
-        boolean sameAtP2 = false;
+        for (ModifiedWeightedEdge triangulationEdge : triangulation.edgeSet()
+        ) {
+            for (ModifiedWeightedEdge tourEdge : tour.edgeSet()
+            ) {
+                if (!triangulationEdge.equals(tourEdge)) {
 
-        if (line1.getP1().equals(line2.getP1()) || line1.getP1().equals(line2.getP2())) {
-            sameAtP1 = true;
-
-        }
-
-        if (line1.getP2().equals(line2.getP1()) || line1.getP2().equals(line2.getP2())) {
-            sameAtP2 = true;
-
-        }
-
-        if (sameAtP1 && sameAtP2) {
-            result = true;
-            //throw new ArithmeticException("Undefined behavior, both lines are the same");
-
-        } else {
-            if (sameAtP1 || sameAtP2) {
-                result = false;
-            } else {
-                result = line1.intersectsLine(line2);
+                    if (areLinesIntersectingWithoutEndpoints(triangulationEdge.getLine2D(), tourEdge.getLine2D())) {
+                        traingulationEdgesToDelete.add(triangulationEdge);
+                    }
+                }
             }
         }
 
+        traingulationEdgesToDelete.forEach(modifiedWeightedEdge -> modifiedWeightedEdge.setInTriangulation(false));
 
-        return result;
+        completeTriangulationWithValidEdges();
+
     }
 
     public int howManyLineAreIntersected(ModifiedWeightedEdge edge, Collection<ModifiedWeightedEdge> edges) {
@@ -134,20 +125,60 @@ public class TriangulationBuilder {
         return instance;
     }*/
 
+    static boolean areLinesIntersectingWithoutEndpoints(Line2D line1, Line2D line2) {
+
+
+        boolean result;
+        boolean sameAtP1 = false;
+        boolean sameAtP2 = false;
+
+        if (line1.getP1().equals(line2.getP1()) || line1.getP1().equals(line2.getP2())) {
+            sameAtP1 = true;
+
+        }
+
+        if (line1.getP2().equals(line2.getP1()) || line1.getP2().equals(line2.getP2())) {
+            sameAtP2 = true;
+
+        }
+
+        if (sameAtP1 && sameAtP2) {
+            result = false;
+            //throw new ArithmeticException("Undefined behavior, both lines are the same");
+
+        } else {
+            if (sameAtP1 || sameAtP2) {
+                result = false;
+            } else {
+                result = line1.intersectsLine(line2);
+            }
+        }
+
+
+        return result;
+    }
+
     private void completeTriangulationWithValidEdges() {
         //ArrayList<MyEdge> result = new ArrayList<>();
+        List<Line2D> triangulationLines = triangulation.edgeSet().stream().map(ModifiedWeightedEdge::getLine2D).collect(Collectors.toList());
+        List<Line2D> tourLines = tour.edgeSet().stream().map(ModifiedWeightedEdge::getLine2D).collect(Collectors.toList());
+        List<Line2D> doNotCrossingLines = new ArrayList<>();
+        doNotCrossingLines.addAll(triangulationLines);
+        doNotCrossingLines.addAll(tourLines);
         for (ModifiedWeightedEdge edge : graph.edgeSet()) {
             Line2D line = edge.getLine2D();
-            List<Line2D> lineArray = triangulation.edgeSet().stream().map(ModifiedWeightedEdge::getLine2D).collect(Collectors.toList());
 
-            if (!isLineIntersectAnyOtherLine(line, lineArray)) {
+            if (!isLineIntersectAnyOtherLine(line, doNotCrossingLines)) {
 
 
                 edge.setInTriangulation(true);
+                doNotCrossingLines.add(line);
 
             }
 
         }
         //return result;
     }
+
+
 }

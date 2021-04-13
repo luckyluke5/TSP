@@ -67,8 +67,8 @@ public class MainController {
 
     void syncTourAndTriangulation() {
         TriangulationBuilder triangulationBuilder = new TriangulationBuilder(instance.graph);
-        triangulationBuilder.initialTriangulationWithSetEdges();
-
+        //triangulationBuilder.initialTriangulationWithSetEdges();
+        triangulationBuilder.deleteAllEdgesOfTriangulationWitchAreCrossingAnEdgeOfTour();
         updateTour();
 
 

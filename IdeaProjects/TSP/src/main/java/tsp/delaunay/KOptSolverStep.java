@@ -331,8 +331,15 @@ public class KOptSolverStep {
      */
 
     private void deleteTriangulationEdges() {
+
+
         for (KOptEdge edge : modifiedTriangulation.edgeSet()
         ) {
+            if (edge.equals(addingEdge)) {
+
+                throw new ArithmeticException("die hinzugfügte kannte sollte eigentlich nicht in der triangulation sein");
+
+            }
             if (TriangulationBuilder.areLinesIntersectingWithoutEndpoints(addingEdge.getLine2D(), edge.getLine2D())) {
                 edge.setInModifiedTriangulation(false);
                 //edge.set_in_tour(false);
@@ -369,14 +376,17 @@ public class KOptSolverStep {
         for (KOptEdge edge : graph.edgeSet()) {
             Line2D line = edge.getLine2D();
 
-            if (!TriangulationBuilder.isLineIntersectAnyOtherLine(line, lineArray)) {
+            if (!edge.isInTriangulation()) {
+
+                if (!TriangulationBuilder.isLineIntersectAnyOtherLine(line, lineArray)) {
 
 
-                edge.setInModifiedTriangulation(true);
-                lineArray.add(line);
+                    edge.setInModifiedTriangulation(true);
+                    lineArray.add(line);
 
-                modifiedTriangulationEdges.add(edge);
+                    modifiedTriangulationEdges.add(edge);
 
+                }
             }
 
         }
