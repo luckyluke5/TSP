@@ -21,6 +21,9 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
     private Button kOptButton;
     private Button tourTriangulationSyncButton;
     private Label tourLengthLabel;
+    private Button randomTourInitializationButton;
+    private Button mstTourInitializationButton;
+    private Button christophidesTourInitializationButton;
 
     ButtonBox() {
         controller = new ButtonBoxController();
@@ -38,6 +41,12 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
         createTourLenghtLabel();
 
+        createRandomTourInitializationButton();
+        createMstTourInitializationButton();
+        createChristophidesTourInitializationButton();
+
+        createResetButton();
+
 
         autosize();
         setAlignment(Pos.BASELINE_RIGHT);
@@ -49,10 +58,38 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     private void createBrowseButton() {
 
-        browseButton = new Button("1. Choose file");
+        browseButton = new Button("0. Choose file");
         browseButton.setOnAction(actionEvent -> controller.pushBrowseButton());
 
         getChildren().add(browseButton);
+    }
+
+    private void createRandomTourInitializationButton() {
+        randomTourInitializationButton = new Button("1a. Random Tour");
+        randomTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setRandomTour());
+
+        getChildren().add(randomTourInitializationButton);
+    }
+
+    private void createMstTourInitializationButton() {
+        mstTourInitializationButton = new Button("1b. Mst Tour");
+        mstTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setMstTour());
+
+        getChildren().add(mstTourInitializationButton);
+    }
+
+    private void createChristophidesTourInitializationButton() {
+        christophidesTourInitializationButton = new Button("1c. Christophides Tour");
+        christophidesTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setChristophidesTour());
+
+        getChildren().add(christophidesTourInitializationButton);
+    }
+
+    private void createResetButton() {
+        Button resetButton = new Button("0. Reset");
+        resetButton.setOnAction(actionEvent -> controller.mainController.resetInstance());
+
+        getChildren().add(resetButton);
     }
 
     private void createMSTCheckbox() {

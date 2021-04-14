@@ -1,11 +1,8 @@
 package tsp.delaunay;
 
 
-import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
-import org.jgrapht.alg.tour.ChristofidesThreeHalvesApproxMetricTSP;
-import org.jgrapht.alg.tour.TwoApproxMetricTSP;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.MaskSubgraph;
 
@@ -55,17 +52,17 @@ public class Instance {
         /**
          * Initialise a tour
          */
-        tour = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTour());
-        triangulation = new MaskSubgraph<Point2D, ModifiedWeightedEdge>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTriangulation());
+        tour = new MaskSubgraph<>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTour());
+        triangulation = new MaskSubgraph<>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTriangulation());
 
-        benchmarkClass.step();
+        //benchmarkClass.step();
 
-        GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
-        GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
+        //GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
+        //GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
 
-        benchmarkClass.step();
+        //benchmarkClass.step();
 
-        setTour(mstTour.getEdgeList());
+        //setTour(mstTour.getEdgeList());
         benchmarkClass.step();
 
 
@@ -73,6 +70,7 @@ public class Instance {
 
         graph.edgeSet().forEach(delaunayOrderCalculator::calculateAndSetUsefulDelaunayOrder);
 
+        benchmarkClass.step();
 
     }
 

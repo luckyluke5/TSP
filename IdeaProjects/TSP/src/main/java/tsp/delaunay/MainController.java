@@ -4,6 +4,9 @@ import javafx.application.Application;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.tour.ChristofidesThreeHalvesApproxMetricTSP;
+import org.jgrapht.alg.tour.TwoApproxMetricTSP;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.awt.geom.Point2D;
@@ -94,6 +97,29 @@ public class MainController {
         solver.towOptForNonIntersectingEdges();
         updateTour();
 
+    }
+
+    public void setRandomTour() {
+
+        updateTour();
+
+    }
+
+    public void setMstTour() {
+        GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
+        instance.setTour(mstTour.getEdgeList());
+
+        updateTour();
+    }
+
+    public void setChristophidesTour() {
+        GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
+        instance.setTour(christofidesTour.getEdgeList());
+
+        updateTour();
+    }
+
+    public void resetInstance() {
     }
 
     void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
