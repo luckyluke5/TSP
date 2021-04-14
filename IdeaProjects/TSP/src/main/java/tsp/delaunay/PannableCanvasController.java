@@ -1,5 +1,7 @@
 package tsp.delaunay;
 
+import sun.jvm.hotspot.debugger.aarch64.AARCH64ThreadContext;
+
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
@@ -12,7 +14,6 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
 
         //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
         mainController.getInstance().triangulate();
-        //getMainController().getGraph().convexHull();
 
         view.playTimelineFromStart();
     }
@@ -45,12 +46,13 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     }
 
 
-    @Override
-    public void showConvexHull() {
-        mainController.getInstance().convexHull();
-        view.showConvexHull();
 
+
+    public void updateMST(){
+        view.updateMST();
     }
+
+
 
     @Override
     public void updateTour() {
@@ -66,6 +68,12 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
         view.showMST();
     }
 
+    @Override
+    public void showTriang0() {
+        view.showTriang0();
+
+    }
+
     public ArrayList<Line2D> getTourLines() {
 
 
@@ -76,6 +84,9 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     public ArrayList<Line2D> getTriangulationLines() {
         return mainController.getInstance().getTriangulationLines();
     }
+
+    public ArrayList<Line2D> getTriang0Lines(){return mainController.getInstance().getTriang0Lines();}
+
 
 
     double getRadiusOfInstance() {

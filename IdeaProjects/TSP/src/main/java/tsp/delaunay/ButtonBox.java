@@ -10,9 +10,9 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
 
     private Button browseButton;
-    private Button mstButton;
+    private CheckBox mstCheckbox;
+    private CheckBox triang0Checkbox;
     private Button triangulationButton;
-    private CheckBox convexHullCheckBox;
     private CheckBox tourCheckbox;
     private CheckBox triangCheckbox;
     private Button twoOptButton;
@@ -27,8 +27,8 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         controller.setView(this);
 
         createBrowseButton();
-        createMSTButton();
-        createConvexHullButton();
+        createMSTCheckbox();
+        createTriang0Checkbox();
         createTriangulationButton();
         createTourCheckbox();
         createTriangulationCheckbox();
@@ -39,9 +39,10 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         createTourLenghtLabel();
 
         getChildren().add(browseButton);
-        getChildren().add(mstButton);
+        getChildren().add(mstCheckbox);
+        getChildren().add(triang0Checkbox);
         getChildren().add(triangulationButton);
-        getChildren().add(convexHullCheckBox);
+
         getChildren().add(tourCheckbox);
         getChildren().add(twoOptButton);
         getChildren().add(kOptButton);
@@ -69,10 +70,7 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     }
 
-    private void createConvexHullButton() {
-        convexHullCheckBox = new CheckBox("Convex Hull");
-        convexHullCheckBox.setOnAction(actionEvent -> controller.pushConvexHullCheckBox());
-    }
+
 
     private void createTourCheckbox() {
         tourCheckbox = new CheckBox("Tour");
@@ -91,12 +89,13 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     }
 
-    private void createMSTButton() {
+    private void createMSTCheckbox() {
 
-        mstButton = new Button("Calculate MST");
-        mstButton.setOnAction(actionEvent -> controller.pushMSTButton());
+        mstCheckbox = new CheckBox("Calculate MST");
+        mstCheckbox.setOnAction(actionEvent -> controller.pushMSTButton());
 
     }
+
 
     private void createTwoOptButton() {
         twoOptButton = new Button("2. Two Optimisation Tour/ Eliminate Crossing");
@@ -110,7 +109,15 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     private void createTourLenghtLabel() {
         tourLengthLabel = new Label();
+
     }
+    public void createTriang0Checkbox(){
+        triang0Checkbox = new CheckBox("Triangulation 0");
+        triang0Checkbox.setSelected(false);
+        triang0Checkbox.setOnAction(actionEvent -> controller.pushTriang0());
+
+    }
+
 
     @Override
     public void updateTourLengthLabel() {

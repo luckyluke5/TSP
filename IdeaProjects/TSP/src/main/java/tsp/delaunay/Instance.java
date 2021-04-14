@@ -21,13 +21,15 @@ public class Instance {
 
 
     DefaultUndirectedWeightedGraph<Point2D, ModifiedWeightedEdge> graph;
-    ArrayList<Point2D> pointsFromConvexHull = new ArrayList<>();
+
 
 
 
     private final ArrayList<Line2D> convexHullLines = new ArrayList<>();
     private final MaskSubgraph<Point2D, ModifiedWeightedEdge> tour;
     private final MaskSubgraph<Point2D, ModifiedWeightedEdge> triangulation;
+
+    private ArrayList<Line2D> triang0Lines = new ArrayList<>();
 
     public Instance(Vertex vertex) {
         TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("Instance::Instance");
@@ -137,25 +139,24 @@ public class Instance {
             Point2D c = triangle.c;
 
             graph.getEdge(a,b).setInTriangulation(true);
-
-
+            triang0Lines.add(new Line2D.Double(a,b));
 
             graph.getEdge(b,c).setInTriangulation(true);
-
+            triang0Lines.add(new Line2D.Double(b,c));
 
             graph.getEdge(a,c).setInTriangulation(true);
-
+            triang0Lines.add(new Line2D.Double(a,c));
         }
-        System.out.println("triangulate() wurde gerufen");
+
 
         benchmarkClass.step();
 
 
     }
 
-    /**
+    /*
      * Finds Convex Hull and saves the Points and Lines of it.
-     */
+     *
 
     public void convexHull() {
 
@@ -225,13 +226,10 @@ public class Instance {
     }
 
     /**
-     *
-     * @param p first Point
-     * @param q second Point
-     * @param r third Point
+
      * @return 0 or 1 or 2 if the Points are
      *         collinear  clock or counterclock wise
-     */
+     *
 
     public double orientation(Point2D p, Point2D q, Point2D r) {
         double val = (q.getY() - p.getY()) * (r.getX() - q.getX()) -
@@ -239,7 +237,7 @@ public class Instance {
 
         if (val == 0) return 0;  // collinear
         return (val > 0) ? 1 : 2; // clock or counterclock wise
-    }
+    }*/
 
     public ArrayList<Line2D> getTriangulationLines() {
         Set<ModifiedWeightedEdge> edgeSet = triangulation.edgeSet();
@@ -297,4 +295,7 @@ public class Instance {
     }
 
 
+    public ArrayList<Line2D> getTriang0Lines() {
+        return triang0Lines;
+    }
 }

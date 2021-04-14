@@ -9,6 +9,7 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
 
     }
 
+
     void pushTriangulationButton() {
         mainController.showTriangulation();
 
@@ -32,9 +33,6 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
         mainController.makeTwoOptimization();
     }
 
-    public void pushConvexHullCheckBox() {
-        mainController.showConvexHull();
-    }
 
     public void pushKOpt() {
         mainController.makeKOptimization();
@@ -56,5 +54,10 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
         mainController.setButtonBoxController(this);
+    }
+
+
+    public void pushTriang0() {
+        mainController.showTriang0();
     }
 }

@@ -28,9 +28,6 @@ public class MainController {
 
     }
 
-    void showConvexHull() {
-        pannableCanvasController.showConvexHull();
-    }
 
     void getFileWithFileLoaderPopUp() {
         FileChooser fileChooser = new FileChooser();
@@ -118,6 +115,8 @@ public class MainController {
         pannableCanvasController.showMST();
     }
 
+
+
     void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
         this.pannableCanvasController = pannableCanvasController;
     }
@@ -130,6 +129,11 @@ public class MainController {
         pannableCanvasController.showTour();
     }
 
+    public void showTriang0() {
+        pannableCanvasController.showTriang0();
+
+    }
+
     private void setFile(File file) {
 
         TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("MainController::setFile");
@@ -137,7 +141,7 @@ public class MainController {
         benchmarkClass.step();
         instance = new Instance(vertex);
         benchmarkClass.step();
-        //instance.convexHull();
+        pannableCanvasController.updateMST();
         benchmarkClass.step();
         instance.triangulate();
         benchmarkClass.step();
@@ -157,6 +161,7 @@ public class MainController {
     Vertex getVertex() {
         return instance.getVertex();
     }
+
 
 
 }
