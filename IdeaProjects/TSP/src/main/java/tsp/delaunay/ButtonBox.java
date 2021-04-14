@@ -14,7 +14,7 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
     private CheckBox triang0Checkbox;
     private Button triangulationButton;
     private CheckBox tourCheckbox;
-    private CheckBox triangCheckbox;
+    private CheckBox triangulationCheckbox;
     private Button twoOptButton;
 
     private final ButtonBoxController controller;
@@ -33,22 +33,11 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         createTourCheckbox();
         createTriangulationCheckbox();
         createTwoOptButton();
-        createKOptTriangulationButton();
+        createKOptButton();
         createTourTriangualtionSyncButton();
 
         createTourLenghtLabel();
 
-        getChildren().add(browseButton);
-        getChildren().add(mstCheckbox);
-        getChildren().add(triang0Checkbox);
-        getChildren().add(triangulationButton);
-
-        getChildren().add(tourCheckbox);
-        getChildren().add(twoOptButton);
-        getChildren().add(kOptButton);
-        getChildren().add(tourTriangulationSyncButton);
-        getChildren().add(triangCheckbox);
-        getChildren().add(tourLengthLabel);
 
         autosize();
         setAlignment(Pos.BASELINE_RIGHT);
@@ -58,35 +47,12 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     }
 
-    private void createTourTriangualtionSyncButton() {
-        tourTriangulationSyncButton = new Button("3. Sync Tour and Triangulation");
-        tourTriangulationSyncButton.setOnAction(actionEvent -> controller.pushSyncTourAndTriangualtion());
-    }
-
-    //TODO eindeutigere Funktionsbezeichner und Labels
-    private void createTriangulationButton() {
-        triangulationButton = new Button("Triangulation");
-        triangulationButton.setOnAction(actionEvent -> controller.pushTriangulationButton());
-
-    }
-
-
-
-    private void createTourCheckbox() {
-        tourCheckbox = new CheckBox("Tour");
-        tourCheckbox.setOnAction(actionEvent -> controller.pushTourCheckBox());
-    }
-
-    //TODO eindeutigere Funktionsbezeichner und Labels
-    private void createTriangulationCheckbox() {
-        triangCheckbox = new CheckBox("Triangulation");
-        triangCheckbox.setOnAction(actionEvent -> controller.pushTriangulationCheckbox());
-    }
     private void createBrowseButton() {
 
         browseButton = new Button("1. Choose file");
         browseButton.setOnAction(actionEvent -> controller.pushBrowseButton());
 
+        getChildren().add(browseButton);
     }
 
     private void createMSTCheckbox() {
@@ -94,27 +60,66 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         mstCheckbox = new CheckBox("Calculate MST");
         mstCheckbox.setOnAction(actionEvent -> controller.pushMSTButton());
 
+        getChildren().add(mstCheckbox);
+
     }
 
+    public void createTriang0Checkbox() {
+        triang0Checkbox = new CheckBox("Triangulation 0");
+        triang0Checkbox.setSelected(false);
+        triang0Checkbox.setOnAction(actionEvent -> controller.pushTriang0());
+
+        getChildren().add(triang0Checkbox);
+    }
+
+    //TODO eindeutigere Funktionsbezeichner und Labels
+    private void createTriangulationButton() {
+        triangulationButton = new Button("Triangulation");
+        triangulationButton.setOnAction(actionEvent -> controller.pushTriangulationButton());
+
+        getChildren().add(triangulationButton);
+    }
+
+    private void createTourCheckbox() {
+        tourCheckbox = new CheckBox("Tour");
+        tourCheckbox.setOnAction(actionEvent -> controller.pushTourCheckBox());
+
+        getChildren().add(tourCheckbox);
+    }
+
+    //TODO eindeutigere Funktionsbezeichner und Labels
+    private void createTriangulationCheckbox() {
+        triangulationCheckbox = new CheckBox("Triangulation");
+        triangulationCheckbox.setOnAction(actionEvent -> controller.pushTriangulationCheckbox());
+
+        getChildren().add(triangulationCheckbox);
+    }
 
     private void createTwoOptButton() {
         twoOptButton = new Button("2. Two Optimisation Tour/ Eliminate Crossing");
         twoOptButton.setOnAction(actionEvent -> controller.pushTwoOpt());
+
+        getChildren().add(twoOptButton);
     }
 
-    private void createKOptTriangulationButton() {
+    private void createKOptButton() {
         kOptButton = new Button("4. K Optimisation Tour and Triangulation");
         kOptButton.setOnAction(actionEvent -> controller.pushKOpt());
+
+        getChildren().add(kOptButton);
+    }
+
+    private void createTourTriangualtionSyncButton() {
+        tourTriangulationSyncButton = new Button("3. Sync Tour and Triangulation");
+        tourTriangulationSyncButton.setOnAction(actionEvent -> controller.pushSyncTourAndTriangualtion());
+
+        getChildren().add(tourTriangulationSyncButton);
     }
 
     private void createTourLenghtLabel() {
         tourLengthLabel = new Label();
 
-    }
-    public void createTriang0Checkbox(){
-        triang0Checkbox = new CheckBox("Triangulation 0");
-        triang0Checkbox.setSelected(false);
-        triang0Checkbox.setOnAction(actionEvent -> controller.pushTriang0());
+        getChildren().add(tourLengthLabel);
 
     }
 

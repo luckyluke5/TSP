@@ -301,6 +301,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         for (Point2D point : controller.getMainController().getVertex().points) {
             Circle cir = new Circle(point.getX(), point.getY(), controller.getMainController().getVertex().getRadius());
 
+
             cir.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
             cir.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
             cir.radiusProperty().bind(revScale);

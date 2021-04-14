@@ -37,7 +37,7 @@ public class DelaunayOrderCalculator {
                 continue;
             }
 
-            if (line.ptLineDist(point) > 0) {
+            if (line.ptLineDist(point) > 1.0e-3) {
 
 
                 if (line.relativeCCW(point) > 0) {
@@ -46,7 +46,7 @@ public class DelaunayOrderCalculator {
                     leftPoints.add(point);
                 }
             } else {
-                if (line.ptSegDist(point) > 0) {
+                if (line.ptSegDist(point) > 1.0e-4) {
 
                 } else {
                     edge.setUsefulDelaunayOrder(points.size());
@@ -80,8 +80,7 @@ public class DelaunayOrderCalculator {
                 }
                 if (leftMax == rightPointsSorted[rightIndex]) {
                     System.out.println("More then tree points on circle");
-                    rightIndex = this.points.size();
-                    ;
+                    rightIndex = points.size();
                 } else {
                     //edge.rightDistance=Math.abs(rightPointsSorted[rightIndex] - rightPointsSorted[rightIndex - 1])/length;
                     //edge.rightDistance = Math.abs(rightPointsSorted[rightIndex] - rightPointsSorted[rightIndex - 1]);
@@ -104,7 +103,7 @@ public class DelaunayOrderCalculator {
                 }
                 if (rightMin == leftPointsSorted[leftPointsSorted.length - (leftIndex + 1)]) {
                     System.out.println("More then tree points on circle");
-                    leftIndex = this.points.size();
+                    leftIndex = points.size();
                 } else {
                     //edge.leftDistance=Math.abs(leftPointsSorted[leftPointsSorted.length - (leftIndex + 1)] - leftPointsSorted[leftPointsSorted.length - (leftIndex)])/length;
                     //edge.leftDistance = Math.abs(leftPointsSorted[leftPointsSorted.length - (leftIndex + 1)] - leftPointsSorted[leftPointsSorted.length - (leftIndex)]);
@@ -157,7 +156,8 @@ public class DelaunayOrderCalculator {
         double det = (p1.getX() - p2.getX()) * (p2.getY() - p3.getY()) - (p2.getX() - p3.getX()) * (p1.getY() - p2.getY());
 
         if (Math.abs(det) < 1.0e-6) {
-            throw new ArithmeticException("It could be that three points are on one line.");
+            System.out.println(Math.abs(det));
+            //throw new ArithmeticException("It could be that three points are on one line.");
         }
 
         // Center of circle
