@@ -11,6 +11,8 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainController {
 
@@ -99,27 +101,48 @@ public class MainController {
 
     }
 
-    public void setRandomTour() {
+    void setRandomTour() {
+        Point2D lastPoint = null;
+
+        ArrayList<Point2D> points = getVertex().points;
+        Collections.shuffle(points);
+
+        ArrayList<ModifiedWeightedEdge> edgeList = new ArrayList<>();
+
+        for (Point2D point : points
+        ) {
+            if (lastPoint != null) {
+                ModifiedWeightedEdge edge = instance.graph.getEdge(lastPoint, point);
+                edgeList.add(edge);
+            }
+            lastPoint = point;
+
+        }
+
+        ModifiedWeightedEdge edge = instance.graph.getEdge(lastPoint, points.get(0));
+        edgeList.add(edge);
+
+        instance.setTour(edgeList);
 
         updateTour();
 
     }
 
-    public void setMstTour() {
+    void setMstTour() {
         GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
         instance.setTour(mstTour.getEdgeList());
 
         updateTour();
     }
 
-    public void setChristophidesTour() {
+    void setChristophidesTour() {
         GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
         instance.setTour(christofidesTour.getEdgeList());
 
         updateTour();
     }
 
-    public void resetInstance() {
+    void resetInstance() {
     }
 
     void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
