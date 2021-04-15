@@ -18,4 +18,8 @@ public interface PannableCanvasInterface {
     void updateTriangulation();
 
     void showTriang0();
+
+    void showDelaunayEdgesWithSpecificOrder(int order);
+
+    void hideDelaunayEdgesWithSpecificOrder();
 }

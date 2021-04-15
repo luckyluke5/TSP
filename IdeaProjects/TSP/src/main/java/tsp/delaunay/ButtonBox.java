@@ -1,49 +1,35 @@
 package tsp.delaunay;
 
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 class ButtonBox extends VBox implements ButtonBoxInterface {
 
 
-    private Button browseButton;
-    private CheckBox mstCheckbox;
-    private CheckBox triang0Checkbox;
-    private Button triangulationButton;
-    private CheckBox tourCheckbox;
-    private CheckBox triangulationCheckbox;
-    private Button twoOptButton;
-
     private final ButtonBoxController controller;
-    private Button kOptButton;
-    private Button tourTriangulationSyncButton;
     private Label tourLengthLabel;
-    private Button randomTourInitializationButton;
-    private Button mstTourInitializationButton;
-    private Button christophidesTourInitializationButton;
 
     ButtonBox() {
         controller = new ButtonBoxController();
         controller.setView(this);
 
         createBrowseButton();
-        createMSTCheckbox();
-        createTriang0Checkbox();
-        createTriangulationButton();
-        createTourCheckbox();
-        createTriangulationCheckbox();
+        createInitialisationMenuButton();
         createTwoOptButton();
-        createKOptButton();
         createTourTriangualtionSyncButton();
+        createKOptButton();
+
+
+        //createTriangulationButton();
+        createTourCheckbox();
+        createMSTCheckbox();
+        createTriangulationCheckbox();
+
+        createDelaunayTriangulationMenuButton();
+
 
         createTourLenghtLabel();
-
-        createRandomTourInitializationButton();
-        createMstTourInitializationButton();
-        createChristophidesTourInitializationButton();
 
         createResetButton();
 
@@ -58,99 +44,92 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     private void createBrowseButton() {
 
-        browseButton = new Button("0. Choose file");
+        Button browseButton = new Button("0. Choose file");
         browseButton.setOnAction(actionEvent -> controller.pushBrowseButton());
 
         getChildren().add(browseButton);
     }
 
-    private void createRandomTourInitializationButton() {
-        randomTourInitializationButton = new Button("1a. Random Tour");
-        randomTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setRandomTour());
+    private void createInitialisationMenuButton() {
+        MenuButton menuButton = new MenuButton("1. Choose Intial Tour");
 
-        getChildren().add(randomTourInitializationButton);
+        menuButton.getItems().add(createRandomTourInitializationButton());
+        menuButton.getItems().add(createMstTourInitializationButton());
+        menuButton.getItems().add(createChristophidesTourInitializationButton());
+
+        getChildren().add(menuButton);
     }
 
-    private void createMstTourInitializationButton() {
-        mstTourInitializationButton = new Button("1b. Mst Tour");
-        mstTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setMstTour());
+    private void createTwoOptButton() {
+        Button twoOptButton = new Button("2. Two Optimisation Tour/ Eliminate Crossing");
+        twoOptButton.setOnAction(actionEvent -> controller.pushTwoOpt());
 
-        getChildren().add(mstTourInitializationButton);
+        getChildren().add(twoOptButton);
     }
 
-    private void createChristophidesTourInitializationButton() {
-        christophidesTourInitializationButton = new Button("1c. Christophides Tour");
-        christophidesTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setChristophidesTour());
+    private void createTourTriangualtionSyncButton() {
+        Button tourTriangulationSyncButton = new Button("3. Sync Tour and Triangulation");
+        tourTriangulationSyncButton.setOnAction(actionEvent -> controller.pushSyncTourAndTriangualtion());
 
-        getChildren().add(christophidesTourInitializationButton);
+        getChildren().add(tourTriangulationSyncButton);
     }
 
-    private void createResetButton() {
-        Button resetButton = new Button("0. Reset");
-        resetButton.setOnAction(actionEvent -> controller.mainController.resetInstance());
+    private void createKOptButton() {
+        Button kOptButton = new Button("4. K Optimisation Tour and Triangulation");
+        kOptButton.setOnAction(actionEvent -> controller.pushKOpt());
 
-        getChildren().add(resetButton);
+        getChildren().add(kOptButton);
+    }
+
+    private void createTourCheckbox() {
+        CheckBox tourCheckbox = new CheckBox("Tour");
+        tourCheckbox.setOnAction(actionEvent -> controller.pushTourCheckBox());
+
+        getChildren().add(tourCheckbox);
     }
 
     private void createMSTCheckbox() {
 
-        mstCheckbox = new CheckBox("Calculate MST");
+        CheckBox mstCheckbox = new CheckBox("Calculate MST");
         mstCheckbox.setOnAction(actionEvent -> controller.pushMSTButton());
 
         getChildren().add(mstCheckbox);
 
     }
 
-    public void createTriang0Checkbox() {
-        triang0Checkbox = new CheckBox("Triangulation 0");
-        triang0Checkbox.setSelected(false);
-        triang0Checkbox.setOnAction(actionEvent -> controller.pushTriang0());
-
-        getChildren().add(triang0Checkbox);
-    }
-
-    //TODO eindeutigere Funktionsbezeichner und Labels
-    private void createTriangulationButton() {
-        triangulationButton = new Button("Triangulation");
-        triangulationButton.setOnAction(actionEvent -> controller.pushTriangulationButton());
-
-        getChildren().add(triangulationButton);
-    }
-
-    private void createTourCheckbox() {
-        tourCheckbox = new CheckBox("Tour");
-        tourCheckbox.setOnAction(actionEvent -> controller.pushTourCheckBox());
-
-        getChildren().add(tourCheckbox);
-    }
-
     //TODO eindeutigere Funktionsbezeichner und Labels
     private void createTriangulationCheckbox() {
-        triangulationCheckbox = new CheckBox("Triangulation");
+        CheckBox triangulationCheckbox = new CheckBox("Triangulation");
         triangulationCheckbox.setOnAction(actionEvent -> controller.pushTriangulationCheckbox());
 
         getChildren().add(triangulationCheckbox);
     }
 
-    private void createTwoOptButton() {
-        twoOptButton = new Button("2. Two Optimisation Tour/ Eliminate Crossing");
-        twoOptButton.setOnAction(actionEvent -> controller.pushTwoOpt());
+    void createDelaunayTriangulationMenuButton() {
+        MenuButton delaunayTriangulationMenuButton = new MenuButton("Delaunay Edges Higher Order");
+        //delaunayTriangulationMenuButton.setSelected(false);
+        //delaunayTriangulationMenuButton.setOnAction(actionEvent -> controller.pushTriang0());
 
-        getChildren().add(twoOptButton);
-    }
+        MenuItem hideMenuItem = new MenuItem("Hide");
+        hideMenuItem.setOnAction(e -> {
+            controller.mainController.hideDelaunayEdgesWithSpecificOrder();
+        });
 
-    private void createKOptButton() {
-        kOptButton = new Button("4. K Optimisation Tour and Triangulation");
-        kOptButton.setOnAction(actionEvent -> controller.pushKOpt());
+        delaunayTriangulationMenuButton.getItems().add(hideMenuItem);
 
-        getChildren().add(kOptButton);
-    }
 
-    private void createTourTriangualtionSyncButton() {
-        tourTriangulationSyncButton = new Button("3. Sync Tour and Triangulation");
-        tourTriangulationSyncButton.setOnAction(actionEvent -> controller.pushSyncTourAndTriangualtion());
+        for (int i = 0; i <= 4; i++) {
+            int k = i;
+            MenuItem menuItem = new MenuItem("Delaunay Order " + i);
+            menuItem.setOnAction(e -> {
+                controller.mainController.showDelaunayEdgesWithSpecificOrder(k);
+            });
 
-        getChildren().add(tourTriangulationSyncButton);
+            delaunayTriangulationMenuButton.getItems().add(menuItem);
+
+        }
+
+        getChildren().add(delaunayTriangulationMenuButton);
     }
 
     private void createTourLenghtLabel() {
@@ -160,6 +139,43 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     }
 
+    private void createResetButton() {
+        Button resetButton = new Button("0. Reset");
+        resetButton.setOnAction(actionEvent -> controller.mainController.resetInstance());
+
+        getChildren().add(resetButton);
+    }
+
+    private MenuItem createRandomTourInitializationButton() {
+        MenuItem randomTourInitializationButton = new MenuItem("Random Tour");
+        randomTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setRandomTour());
+
+        return randomTourInitializationButton;
+    }
+
+    private MenuItem createMstTourInitializationButton() {
+        MenuItem mstTourInitializationButton = new MenuItem("Mst Tour");
+        mstTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setMstTour());
+
+        //getChildren().add(mstTourInitializationButton);
+        return mstTourInitializationButton;
+    }
+
+    private MenuItem createChristophidesTourInitializationButton() {
+        MenuItem christophidesTourInitializationButton = new MenuItem("Christophides Tour");
+        christophidesTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setChristophidesTour());
+
+        //getChildren().add(christophidesTourInitializationButton);
+        return christophidesTourInitializationButton;
+    }
+
+    //TODO eindeutigere Funktionsbezeichner und Labels
+    private void createTriangulationButton() {
+        Button triangulationButton = new Button("Triangulation");
+        triangulationButton.setOnAction(actionEvent -> controller.pushTriangulationButton());
+
+        getChildren().add(triangulationButton);
+    }
 
     @Override
     public void updateTourLengthLabel() {

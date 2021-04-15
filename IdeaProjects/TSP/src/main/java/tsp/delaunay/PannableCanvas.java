@@ -22,6 +22,7 @@ import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PannableCanvas extends BorderPane implements PannableCanvasInterface {
@@ -30,6 +31,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     private final Group strokesGroup;
     private final Group triangLines;
     private final Group triang0Lines;
+    private final Group delaunayOrderHigherOrder;
     private final Group mstLines;
     // das ist nicht die main group die in der scene verankert ist
     // sondern die erste gruppe, an der circle, strokes und tourLines enthalten ist
@@ -76,12 +78,15 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         triangLines = new Group();
         triangLines.setVisible(false);
 
+        delaunayOrderHigherOrder = new Group();
+
         getChildren().add(mainGroup);
         mainGroup.getChildren().add(triang0Lines);
         mainGroup.getChildren().add(mstLines);
         mainGroup.getChildren().add(strokesGroup);
         mainGroup.getChildren().add(inTourLines);
         mainGroup.getChildren().add(triangLines);
+        mainGroup.getChildren().add(delaunayOrderHigherOrder);
 
 
     }
@@ -140,19 +145,43 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     public void showTriang0() {
         ArrayList <Line2D> lines = controller.getTriang0Lines();
 
-        lines.forEach(line ->{
+        lines.forEach(line -> {
             Line javaFXLine = convertLine(line);
             javaFXLine.setStrokeWidth(getDefaultLineStrokeWidth());
             javaFXLine.strokeWidthProperty().bind(revScale);
             javaFXLine.setStroke(Color.DIMGRAY);
             triang0Lines.getChildren().add(javaFXLine);
 
-        } );
+        });
         triang0Lines.setVisible(!triang0Lines.isVisible());
     }
 
+    @Override
+    public void showDelaunayEdgesWithSpecificOrder(int order) {
+        delaunayOrderHigherOrder.getChildren().clear();
 
-    public void updateMST(){
+        List<Line2D> lines = controller.getDelaunayEdgesWithOrder(order);
+
+        lines.forEach(line -> {
+            Line javaFXLine = convertLine(line);
+            javaFXLine.setStrokeWidth(getDefaultLineStrokeWidth());
+            javaFXLine.strokeWidthProperty().bind(revScale);
+            javaFXLine.setStroke(Color.DIMGRAY);
+            delaunayOrderHigherOrder.getChildren().add(javaFXLine);
+
+        });
+        delaunayOrderHigherOrder.setVisible(true);
+
+
+    }
+
+    @Override
+    public void hideDelaunayEdgesWithSpecificOrder() {
+        delaunayOrderHigherOrder.setVisible(false);
+    }
+
+
+    public void updateMST() {
         SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> mst = controller.getMainController().getInstance().getMST();
         for (ModifiedWeightedEdge edge : mst.getEdges()
         ) {

@@ -19,4 +19,8 @@ public interface PannableCanvasControllerInterface extends Controller {
     void showTriangulation();
 
     void showTriang0();
+
+    void showDelaunayEdgesWithSpecificOrder(int order);
+
+    void hideDelaunayEdgesWithSpecificOrder();
 }
