@@ -4,10 +4,15 @@ import javafx.application.Application;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.tour.ChristofidesThreeHalvesApproxMetricTSP;
+import org.jgrapht.alg.tour.TwoApproxMetricTSP;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainController {
 
@@ -28,9 +33,6 @@ public class MainController {
 
     }
 
-    void showConvexHull() {
-        pannableCanvasController.showConvexHull();
-    }
 
     void getFileWithFileLoaderPopUp() {
         FileChooser fileChooser = new FileChooser();
@@ -99,6 +101,50 @@ public class MainController {
 
     }
 
+    void setRandomTour() {
+        Point2D lastPoint = null;
+
+        ArrayList<Point2D> points = getVertex().points;
+        Collections.shuffle(points);
+
+        ArrayList<ModifiedWeightedEdge> edgeList = new ArrayList<>();
+
+        for (Point2D point : points
+        ) {
+            if (lastPoint != null) {
+                ModifiedWeightedEdge edge = instance.graph.getEdge(lastPoint, point);
+                edgeList.add(edge);
+            }
+            lastPoint = point;
+
+        }
+
+        ModifiedWeightedEdge edge = instance.graph.getEdge(lastPoint, points.get(0));
+        edgeList.add(edge);
+
+        instance.setTour(edgeList);
+
+        updateTour();
+
+    }
+
+    void setMstTour() {
+        GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
+        instance.setTour(mstTour.getEdgeList());
+
+        updateTour();
+    }
+
+    void setChristophidesTour() {
+        GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
+        instance.setTour(christofidesTour.getEdgeList());
+
+        updateTour();
+    }
+
+    void resetInstance() {
+    }
+
     void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
         this.buttonBoxController = buttonBoxController;
     }
@@ -118,6 +164,8 @@ public class MainController {
         pannableCanvasController.showMST();
     }
 
+
+
     void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
         this.pannableCanvasController = pannableCanvasController;
     }
@@ -130,6 +178,11 @@ public class MainController {
         pannableCanvasController.showTour();
     }
 
+    public void showTriang0() {
+        pannableCanvasController.showTriang0();
+
+    }
+
     private void setFile(File file) {
 
         TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("MainController::setFile");
@@ -137,7 +190,7 @@ public class MainController {
         benchmarkClass.step();
         instance = new Instance(vertex);
         benchmarkClass.step();
-        //instance.convexHull();
+        pannableCanvasController.updateMST();
         benchmarkClass.step();
         instance.triangulate();
         benchmarkClass.step();
@@ -157,6 +210,7 @@ public class MainController {
     Vertex getVertex() {
         return instance.getVertex();
     }
+
 
 
 }

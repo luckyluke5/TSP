@@ -5,15 +5,17 @@ public interface PannableCanvasInterface {
 
     void showMST();
 
+    void updateMST();
+
     void playTimelineFromStart();
 
     void updateTour();
-
-    void showConvexHull();
 
     void showTour();
 
     void showTriangulation();
 
     void updateTriangulation();
+
+    void showTriang0();
 }

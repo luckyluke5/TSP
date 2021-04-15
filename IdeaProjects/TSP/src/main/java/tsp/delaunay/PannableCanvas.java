@@ -29,6 +29,8 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     private final Group inTourLines;
     private final Group strokesGroup;
     private final Group triangLines;
+    private final Group triang0Lines;
+    private final Group mstLines;
     // das ist nicht die main group die in der scene verankert ist
     // sondern die erste gruppe, an der circle, strokes und tourLines enthalten ist
     private final Group mainGroup;
@@ -62,6 +64,12 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         inTourLines = new Group();
         inTourLines.setVisible(false);
 
+        mstLines = new Group();
+        mstLines.setVisible(false);
+
+        triang0Lines = new Group();
+        triang0Lines.setVisible(false);
+
         circleGroup = new Group();
         strokesGroup = new Group();
 
@@ -69,6 +77,8 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         triangLines.setVisible(false);
 
         getChildren().add(mainGroup);
+        mainGroup.getChildren().add(triang0Lines);
+        mainGroup.getChildren().add(mstLines);
         mainGroup.getChildren().add(strokesGroup);
         mainGroup.getChildren().add(inTourLines);
         mainGroup.getChildren().add(triangLines);
@@ -104,6 +114,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
             Line javaFXLine = convertLine(line);
             javaFXLine.setStrokeWidth(getDefaultLineStrokeWidth());
+            javaFXLine.strokeWidthProperty().bind(revScale);
             javaFXLine.setStroke(Color.GREEN);
             inTourLines.getChildren().add(javaFXLine);
         });
@@ -125,30 +136,23 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     }
 
-
-    private Line convertLine(Line2D line) {
-        return new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
-    }
-
-    private double getDefaultLineStrokeWidth() {
-        return controller.getRadiusOfInstance();
-    }
-
     @Override
-    public void showConvexHull() {
+    public void showTriang0() {
+        ArrayList <Line2D> lines = controller.getTriang0Lines();
 
+        lines.forEach(line ->{
+            Line javaFXLine = convertLine(line);
+            javaFXLine.setStrokeWidth(getDefaultLineStrokeWidth());
+            javaFXLine.strokeWidthProperty().bind(revScale);
+            javaFXLine.setStroke(Color.DIMGRAY);
+            triang0Lines.getChildren().add(javaFXLine);
+
+        } );
+        triang0Lines.setVisible(!triang0Lines.isVisible());
     }
 
-    @Override
-    public void showTour() {
-        inTourLines.setVisible(!inTourLines.isVisible());
-    }
 
-    @Override
-    public void showTriangulation() {triangLines.setVisible(!triangLines.isVisible());}
-
-
-    public void showMST() {
+    public void updateMST(){
         SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> mst = controller.getMainController().getInstance().getMST();
         for (ModifiedWeightedEdge edge : mst.getEdges()
         ) {
@@ -159,10 +163,35 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
             line.setStrokeWidth(getDefaultLineStrokeWidth());
             line.strokeWidthProperty().bind(revScale);
             line.setStroke(Color.GRAY);
-            circleGroup.getChildren().add(line);
+            mstLines.getChildren().add(line);
 
         }
 
+    }
+
+
+    private Line convertLine(Line2D line) {
+        return new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+    }
+
+    private double getDefaultLineStrokeWidth() {
+        return controller.getRadiusOfInstance();
+    }
+
+
+
+    @Override
+    public void showTour() {
+        inTourLines.setVisible(!inTourLines.isVisible());
+    }
+
+
+
+    @Override
+    public void showTriangulation() {triangLines.setVisible(!triangLines.isVisible());}
+
+
+    public void showMST() {mstLines.setVisible(!mstLines.isVisible());
     }
 
     /**
@@ -271,6 +300,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
         for (Point2D point : controller.getMainController().getVertex().points) {
             Circle cir = new Circle(point.getX(), point.getY(), controller.getMainController().getVertex().getRadius());
+
 
             cir.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
             cir.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
