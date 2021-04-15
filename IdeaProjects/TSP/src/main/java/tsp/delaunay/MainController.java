@@ -58,6 +58,10 @@ public class MainController {
         System.out.println("vorher " + previous + " nachher " + after);
 
         updateTour();
+        updateTriangulation();
+    }
+
+    private void updateTriangulation() {
         pannableCanvasController.updateTriangulation();
     }
 
@@ -147,7 +151,11 @@ public class MainController {
             modifiedWeightedEdge.setInTriangulation(modifiedWeightedEdge.getUsefulDelaunayOrder() == 0);
         });
         instance.setTour(new ArrayList<>());
+
+        updateTour();
+        updateTriangulation();
     }
+
 
     void showDelaunayEdgesWithSpecificOrder(int order) {
         pannableCanvasController.showDelaunayEdgesWithSpecificOrder(order);
