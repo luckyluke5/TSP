@@ -23,8 +23,8 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
         //createTriangulationButton();
         createTourCheckbox();
-        createMSTCheckbox();
         createTriangulationCheckbox();
+        createMSTCheckbox();
 
         createDelaunayTriangulationMenuButton();
 
