@@ -1,9 +1,9 @@
 package tsp.delaunay;
 
-import sun.jvm.hotspot.debugger.aarch64.AARCH64ThreadContext;
-
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PannableCanvasController implements PannableCanvasControllerInterface {
 
@@ -16,6 +16,18 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
         mainController.getInstance().triangulate();
 
         view.playTimelineFromStart();
+    }
+
+    public List<Line2D> getDelaunayEdgesWithOrder(int order) {
+        List<Line2D> result = mainController.getInstance()
+                .graph
+                .edgeSet()
+                .stream()
+                .filter(modifiedWeightedEdge -> modifiedWeightedEdge.getUsefulDelaunayOrder() == order)
+                .map(ModifiedWeightedEdge::getLine2D)
+                .collect(Collectors.toList());
+
+        return result;
     }
 
     public void setMainController(MainController mainController) {
@@ -40,18 +52,15 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
         view.showTour();
     }
 
-    public void showTriangulation(){
+    public void showTriangulation() {
 
         view.showTriangulation();
     }
 
 
-
-
-    public void updateMST(){
+    public void updateMST() {
         view.updateMST();
     }
-
 
 
     @Override
@@ -74,6 +83,17 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
 
     }
 
+    @Override
+    public void showDelaunayEdgesWithSpecificOrder(int order) {
+        view.showDelaunayEdgesWithSpecificOrder(order);
+
+    }
+
+    @Override
+    public void hideDelaunayEdgesWithSpecificOrder() {
+        view.hideDelaunayEdgesWithSpecificOrder();
+    }
+
     public ArrayList<Line2D> getTourLines() {
 
 
@@ -85,8 +105,9 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
         return mainController.getInstance().getTriangulationLines();
     }
 
-    public ArrayList<Line2D> getTriang0Lines(){return mainController.getInstance().getTriang0Lines();}
-
+    public ArrayList<Line2D> getTriang0Lines() {
+        return mainController.getInstance().getTriang0Lines();
+    }
 
 
     double getRadiusOfInstance() {

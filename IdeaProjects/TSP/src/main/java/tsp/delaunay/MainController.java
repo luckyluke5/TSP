@@ -143,6 +143,18 @@ public class MainController {
     }
 
     void resetInstance() {
+        instance.graph.edgeSet().forEach(modifiedWeightedEdge -> {
+            modifiedWeightedEdge.setInTriangulation(modifiedWeightedEdge.getUsefulDelaunayOrder() == 0);
+        });
+        instance.setTour(new ArrayList<>());
+    }
+
+    void showDelaunayEdgesWithSpecificOrder(int order) {
+        pannableCanvasController.showDelaunayEdgesWithSpecificOrder(order);
+    }
+
+    public void hideDelaunayEdgesWithSpecificOrder() {
+        pannableCanvasController.hideDelaunayEdgesWithSpecificOrder();
     }
 
     void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
