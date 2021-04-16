@@ -12,10 +12,10 @@ import java.util.NoSuchElementException;
 
 public class Vertex {
 
-    ArrayList<Point2D> points;
+    ArrayList<ModifiedPoint2D> points;
     public int factor =300;
 
-    public Vertex(ArrayList<Point2D> points) {
+    public Vertex(ArrayList<ModifiedPoint2D> points) {
         this.points = points;
         points.sort(Comparator.comparing(Point2D::getX));
     }

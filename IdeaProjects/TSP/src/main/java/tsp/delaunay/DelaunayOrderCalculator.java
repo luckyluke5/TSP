@@ -8,9 +8,9 @@ import java.util.NoSuchElementException;
 
 public class DelaunayOrderCalculator {
 
-    ArrayList<Point2D> points;
+    ArrayList<ModifiedPoint2D> points;
 
-    public DelaunayOrderCalculator(ArrayList<Point2D> points) {
+    public DelaunayOrderCalculator(ArrayList<ModifiedPoint2D> points) {
         this.points = points;
     }
 

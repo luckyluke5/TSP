@@ -8,6 +8,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +23,7 @@ import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.beans.EventHandler;
 import java.util.ArrayList;
 
 
@@ -54,9 +57,13 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         // logging
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             System.out.println(
-                    "canvas event: " + (((event.getSceneX() - getBoundsInParent().getMinX()) / getScale()) + ", scale: " + getScale())
+                    //"canvas eventX: " + ((event.getSceneX()-getBoundsInParent().getMinX())/getScale())
+                  //  "canvas eventX: " + (((event.getSceneX() - getBoundsInParent().getMinX()) / getScale()) + ", scale: " + getScale())
             );
-            System.out.println("canvas bounds: " + getBoundsInParent());
+            System.out.println(
+                    //"canvas eventY: " + (((event.getSceneY() - getBoundsInParent().getMinY()) / getScale()) + ", scale: " + getScale())
+            );
+          //  System.out.println("canvas bounds: " + getBoundsInParent());
         });
 
         mainGroup = new Group();
@@ -96,7 +103,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
      */
     public void setScale(double scale) {
         myScale.set(scale);
-        revScale.set(3 / scale);
+        revScale.set(4 / scale);
     }
 
     public void playTimelineFromStart() {
@@ -178,14 +185,10 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         return controller.getRadiusOfInstance();
     }
 
-
-
     @Override
     public void showTour() {
         inTourLines.setVisible(!inTourLines.isVisible());
     }
-
-
 
     @Override
     public void showTriangulation() {triangLines.setVisible(!triangLines.isVisible());}
@@ -224,10 +227,6 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
         setScale(scale.getValue().doubleValue());
     }
-
-    /*public void setMainController(MainController mainController) {
-        controller.setMainController(mainController);
-    }*/
 
     void makeSceneGestures(Scene scene) {
 
@@ -272,7 +271,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         Integer[] length = {STARTTIME};
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.4), actionEvent -> {
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.2), actionEvent -> {
             length[0]++;
 
             int i = length[0];
@@ -289,22 +288,33 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     private void transformGroup(Group group1) {
         group1.getTransforms().add(new Translate(-controller.getMainController().getVertex().min_x(), -controller.getMainController().getVertex().min_y()));
-        group1.getTransforms().add(new Scale(0.9, -0.9, controller.getMainController().getVertex().min_x() + controller.getMainController().getVertex().x_diff() / 2, controller.getMainController().getVertex().min_y() + controller.getMainController().getVertex().y_diff() / 2));
+        group1.getTransforms().add(new Scale(1, -1, controller.getMainController().getVertex().min_x() + controller.getMainController().getVertex().x_diff() / 2, controller.getMainController().getVertex().min_y() + controller.getMainController().getVertex().y_diff() / 2));
     }
 
-    ArrayList<Circle> createPointsWithNodeGesture() {
+    /**
+     * Modify circles and update Point2D coordinate after Dragg & Drop
+     *
+     * @return ArrayList of Cicrcles
+     */
+    public ArrayList<Circle> createPointsWithNodeGesture() {
         ArrayList<Circle> circles = new ArrayList<>();
 
         // create sample nodes which can be dragged
-        NodeGestures nodeGestures = new NodeGestures(this);
+       // NodeGestures nodeGestures = new NodeGestures(this);
 
-        for (Point2D point : controller.getMainController().getVertex().points) {
-            Circle cir = new Circle(point.getX(), point.getY(), controller.getMainController().getVertex().getRadius());
+        for (ModifiedPoint2D point : controller.getMainController().getVertex().points) {
+            NodeGestures nodeGestures = new NodeGestures(this,point);
 
-            cir.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
-            cir.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
-            cir.radiusProperty().bind(revScale);
-            circles.add(cir);
+
+            point.getCircle().setRadius(controller.getMainController().getVertex().getRadius());
+
+            point.getCircle().addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
+            point.getCircle().addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
+            point.getCircle().addEventFilter(MouseEvent.MOUSE_RELEASED,nodeGestures.getOnMouseReleasedEventHandler());
+
+            point.getCircle().radiusProperty().bind(revScale);
+            circles.add(point.getCircle());
+
         }
 
         return circles;
@@ -316,7 +326,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         //Create group with cirles to add to canvas
 
         group1.getChildren().addAll(circles);
-        //transformGroup(group1);
+
         return group1;
     }
 
