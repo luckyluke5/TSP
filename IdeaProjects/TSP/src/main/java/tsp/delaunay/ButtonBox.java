@@ -170,12 +170,6 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
     }
 
     //TODO eindeutigere Funktionsbezeichner und Labels
-    private void createTriangulationButton() {
-        Button triangulationButton = new Button("Triangulation");
-        triangulationButton.setOnAction(actionEvent -> controller.pushTriangulationButton());
-
-        getChildren().add(triangulationButton);
-    }
 
     @Override
     public void updateTourLengthLabel() {

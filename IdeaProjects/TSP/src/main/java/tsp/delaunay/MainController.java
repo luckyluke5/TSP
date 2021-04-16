@@ -108,7 +108,7 @@ public class MainController {
     void setRandomTour() {
         Point2D lastPoint = null;
 
-        ArrayList<Point2D> points = getVertex().points;
+        ArrayList<ModifiedPoint2D> points = getVertex().points;
         Collections.shuffle(points);
 
         ArrayList<ModifiedWeightedEdge> edgeList = new ArrayList<>();
@@ -190,9 +190,6 @@ public class MainController {
         this.pannableCanvasController = pannableCanvasController;
     }
 
-    void showTriangulation() {
-        pannableCanvasController.showTriangulationAnimation();
-    }
 
     void showTour() {
         pannableCanvasController.showTour();

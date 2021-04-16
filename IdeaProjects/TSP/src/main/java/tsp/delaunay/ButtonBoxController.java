@@ -10,11 +10,6 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
     }
 
 
-    void pushTriangulationButton() {
-        mainController.showTriangulation();
-
-    }
-
     void pushTriangulationCheckbox(){
         mainController.showTriangCheckbox();
     }

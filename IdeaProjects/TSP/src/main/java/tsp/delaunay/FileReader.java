@@ -20,7 +20,7 @@ public class FileReader {
     static Vertex readPointsFromFile(File file) {
 
 
-        ArrayList<Point2D> points = new ArrayList<>();
+        ArrayList<ModifiedPoint2D> points = new ArrayList<>();
         //read points from file
         try {
 
@@ -30,7 +30,7 @@ public class FileReader {
                     int point_id = Integer.parseInt(scanner.next());
                     double x = Double.parseDouble(scanner.next());
                     double y = Double.parseDouble(scanner.next());
-                    points.add(new Point2D.Double(x, y));
+                    points.add(new ModifiedPoint2D(x, y,point_id));
                 } catch (Exception e) {
                     System.out.println("Es gibt eine Zeile in dem File die man nicht lesen kann.");
 

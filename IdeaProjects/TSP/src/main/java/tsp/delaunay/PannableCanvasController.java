@@ -10,13 +10,7 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
     private MainController mainController;
     private PannableCanvasInterface view;
 
-    public void showTriangulationAnimation() {
 
-        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
-        mainController.getInstance().triangulate();
-
-        view.playTimelineFromStart();
-    }
 
     public List<Line2D> getDelaunayEdgesWithOrder(int order) {
         List<Line2D> result = mainController.getInstance()

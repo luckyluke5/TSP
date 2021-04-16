@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public class DelaunayTriangulator {
-    private final List<Point2D> pointSet;
+    private final List<ModifiedPoint2D> pointSet;
     private TriangleSoup triangleSoup;
 
     /**
@@ -15,7 +15,7 @@ public class DelaunayTriangulator {
      *
      * @param pointSet The point set to be triangulated
      */
-    public DelaunayTriangulator(List<Point2D> pointSet) {
+    public DelaunayTriangulator(List<ModifiedPoint2D> pointSet) {
         this.pointSet = pointSet;
         triangleSoup = new TriangleSoup();
     }
@@ -157,7 +157,7 @@ public class DelaunayTriangulator {
      *
      * @return Returns the points set.
      */
-    public List<Point2D> getPointSet() {
+    public List<ModifiedPoint2D> getPointSet() {
         return pointSet;
     }
 
