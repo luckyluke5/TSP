@@ -78,6 +78,8 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
         mainGroup.getChildren().add(delaunayOrderHigherOrder);
         mainGroup.getChildren().add(circleGroup);
 
+        mainGroup.setScaleY(-1);
+
         myScale = Bindings.min(mainGroup.scaleXProperty(), Bindings.multiply(-1, mainGroup.scaleYProperty()));
         revScale = Bindings.divide(3.3, myScale);
 
@@ -328,11 +330,11 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
      */
     private void transformMainGroup() {
 
-        mainGroup.setScaleX(getLayoutBounds().getWidth() * 0.9 / mainGroup.getBoundsInParent().getWidth());
-        mainGroup.setScaleY(-getLayoutBounds().getHeight() * 0.9 / mainGroup.getBoundsInParent().getHeight());
+        mainGroup.setScaleX(mainGroup.getScaleX() * getLayoutBounds().getWidth() * 0.9 / mainGroup.getBoundsInParent().getWidth());
+        mainGroup.setScaleY(mainGroup.getScaleY() * getLayoutBounds().getHeight() * 0.9 / mainGroup.getBoundsInParent().getHeight());
 
-        mainGroup.setTranslateX(-mainGroup.getBoundsInParent().getMinX());
-        mainGroup.setTranslateY(-mainGroup.getBoundsInParent().getMinY());
+        mainGroup.setTranslateX(mainGroup.getTranslateX() - mainGroup.getBoundsInParent().getMinX());
+        mainGroup.setTranslateY(mainGroup.getTranslateY() - mainGroup.getBoundsInParent().getMinY());
 
 
     }

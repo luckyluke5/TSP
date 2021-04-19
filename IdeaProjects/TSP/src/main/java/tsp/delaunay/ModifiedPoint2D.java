@@ -35,7 +35,7 @@ public class ModifiedPoint2D extends Point2D {
     @Override
     public void setLocation(double x, double y) {
 
-
+        System.out.println("OLD LOCATION OF [[" + this.point_id + "]]::" + "X:" + this.x + "Y:" + this.y);
 
         this.x=x;
         this.y=y;
