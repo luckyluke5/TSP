@@ -1,5 +1,6 @@
 package tsp.delaunay;
 
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.graph.MaskSubgraph;
@@ -29,6 +30,7 @@ public class KOptSolverStep {
 
     ArrayList<Point2D> points;
     private Double length;
+    private TimeLoopBenchmarkClass benchmarkClass;
 
     public KOptSolverStep(DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph) {
         this.graph = graph;
@@ -126,13 +128,26 @@ public class KOptSolverStep {
                         AugmentingCircle result = searchFromWithEdges();
 
                         if (points.get(numberOfPoints).equals(points.get(0))) {
+
                             ConnectivityInspector<Point2D, KOptEdge> connectivityInspector = new ConnectivityInspector<>(modifiedTour);
-                            if (connectivityInspector.isConnected() && length < minSoFar.length) {
+                            benchmarkClass.step(8);
+
+
+                            if (checkForConnectivity() && length < minSoFar.length) {
                                 //System.out.println(result);
 
 
                                 minSoFar = new AugmentingCircle((ArrayList<Point2D>) points.clone(), length);
                             }
+
+
+                            /*if (connectivityInspector.isConnected() && length < minSoFar.length) {
+                                //System.out.println(result);
+
+
+                                minSoFar = new AugmentingCircle((ArrayList<Point2D>) points.clone(), length);
+                            }*/
+                            benchmarkClass.step(14);
 
                         }
 
@@ -154,6 +169,39 @@ public class KOptSolverStep {
         }
         //System.out.println("in_augmentation");
         return minSoFar;
+
+    }
+
+    private boolean checkForConnectivity() {
+
+        KOptEdge lastEdge = modifiedTour.edgeSet().iterator().next();
+
+        Point2D source = lastEdge.getSource();
+
+        Point2D lastPoint = source;
+
+        Point2D nextPoint = lastEdge.getTarget();
+
+        int counter = 0;
+
+        while (nextPoint != source) {
+
+            List<Point2D> neighborList = Graphs.neighborListOf(modifiedTour, nextPoint);
+            //KOptEdge newEdge = kOptEdges.iterator().next();
+            if (neighborList.get(0) != lastPoint) {
+                lastPoint = nextPoint;
+                nextPoint = neighborList.get(0);
+            } else {
+                lastPoint = nextPoint;
+                nextPoint = neighborList.get(1);
+            }
+
+            counter += 1;
+
+        }
+
+        return counter + 1 == modifiedTour.vertexSet().size();
+
 
     }
 
@@ -185,19 +233,30 @@ public class KOptSolverStep {
      * then completing sub-triangulation to triangulation
      * <p>
      * then if deleted edges were part of the tour, make local optimisation
+     *
+     * @param benchmarkClass
      */
 
-    void solve() {
+    void solve(TimeLoopBenchmarkClass benchmarkClass) {
+
+        this.benchmarkClass = benchmarkClass;
+
         addingEdge.setInModifiedTriangulation(true);
         modifiedTriangulationEdges.add(addingEdge);
         //ArrayList<ModifiedWeightedEdge> modifiedEdges = new ArrayList<>();
         //ArrayList<ModifiedWeightedEdge> deletedEdges = new ArrayList<>();
         //modifiedEdges.add(forceEdge);
+        benchmarkClass.step(1);
+
 
         deleteTriangulationEdges();
 
+        benchmarkClass.step(2);
+
 
         completeTriangulationWithValidEdges();
+
+        benchmarkClass.step(3);
 
 
         //ArrayList<AugmentingCircle> results = new ArrayList<>();
@@ -207,9 +266,14 @@ public class KOptSolverStep {
         if (deletedTourEdges.size() > 0) {
             AugmentingCircle result = cheapestAugmentingCircle();
 
+            benchmarkClass.step(8);
+
             if (result.length < 0) {
                 augmentTour(result.points);
+                benchmarkClass.step(9);
                 saveTriangulation();
+
+                benchmarkClass.step(10);
 
                 System.out.println(result.length + " " + result.points.size());
             } else {
@@ -219,13 +283,23 @@ public class KOptSolverStep {
 
         } else {
             saveTriangulation();
+            benchmarkClass.step(11);
         }
 
+        benchmarkClass.step(4);
+
         modifiedTourEdges.forEach(KOptEdge::reset);
+
+        benchmarkClass.step(5);
+
         modifiedTriangulationEdges.forEach(KOptEdge::reset);
+
+        benchmarkClass.step(6);
 
 
         modifyTriangulationAndForceEdge();
+
+        benchmarkClass.step(7);
 
     }
 

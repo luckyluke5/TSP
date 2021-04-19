@@ -17,6 +17,8 @@ public class KOpt {
 
         int max = 4;
 
+        TimeLoopBenchmarkClass benchmarkClass = new TimeLoopBenchmarkClass("KOpt::solve", 15);
+
 
         for (int i = 1; i <= max; i++) {
             for (KOptEdge edge : graph.edgeSet()
@@ -24,9 +26,10 @@ public class KOpt {
                 if (edge.getUsefulDelaunayOrder() == i && !edge.isInTriangulation()) {
                     //try {
 
-                    KOptSolverStep kOptSplver = new KOptSolverStep(graph);
-                    kOptSplver.setAddingEdge(edge);
-                    kOptSplver.solve();
+                    KOptSolverStep kOptSolver = new KOptSolverStep(graph);
+                    benchmarkClass.step(0);
+                    kOptSolver.setAddingEdge(edge);
+                    kOptSolver.solve(benchmarkClass);
                     //} catch (InterruptedException e) {
                     //    e.printStackTrace();
                     //}
@@ -36,6 +39,7 @@ public class KOpt {
             System.out.println("fertig" + i);
         }
         System.out.println("fertig");
+        System.out.println(benchmarkClass.printDurationArray());
     }
 
 }
