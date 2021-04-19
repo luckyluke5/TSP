@@ -1,18 +1,29 @@
 package tsp.delaunay;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 
-class ButtonBox extends VBox implements ButtonBoxInterface {
+class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
 
     private final ButtonBoxController controller;
+    private final Menu algo;
+    private final Menu view;
     private Label tourLengthLabel;
+    Menu file;
 
     ButtonBox() {
         controller = new ButtonBoxController();
         controller.setView(this);
+
+        file = new Menu("File");
+        getMenus().add(file);
+
+        algo = new Menu("Algorithm");
+        getMenus().add(algo);
+
+        view = new Menu("View");
+        getMenus().add(view);
+
 
         createBrowseButton();
         createInitialisationMenuButton();
@@ -29,14 +40,14 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
         createDelaunayTriangulationMenuButton();
 
 
-        createTourLenghtLabel();
+        createTourLengthLabel();
 
         createResetButton();
 
 
         autosize();
-        setAlignment(Pos.BASELINE_RIGHT);
-        setSpacing(10);
+        //setAlignment(Pos.BASELINE_RIGHT);
+        //setSpacing(10);
 
         updateTourLengthLabel();
 
@@ -44,69 +55,69 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
     private void createBrowseButton() {
 
-        Button browseButton = new Button("0. Choose file");
+        MenuItem browseButton = new MenuItem("0. Choose file");
         browseButton.setOnAction(actionEvent -> controller.pushBrowseButton());
 
-        getChildren().add(browseButton);
+        file.getItems().add(browseButton);
     }
 
     private void createInitialisationMenuButton() {
-        MenuButton menuButton = new MenuButton("1. Choose Intial Tour");
+        Menu menuButton = new Menu("1. Choose Intial Tour");
 
         menuButton.getItems().add(createRandomTourInitializationButton());
         menuButton.getItems().add(createMstTourInitializationButton());
         menuButton.getItems().add(createChristophidesTourInitializationButton());
 
-        getChildren().add(menuButton);
+        algo.getItems().add(menuButton);
     }
 
     private void createTwoOptButton() {
-        Button twoOptButton = new Button("2. Two Optimisation Tour/ Eliminate Crossing");
+        MenuItem twoOptButton = new MenuItem("2. Two Optimisation Tour/ Eliminate Crossing");
         twoOptButton.setOnAction(actionEvent -> controller.pushTwoOpt());
 
-        getChildren().add(twoOptButton);
+        algo.getItems().add(twoOptButton);
     }
 
     private void createTourTriangualtionSyncButton() {
-        Button tourTriangulationSyncButton = new Button("3. Sync Tour and Triangulation");
+        MenuItem tourTriangulationSyncButton = new MenuItem("3. Sync Tour and Triangulation");
         tourTriangulationSyncButton.setOnAction(actionEvent -> controller.pushSyncTourAndTriangualtion());
 
-        getChildren().add(tourTriangulationSyncButton);
+        algo.getItems().add(tourTriangulationSyncButton);
     }
 
     private void createKOptButton() {
-        Button kOptButton = new Button("4. K Optimisation Tour and Triangulation");
+        MenuItem kOptButton = new MenuItem("4. K Optimisation Tour and Triangulation");
         kOptButton.setOnAction(actionEvent -> controller.pushKOpt());
 
-        getChildren().add(kOptButton);
+        algo.getItems().add(kOptButton);
     }
 
     private void createTourCheckbox() {
-        CheckBox tourCheckbox = new CheckBox("Tour");
+        CheckMenuItem tourCheckbox = new CheckMenuItem("Show Tour");
         tourCheckbox.setOnAction(actionEvent -> controller.pushTourCheckBox());
 
-        getChildren().add(tourCheckbox);
+        view.getItems().add(tourCheckbox);
     }
 
     private void createMSTCheckbox() {
 
-        CheckBox mstCheckbox = new CheckBox("Calculate MST");
+        CheckMenuItem mstCheckbox = new CheckMenuItem("Show MST");
         mstCheckbox.setOnAction(actionEvent -> controller.pushMSTButton());
 
-        getChildren().add(mstCheckbox);
+        view.getItems().add(mstCheckbox);
 
     }
 
     //TODO eindeutigere Funktionsbezeichner und Labels
     private void createTriangulationCheckbox() {
-        CheckBox triangulationCheckbox = new CheckBox("Triangulation");
+        CheckMenuItem triangulationCheckbox = new CheckMenuItem("Show Triangulation");
         triangulationCheckbox.setOnAction(actionEvent -> controller.pushTriangulationCheckbox());
 
-        getChildren().add(triangulationCheckbox);
+        view.getItems().add(triangulationCheckbox);
     }
 
     void createDelaunayTriangulationMenuButton() {
-        MenuButton delaunayTriangulationMenuButton = new MenuButton("Delaunay Edges Higher Order");
+        Menu delaunayTriangulationMenuButton = new Menu("Delaunay Edges Higher Order");
         //delaunayTriangulationMenuButton.setSelected(false);
         //delaunayTriangulationMenuButton.setOnAction(actionEvent -> controller.pushTriang0());
 
@@ -129,10 +140,10 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
 
         }
 
-        getChildren().add(delaunayTriangulationMenuButton);
+        view.getItems().add(delaunayTriangulationMenuButton);
     }
 
-    private void createTourLenghtLabel() {
+    private void createTourLengthLabel() {
         tourLengthLabel = new Label();
 
         getChildren().add(tourLengthLabel);
@@ -140,10 +151,10 @@ class ButtonBox extends VBox implements ButtonBoxInterface {
     }
 
     private void createResetButton() {
-        Button resetButton = new Button("0. Reset");
+        Menu resetButton = new Menu("0. Reset");
         resetButton.setOnAction(actionEvent -> controller.mainController.resetInstance());
 
-        getChildren().add(resetButton);
+        algo.getItems().add(resetButton);
     }
 
     private MenuItem createRandomTourInitializationButton() {
