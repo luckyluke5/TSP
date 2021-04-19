@@ -22,4 +22,6 @@ public interface PannableCanvasInterface {
     void showDelaunayEdgesWithSpecificOrder(int order);
 
     void hideDelaunayEdgesWithSpecificOrder();
+
+    void updatePoints();
 }

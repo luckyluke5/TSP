@@ -22,12 +22,15 @@ public class main extends Application {
 
         //mainScene.setMainController(mainController);
 
-        mainGroup.initializeGroup(mainScene);
-
-
         stage.setScene(mainScene);
 
+
         stage.show();
+
+
+        mainController.getFileWithFileLoaderPopUp();
+
+        //mainGroup.pannableCanvas.initializePannableCanvas();
 
 
     }

@@ -88,6 +88,11 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
         view.hideDelaunayEdgesWithSpecificOrder();
     }
 
+    @Override
+    public void updatePoints() {
+        view.updatePoints();
+    }
+
     public ArrayList<Line2D> getTourLines() {
 
 

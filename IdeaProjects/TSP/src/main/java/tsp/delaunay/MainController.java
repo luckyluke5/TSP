@@ -41,6 +41,33 @@ public class MainController {
         setFile(file);
     }
 
+    private void setFile(File file) {
+
+        //TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("MainController::setFile");
+        Vertex vertex = FileReader.readPointsFromFile(file);
+        //benchmarkClass.step();
+        instance = new Instance(vertex);
+        instance.triangulate();
+        //benchmarkClass.step();
+        //benchmarkClass.step();
+        //benchmarkClass.step();
+        //benchmarkClass.step();
+        updatePoints();
+        updateTour();
+        pannableCanvasController.updateMST();
+        pannableCanvasController.updateTriangulation();
+        //benchmarkClass.step();
+
+
+        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
+    }
+
+    private void updateTour() {
+        pannableCanvasController.updateTour();
+
+        buttonBoxController.updateTourLength();
+    }
+
     void makeKOptimization() {
 
         double previous = instance.getTourLength();
@@ -63,12 +90,6 @@ public class MainController {
 
     private void updateTriangulation() {
         pannableCanvasController.updateTriangulation();
-    }
-
-    private void updateTour() {
-        pannableCanvasController.updateTour();
-
-        buttonBoxController.updateTourLength();
     }
 
     void syncTourAndTriangulation() {
@@ -132,6 +153,10 @@ public class MainController {
 
     }
 
+    Vertex getVertex() {
+        return instance.getVertex();
+    }
+
     void setMstTour() {
         GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
         instance.setTour(mstTour.getEdgeList());
@@ -153,10 +178,16 @@ public class MainController {
         });
         instance.setTour(new ArrayList<>());
 
+        updatePoints();
         updateTour();
         updateTriangulation();
     }
 
+    private void updatePoints() {
+        pannableCanvasController.updatePoints();
+
+
+    }
 
     void showDelaunayEdgesWithSpecificOrder(int order) {
         pannableCanvasController.showDelaunayEdgesWithSpecificOrder(order);
@@ -166,31 +197,14 @@ public class MainController {
         pannableCanvasController.hideDelaunayEdgesWithSpecificOrder();
     }
 
-    void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
-        this.buttonBoxController = buttonBoxController;
-    }
-
     void showTriangCheckbox() {
         pannableCanvasController.showTriangulation();
 
     }
 
-    Instance getInstance() {
-
-        return instance;
-    }
-
-
     void showMST() {
         pannableCanvasController.showMST();
     }
-
-
-
-    void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
-        this.pannableCanvasController = pannableCanvasController;
-    }
-
 
     void showTour() {
         pannableCanvasController.showTour();
@@ -201,34 +215,22 @@ public class MainController {
 
     }
 
-    private void setFile(File file) {
-
-        TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("MainController::setFile");
-        Vertex vertex = FileReader.readPointsFromFile(file);
-        benchmarkClass.step();
-        instance = new Instance(vertex);
-        benchmarkClass.step();
-        pannableCanvasController.updateMST();
-        benchmarkClass.step();
-        instance.triangulate();
-        benchmarkClass.step();
-        updateTour();
-        benchmarkClass.step();
-        pannableCanvasController.updateTriangulation();
-        benchmarkClass.step();
-
-
-        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
-    }
-
     void computeShortTour() {
 
     }
 
-    Vertex getVertex() {
-        return instance.getVertex();
+    void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
+        this.buttonBoxController = buttonBoxController;
     }
 
+    void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
+        this.pannableCanvasController = pannableCanvasController;
+    }
+
+    Instance getInstance() {
+
+        return instance;
+    }
 
 
 }

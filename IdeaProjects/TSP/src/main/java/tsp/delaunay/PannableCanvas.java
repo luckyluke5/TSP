@@ -1,34 +1,24 @@
 package tsp.delaunay;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
-import javafx.util.Duration;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.beans.EventHandler;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class PannableCanvas extends BorderPane implements PannableCanvasInterface {
+public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
     private final Group inTourLines;
     private final Group strokesGroup;
@@ -39,13 +29,15 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
     // das ist nicht die main group die in der scene verankert ist
     // sondern die erste gruppe, an der circle, strokes und tourLines enthalten ist
     private final Group mainGroup;
-    DoubleProperty myScale = new SimpleDoubleProperty(1.0);
-    DoubleProperty revScale = new SimpleDoubleProperty(1.0);
+    private NumberBinding myScale;
+
+    private NumberBinding revScale;
     private Timeline timeline;
     private Group circleGroup;
     private ArrayList<Line> strokes;
 
     private PannableCanvasController controller;
+
 
     public PannableCanvas() {
 
@@ -53,9 +45,9 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         controller.setView(this);
 
         // add scale transform
-        scaleXProperty().bind(myScale);
-        scaleYProperty().bind(myScale);
-
+        //scaleXProperty().bind(myScale);
+        //scaleYProperty().bind(myScale);
+        //setStyle("-fx-background-color: green;");
 
         mainGroup = new Group();
 
@@ -69,6 +61,7 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         triang0Lines.setVisible(false);
 
         circleGroup = new Group();
+
         strokesGroup = new Group();
 
         triangLines = new Group();
@@ -83,12 +76,16 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         mainGroup.getChildren().add(inTourLines);
         mainGroup.getChildren().add(triangLines);
         mainGroup.getChildren().add(delaunayOrderHigherOrder);
+        mainGroup.getChildren().add(circleGroup);
+
+        myScale = Bindings.min(mainGroup.scaleXProperty(), Bindings.multiply(-1, mainGroup.scaleYProperty()));
+        revScale = Bindings.divide(3.3, myScale);
 
 
     }
 
     public double getScale() {
-        return myScale.get();
+        return myScale.getValue().doubleValue();
     }
 
     /*
@@ -96,8 +93,9 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
      * @param myScale
      */
     public void setScale(double scale) {
-        myScale.set(scale);
-        revScale.set(3.3 / scale);
+        //myScale.set(scale);
+        //revScale.set(3.3 / scale);
+
     }
 
     public void playTimelineFromStart() {
@@ -225,16 +223,36 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         setTranslateY(getTranslateY() - y);
     }
 
-    void initializePannableCanvas(MainScene mainScene) {
+    void initializePannableCanvas() {
+        setCanvasScale();
+        makeSceneGestures();
+
+        updatePoints();
+
+
+        transformMainGroup();
+    }
+
+    /*void initializePannableCanvas(MainScene mainScene) {
         setCanvasScale(mainScene);
         makeSceneGestures(mainScene);
-                getCircleGroup();
+        getCircleGroup();
 
 
         transformGroup(mainGroup);
+    }*/
+
+    void setCanvasScale() {
+        //Calculating scale and passing it to canvas
+
+        NumberBinding scale_height = Bindings.divide(heightProperty(), controller.getMainController().getVertex().y_diff());
+        NumberBinding scale_width = Bindings.divide(widthProperty(), controller.getMainController().getVertex().x_diff());
+
+
+        //setScale(scale.getValue().doubleValue());
     }
 
-    void setCanvasScale(Scene scene) {
+    /*void setCanvasScale(Scene scene) {
         //Calculating scale and passing it to canvas
 
         NumberBinding scale_height = Bindings.divide(scene.heightProperty(), controller.getMainController().getVertex().y_diff());
@@ -242,16 +260,28 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
         NumberBinding scale = Bindings.min(scale_height, scale_width);
 
         setScale(scale.getValue().doubleValue());
+    }*/
+
+    void makeSceneGestures() {
+
+
+        SceneGestures sceneGestures = new SceneGestures(this);
+        addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
+        addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
+        addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
     }
 
-    void makeSceneGestures(Scene scene) {
+
+    /*void makeSceneGestures(Scene scene) {
 
 
         SceneGestures sceneGestures = new SceneGestures(this);
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
         scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
         scene.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-    }
+    }*/
+
+
 /*
     void createStrokes() {
         strokes = new ArrayList();
@@ -272,39 +302,39 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
 
     }
  */
-    public void getCircleGroup() {
-        ArrayList<Circle> circles = createPointsWithNodeGesture();
-        circleGroup = getGroupWithCircles(circles);
 
-        mainGroup.getChildren().add(circleGroup);
+    /*
+        public void getTimeline() {
+            timeline = new Timeline();
+            final int STARTTIME = 0;
+            System.out.println("STARTTIME " + controller.getMainController().getInstance().getTriangulationLines().size());
+            Integer[] length = {STARTTIME};
+            timeline.setCycleCount(Timeline.INDEFINITE);
 
-    }
-/*
-    public void getTimeline() {
-        timeline = new Timeline();
-        final int STARTTIME = 0;
-        System.out.println("STARTTIME " + controller.getMainController().getInstance().getTriangulationLines().size());
-        Integer[] length = {STARTTIME};
-        timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.2), actionEvent -> {
+                length[0]++;
 
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.2), actionEvent -> {
-            length[0]++;
+                int i = length[0];
+                mainGroup.getChildren().add(strokes.get(i - 1));
+                if (length[0] >= strokes.size()) {
+                    timeline.stop();
+                }
 
-            int i = length[0];
-            mainGroup.getChildren().add(strokes.get(i - 1));
-            if (length[0] >= strokes.size()) {
-                timeline.stop();
-            }
-
-        }));
+            }));
 
 
 
-    }
- */
-    private void transformGroup(Group group1) {
-        group1.getTransforms().add(new Translate(-controller.getMainController().getVertex().min_x(), -controller.getMainController().getVertex().min_y()));
-        group1.getTransforms().add(new Scale(1, -1, controller.getMainController().getVertex().min_x() + controller.getMainController().getVertex().x_diff() / 2, controller.getMainController().getVertex().min_y() + controller.getMainController().getVertex().y_diff() / 2));
+        }
+     */
+    private void transformMainGroup() {
+
+        mainGroup.setScaleX(getLayoutBounds().getWidth() * 0.9 / mainGroup.getBoundsInParent().getWidth());
+        mainGroup.setScaleY(-getLayoutBounds().getHeight() * 0.9 / mainGroup.getBoundsInParent().getHeight());
+
+        mainGroup.setTranslateX(-mainGroup.getBoundsInParent().getMinX());
+        mainGroup.setTranslateY(-mainGroup.getBoundsInParent().getMinY());
+
+
     }
 
     /**
@@ -312,39 +342,46 @@ public class PannableCanvas extends BorderPane implements PannableCanvasInterfac
      *
      * @return ArrayList of Cicrcles
      */
-    public ArrayList<Circle> createPointsWithNodeGesture() {
-        ArrayList<Circle> circles = new ArrayList<>();
+    public void updatePoints() {
+        circleGroup.getChildren().clear();
+
 
         // create sample nodes which can be dragged
-       // NodeGestures nodeGestures = new NodeGestures(this);
+        // NodeGestures nodeGestures = new NodeGestures(this);
 
         for (ModifiedPoint2D point : controller.getMainController().getVertex().points) {
-            NodeGestures nodeGestures = new NodeGestures(this,point);
+            NodeGestures nodeGestures = new NodeGestures(this, point);
 
 
-            point.getCircle().setRadius(controller.getMainController().getVertex().getRadius());
+            Circle circle = new Circle(point.getX(), point.getY(), controller.getMainController().getVertex().getRadius());
 
-            point.getCircle().addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
-            point.getCircle().addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
-            point.getCircle().addEventFilter(MouseEvent.MOUSE_RELEASED,nodeGestures.getOnMouseReleasedEventHandler());
 
-            point.getCircle().radiusProperty().bind(revScale);
-            circles.add(point.getCircle());
+            //circle.setRadius(controller.getMainController().getVertex().getRadius());
+
+            circle.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
+            circle.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
+            circle.addEventFilter(MouseEvent.MOUSE_RELEASED, nodeGestures.getOnMouseReleasedEventHandler());
+
+            //circle.radiusProperty().bind(revScale);
+
+
+            circleGroup.getChildren().add(circle);
 
 
         }
 
-        return circles;
+
+        transformMainGroup();
+
+
     }
 
-    Group getGroupWithCircles(ArrayList<Circle> circles) {
-        Group group1 = new Group();
+    void createCircleGroup(ArrayList<Circle> circles) {
+
 
         //Create group with cirles to add to canvas
 
-        group1.getChildren().addAll(circles);
 
-        return group1;
     }
 
     public void clear() {

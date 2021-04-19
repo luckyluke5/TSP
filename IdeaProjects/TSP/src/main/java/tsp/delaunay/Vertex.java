@@ -21,7 +21,7 @@ public class Vertex {
     }
 
 
-    public double min_x() {
+    public double minX() {
         return points.stream().min(Comparator.comparing(Point2D::getX)).orElseThrow(NoSuchElementException::new).getX();
 
     }
@@ -32,7 +32,7 @@ public class Vertex {
 
     }
 
-    public double min_y() {
+    public double minY() {
         return points.stream().min(Comparator.comparing(Point2D::getY)).orElseThrow(NoSuchElementException::new).getY();
 
     }
@@ -48,11 +48,11 @@ public class Vertex {
     }
 
     public double x_diff() {
-        return max_x() - min_x();
+        return max_x() - minX();
     }
 
     public double y_diff() {
-        return max_y() - min_y();
+        return max_y() - minY();
     }
 
 

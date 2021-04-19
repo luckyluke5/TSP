@@ -1,12 +1,14 @@
 package tsp.delaunay;
 
-import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 
-public class MainGroup extends Group implements MainGroupInterface {
+public class MainGroup extends BorderPane implements MainGroupInterface {
 
     public MainGroupController mainGroupController;
     PannableCanvas pannableCanvas;
     ButtonBox buttonBox;
+    private Label tourLengthLabel;
 
 
     public MainGroup() {
@@ -24,19 +26,16 @@ public class MainGroup extends Group implements MainGroupInterface {
         //setLeft(buttonBox);
         //setCenter(pannableCanvas);
 
-
-        getChildren().add(pannableCanvas);
-        getChildren().add(buttonBox);
-    }
-
-    public void initializeGroup(MainScene mainScene) {
-
-        mainGroupController.loadNewFile();
+        tourLengthLabel = new Label("test");
 
 
-        pannableCanvas.initializePannableCanvas(mainScene);
+        setTop(buttonBox);
+        setCenter(pannableCanvas);
+        setBottom(tourLengthLabel);
 
 
+        //getChildren().add(pannableCanvas);
+        //getChildren().add(buttonBox);
     }
 
     public MainGroupControllerInterface getMainGroupController() {
