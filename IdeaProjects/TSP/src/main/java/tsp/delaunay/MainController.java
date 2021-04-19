@@ -8,6 +8,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.tour.ChristofidesThreeHalvesApproxMetricTSP;
 import org.jgrapht.alg.tour.TwoApproxMetricTSP;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -48,8 +49,9 @@ public class MainController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save");
         File file = fileChooser.showSaveDialog(new Popup());
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
 
-
+        fileChooser.getExtensionFilters().add(extFilter);
         try {
             FileWriter writer = new FileWriter(file);
 
@@ -64,6 +66,37 @@ public class MainController {
             e.printStackTrace();
         }
 
+
+    }
+
+    public void saveTourToFile() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        File file = fileChooser.showSaveDialog(new Popup());
+
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        DepthFirstIterator<Point2D, ModifiedWeightedEdge> tourIterator = new DepthFirstIterator<>(instance.tour);
+
+
+        try {
+            FileWriter writer = new FileWriter(file);
+
+            while (tourIterator.hasNext()) {
+                Point2D point = tourIterator.next();
+
+                writer.write(String.valueOf(point.getX()) + "\t" + String.valueOf(point.getY()) + "\n");
+            }
+
+
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

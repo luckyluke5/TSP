@@ -61,8 +61,12 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         MenuItem saveInsatnce = new MenuItem("Save Instance");
         saveInsatnce.setOnAction(actionEvent -> controller.mainController.saveInstanceToFile());
 
+        MenuItem saveTour = new MenuItem("Save Tour");
+        saveTour.setOnAction(actionEvent -> controller.mainController.saveTourToFile());
+
         file.getItems().add(openInsatnce);
         file.getItems().add(saveInsatnce);
+        file.getItems().add(saveTour);
     }
 
     private void createInitialisationMenuButton() {

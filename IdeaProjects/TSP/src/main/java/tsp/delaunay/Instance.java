@@ -23,7 +23,7 @@ public class Instance {
 
 
 
-    private final MaskSubgraph<Point2D, ModifiedWeightedEdge> tour;
+    final MaskSubgraph<Point2D, ModifiedWeightedEdge> tour;
     private final MaskSubgraph<Point2D, ModifiedWeightedEdge> triangulation;
 
 
