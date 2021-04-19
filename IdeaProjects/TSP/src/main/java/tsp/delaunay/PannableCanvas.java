@@ -86,6 +86,10 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
     }
 
+    public void updateInstance() {
+        controller.getMainController().resetInstance();
+    }
+
     public double getScale() {
         return myScale.getValue().doubleValue();
     }
@@ -178,6 +182,8 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
 
     public void updateMST() {
+        mstLines.getChildren().clear();
+
         SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> mst = controller.getMainController().getInstance().getMST();
         for (ModifiedWeightedEdge edge : mst.getEdges()
         ) {

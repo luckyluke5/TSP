@@ -191,6 +191,8 @@ public class KOptSolverStep {
             if (neighborList.get(0) != lastPoint) {
                 lastPoint = nextPoint;
                 nextPoint = neighborList.get(0);
+            } else if (neighborList.size() < 2) {
+                break;
             } else {
                 lastPoint = nextPoint;
                 nextPoint = neighborList.get(1);

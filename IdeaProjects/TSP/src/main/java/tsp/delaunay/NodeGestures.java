@@ -2,7 +2,7 @@ package tsp.delaunay;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseEvent;
 
 
 /**
@@ -102,6 +102,9 @@ public class NodeGestures {
             double delteY = firstY-afterY;
             if(delteY != firstY) {
                 point.setLocation(xCor, point.getY() + delteY);
+
+                canvas.updateInstance();
+
             }
         }
     };

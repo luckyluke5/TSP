@@ -25,7 +25,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         getMenus().add(view);
 
 
-        createBrowseButton();
+        createFileMenu();
         createInitialisationMenuButton();
         createTwoOptButton();
         createTourTriangualtionSyncButton();
@@ -53,12 +53,16 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
     }
 
-    private void createBrowseButton() {
+    private void createFileMenu() {
 
-        MenuItem browseButton = new MenuItem("0. Choose file");
-        browseButton.setOnAction(actionEvent -> controller.pushBrowseButton());
+        MenuItem openInsatnce = new MenuItem("Open Instance");
+        openInsatnce.setOnAction(actionEvent -> controller.pushBrowseButton());
 
-        file.getItems().add(browseButton);
+        MenuItem saveInsatnce = new MenuItem("Save Instance");
+        saveInsatnce.setOnAction(actionEvent -> controller.mainController.saveInstanceToFile());
+
+        file.getItems().add(openInsatnce);
+        file.getItems().add(saveInsatnce);
     }
 
     private void createInitialisationMenuButton() {

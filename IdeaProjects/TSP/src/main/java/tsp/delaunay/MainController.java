@@ -11,6 +11,8 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -36,9 +38,33 @@ public class MainController {
 
     void getFileWithFileLoaderPopUp() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose the Example");
+        fileChooser.setTitle("Open");
         File file = fileChooser.showOpenDialog(new Popup());
         setFile(file);
+    }
+
+    public void saveInstanceToFile() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        File file = fileChooser.showSaveDialog(new Popup());
+
+
+        try {
+            FileWriter writer = new FileWriter(file);
+
+            for (int i = 0; i < getVertex().points.size(); i++) {
+
+                writer.write(String.valueOf(i) + "\t" + String.valueOf(getVertex().points.get(i).getX()) + "\t" + String.valueOf(getVertex().points.get(i).getY()) + "\n");
+            }
+
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void setFile(File file) {
@@ -179,8 +205,13 @@ public class MainController {
         instance.setTour(new ArrayList<>());
 
         updatePoints();
+        updateMST();
         updateTour();
         updateTriangulation();
+    }
+
+    private void updateMST() {
+        pannableCanvasController.updateMST();
     }
 
     private void updatePoints() {
