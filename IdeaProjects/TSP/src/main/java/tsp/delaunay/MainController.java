@@ -147,6 +147,7 @@ public class MainController {
     }
 
     void resetInstance() {
+        instance = new Instance(instance.getVertex());
         instance.graph.edgeSet().forEach(modifiedWeightedEdge -> {
             modifiedWeightedEdge.setInTriangulation(modifiedWeightedEdge.getUsefulDelaunayOrder() == 0);
         });
