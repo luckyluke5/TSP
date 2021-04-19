@@ -5,28 +5,28 @@ import javafx.scene.layout.BorderPane;
 
 public class MainGroup extends BorderPane implements MainGroupInterface {
 
-    public MainGroupController mainGroupController;
+    public MainGroupController controller;
     PannableCanvas pannableCanvas;
     ButtonBox buttonBox;
     private Label tourLengthLabel;
 
 
     public MainGroup() {
-        mainGroupController = new MainGroupController();
-        mainGroupController.setView(this);
+        controller = new MainGroupController();
+        controller.setView(this);
 
         pannableCanvas = new PannableCanvas();
         buttonBox = new ButtonBox();
 
-        mainGroupController.setPannableCanvasController(pannableCanvas.getController());
-        mainGroupController.setButtonBoxController(buttonBox.getController());
+        controller.setPannableCanvasController(pannableCanvas.getController());
+        controller.setButtonBoxController(buttonBox.getController());
 
         //setAlignment(pannableCanvas, Pos.TOP_RIGHT);
         //setMargin(pannableCanvas, new Insets(12,12,12,12));
         //setLeft(buttonBox);
         //setCenter(pannableCanvas);
 
-        tourLengthLabel = new Label("test");
+        tourLengthLabel = new Label("start");
 
 
         setTop(buttonBox);
@@ -38,8 +38,23 @@ public class MainGroup extends BorderPane implements MainGroupInterface {
         //getChildren().add(buttonBox);
     }
 
-    public MainGroupControllerInterface getMainGroupController() {
-        return mainGroupController;
+
+    public MainGroupControllerInterface getController() {
+        return controller;
+    }
+
+    public void updateTourLength() {
+        try {
+
+            tourLengthLabel.setText(tourLengthLabel.getText() + "\n" + String.valueOf(controller.mainController.getInstance().getTourLength()));
+        } catch (NullPointerException e) {
+            tourLengthLabel.setText("Noch keine Tour berechnet");
+        }
+    }
+
+    @Override
+    public void resetTourLengthLabel() {
+        tourLengthLabel.setText("start");
     }
 
 

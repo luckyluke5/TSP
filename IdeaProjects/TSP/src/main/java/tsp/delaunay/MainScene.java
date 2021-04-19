@@ -32,7 +32,7 @@ public class MainScene extends Scene implements MainSceneInterface {
 
         mainSceneController.setScene(this);
 
-        mainSceneController.setMainGroupController(mainGroup.getMainGroupController());
+        mainSceneController.setMainGroupController(mainGroup.getController());
 
         //MainGroup.initalizeGroup(mainGroup.getMainGroupController(), mainGroup.pannableCanvas, this);
 

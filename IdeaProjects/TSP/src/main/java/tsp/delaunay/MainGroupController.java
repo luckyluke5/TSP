@@ -7,6 +7,27 @@ public class MainGroupController implements MainGroupControllerInterface {
     private MainGroupInterface view;
     private ButtonBoxControllerInterface buttonBoxController;
 
+    void loadNewFile() {
+        mainController.getFileWithFileLoaderPopUp();
+    }
+
+    @Override
+    public void updateTourLength() {
+        view.updateTourLength();
+    }
+
+    @Override
+    public void resetTourLengthLabel() {
+        view.resetTourLengthLabel();
+    }
+
+    public void setView(MainGroupInterface group) {
+        view = group;
+    }
+
+    public void setButtonBoxController(ButtonBoxControllerInterface controller) {
+        buttonBoxController = controller;
+    }
 
     public PannableCanvasControllerInterface getPannableCanvasController() {
         return pannableCanvasController;
@@ -24,18 +45,7 @@ public class MainGroupController implements MainGroupControllerInterface {
         this.mainController = mainController;
         pannableCanvasController.setMainController(mainController);
         buttonBoxController.setMainController(mainController);
+        mainController.setMainGroupController(this);
 
-    }
-
-    public void setView(MainGroupInterface group) {
-        view = group;
-    }
-
-    void loadNewFile() {
-        mainController.getFileWithFileLoaderPopUp();
-    }
-
-    public void setButtonBoxController(ButtonBoxControllerInterface controller) {
-        buttonBoxController = controller;
     }
 }

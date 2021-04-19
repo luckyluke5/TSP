@@ -1,6 +1,9 @@
 package tsp.delaunay;
 
-import javafx.scene.control.*;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 
 class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
@@ -8,7 +11,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
     private final ButtonBoxController controller;
     private final Menu algo;
     private final Menu view;
-    private Label tourLengthLabel;
+
     Menu file;
 
     ButtonBox() {
@@ -40,7 +43,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         createDelaunayTriangulationMenuButton();
 
 
-        createTourLengthLabel();
+        //createTourLengthLabel();
 
         createResetButton();
 
@@ -49,7 +52,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         //setAlignment(Pos.BASELINE_RIGHT);
         //setSpacing(10);
 
-        updateTourLengthLabel();
+        //updateTourLengthLabel();
 
     }
 
@@ -151,12 +154,12 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         view.getItems().add(delaunayTriangulationMenuButton);
     }
 
-    private void createTourLengthLabel() {
+    /*private void createTourLengthLabel() {
         tourLengthLabel = new Label();
 
         getChildren().add(tourLengthLabel);
 
-    }
+    }*/
 
     private void createResetButton() {
         Menu resetButton = new Menu("0. Reset");
@@ -190,7 +193,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
     //TODO eindeutigere Funktionsbezeichner und Labels
 
-    @Override
+    /*@Override
     public void updateTourLengthLabel() {
         try {
 
@@ -198,7 +201,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         } catch (NullPointerException e) {
             tourLengthLabel.setText("Noch keine Tour berechnet");
         }
-    }
+    }*/
 
     ButtonBoxControllerInterface getController() {
         return controller;

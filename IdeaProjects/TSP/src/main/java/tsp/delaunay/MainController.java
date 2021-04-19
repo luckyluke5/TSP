@@ -28,6 +28,12 @@ public class MainController {
     private PannableCanvasControllerInterface pannableCanvasController;
     private ButtonBoxControllerInterface buttonBoxController;
 
+    public void setMainGroupController(MainGroupControllerInterface mainGroupController) {
+        this.mainGroupController = mainGroupController;
+    }
+
+    private MainGroupControllerInterface mainGroupController;
+
     MainController(Application application) {
         this.application = application;
 
@@ -124,7 +130,7 @@ public class MainController {
     private void updateTour() {
         pannableCanvasController.updateTour();
 
-        buttonBoxController.updateTourLength();
+        mainGroupController.updateTourLength();
     }
 
     void makeKOptimization() {
@@ -155,10 +161,9 @@ public class MainController {
         TriangulationBuilder triangulationBuilder = new TriangulationBuilder(instance.graph);
         //triangulationBuilder.initialTriangulationWithSetEdges();
         triangulationBuilder.deleteAllEdgesOfTriangulationWitchAreCrossingAnEdgeOfTour();
-        updateTour();
 
 
-        pannableCanvasController.updateTriangulation();
+        updateTriangulation();
     }
 
     void showNewInstanceWindow() {
@@ -241,6 +246,7 @@ public class MainController {
         updateMST();
         updateTour();
         updateTriangulation();
+        mainGroupController.resetTourLengthLabel();
     }
 
     private void updateMST() {
