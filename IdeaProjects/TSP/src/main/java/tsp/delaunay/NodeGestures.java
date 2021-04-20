@@ -23,16 +23,6 @@ import javafx.scene.shape.Circle;
 
 public class NodeGestures {
 
-    private static final double MAX_SCALE = 200.0d;
-    private static final double MIN_SCALE = .1d;
-
-    double xCor;
-    //For Y Coordindate
-    //Used to notice location before and after the movement and add the difference to the actual Y
-    private double firstY;
-    private double afterY;
-
-
     private final DragContext nodeDragContext = new DragContext();
 
     PannableCanvas canvas;
@@ -53,7 +43,6 @@ public class NodeGestures {
             if (!event.isPrimaryButtonDown())
                 return;
 
-            afterY=0;
 
 
             nodeDragContext.mouseAnchorX = event.getSceneX();
@@ -66,7 +55,6 @@ public class NodeGestures {
 
             System.out.println("LOCATION OF [["+point.getPoint_id()+"]]::"+"X:"+point.getX()+"Y:"+point.getY());
 
-            firstY = (event.getSceneY() - canvas.getBoundsInParent().getMinY()) / canvas.getScale();
 
         }
 
@@ -81,18 +69,11 @@ public class NodeGestures {
             if (!event.isPrimaryButtonDown())
                 return;
 
-            //double scale = canvas.getScale();
+
 
             Circle node = (Circle) event.getSource();
 
             node.setFill(Color.BROWN);
-            //node.setCenterX(event.getX());
-            //node.setCenterY(event.getY());
-
-            //node.setTranslateX(nodeDragContext.translateAnchorX + ((event.getSceneX() - nodeDragContext.mouseAnchorX) / scale));
-            //node.setTranslateY(nodeDragContext.translateAnchorY - ((event.getSceneY() - nodeDragContext.mouseAnchorY) / scale));
-
-            //afterY= ((event.getSceneY() - canvas.getBoundsInParent().getMinY()) / scale);
 
             event.consume();
 
@@ -110,9 +91,7 @@ public class NodeGestures {
             node.setCenterY(event.getY());
 
 
-            //xCor = (event.getSceneX() - canvas.getBoundsInParent().getMinX()) / canvas.getScale();
-            //double delteY = firstY-afterY;
-            //if(delteY != firstY) {
+
             point.setLocation(event.getX(), event.getY());
             canvas.updateInstance();
 

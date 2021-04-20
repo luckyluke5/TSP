@@ -51,9 +51,6 @@ public class ModifiedPoint2D extends Point2D {
     }
 
 
-    public Circle getCircle(){
-        return circle;
-    }
 
 
 

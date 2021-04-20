@@ -26,9 +26,6 @@ public class TimeLoopBenchmarkClass {
 
         durationArray[i] += System.nanoTime() - lastTime;
 
-
-        //System.out.println("This step in " + name + " takes " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastTime) + " ms");
-
         lastTime = System.nanoTime();
     }
 

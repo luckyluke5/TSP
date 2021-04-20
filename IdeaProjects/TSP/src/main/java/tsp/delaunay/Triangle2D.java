@@ -167,10 +167,6 @@ public class Triangle2D {
     public EdgeDistancePack findNearestEdge(Point2D point) {
         EdgeDistancePack[] edges = new EdgeDistancePack[3];
 
-        //edges[0] = new EdgeDistancePack(new Edge2D(a, b), computeClosestPoint(new Edge2D(a, b), point).distance(point));
-        //edges[1] = new EdgeDistancePack(new Edge2D(b, c), computeClosestPoint(new Edge2D(b, c), point).distance(point));
-        //edges[2] = new EdgeDistancePack(new Edge2D(c, a), computeClosestPoint(new Edge2D(c, a), point).distance(point));
-
         edges[0] = new EdgeDistancePack(new Edge2D(a, b), new Line2D.Double(a, b).ptSegDist(point));
         edges[1] = new EdgeDistancePack(new Edge2D(b, c), new Line2D.Double(b, c).ptSegDist(point));
         edges[2] = new EdgeDistancePack(new Edge2D(c, a), new Line2D.Double(c, a).ptSegDist(point));
@@ -180,38 +176,7 @@ public class Triangle2D {
         return edges[0];
     }
 
-    /**
-     * Computes the closest point on the given edge to the specified point.
-     *
-     * @param edge  The edge on which we search the closest point to the specified
-     *              point
-     * @param point The point to which we search the closest point on the edge
-     * @return The closest point on the given edge to the specified point
-     */
 
-    /*private Point2D computeClosestPoint(Edge2D edge, Point2D point) {
-        Point2D ab = edge.b.subtract(edge.a);
-        double t = point.subtract(edge.a).dotProduct(ab) / ab.dotProduct(ab);
-
-        if (t < 0.0d) {
-            t = 0.0d;
-        } else if (t > 1.0d) {
-            t = 1.0d;
-        }
-
-        return edge.a.add(ab.multiply(t));
-    }*/
-
-    /**
-     * Tests if the two arguments have the same sign.
-     *
-     * @param a The first floating point argument
-     * @param b The second floating point argument
-     * @return Returns true iff both arguments have the same sign
-     */
-    private boolean hasSameSign(double a, double b) {
-        return Math.signum(a) == Math.signum(b);
-    }
 
     @Override
     public String toString() {

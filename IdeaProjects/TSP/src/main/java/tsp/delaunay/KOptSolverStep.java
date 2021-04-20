@@ -18,7 +18,7 @@ public class KOptSolverStep {
     private final MaskSubgraph<Point2D, KOptEdge> modifiedTour;
     private final MaskSubgraph<Point2D, KOptEdge> modifiedTriangulation;
     private final Collection<KOptEdge> modifiedTourEdges;
-    //public final Instance instance;
+
     DefaultUndirectedWeightedGraph<Point2D, KOptEdge> graph;
     int k = 5 * 2;
 
@@ -51,21 +51,20 @@ public class KOptSolverStep {
 
         points.add(edge.getSource());
         points.add(edge.getTarget());
-        //edge.setInModifiedTour(false);
+
         edge.setInAugmentingCircle(true);
         length = -edge.getWeight();
         AugmentingCircle result = searchFromWithEdges();
-        //edge.setInModifiedTour(true);
+
         edge.setInAugmentingCircle(false);
         if (result.points.isEmpty()) {
             //throw new Exception("no optimisation possible");
         }
-        //augment_tour(result.points);
+
 
         return result;
 
 
-        //
 
 
     }
@@ -134,19 +133,10 @@ public class KOptSolverStep {
 
 
                             if (checkForConnectivity() && length < minSoFar.length) {
-                                //System.out.println(result);
 
 
                                 minSoFar = new AugmentingCircle((ArrayList<Point2D>) points.clone(), length);
                             }
-
-
-                            /*if (connectivityInspector.isConnected() && length < minSoFar.length) {
-                                //System.out.println(result);
-
-
-                                minSoFar = new AugmentingCircle((ArrayList<Point2D>) points.clone(), length);
-                            }*/
                             benchmarkClass.step(14);
 
                         }
@@ -167,7 +157,6 @@ public class KOptSolverStep {
                 }
             }
         }
-        //System.out.println("in_augmentation");
         return minSoFar;
 
     }
@@ -187,7 +176,7 @@ public class KOptSolverStep {
         while (nextPoint != source) {
 
             List<Point2D> neighborList = Graphs.neighborListOf(modifiedTour, nextPoint);
-            //KOptEdge newEdge = kOptEdges.iterator().next();
+
             if (neighborList.get(0) != lastPoint) {
                 lastPoint = nextPoint;
                 nextPoint = neighborList.get(0);
@@ -218,7 +207,6 @@ public class KOptSolverStep {
             if (edge.isInTour() && !edge.isInModifiedTriangulation()) {
 
                 System.out.println("adding edge which is not in triangulation");
-                //throw new ValueException("why is it");
             }
 
         }
@@ -245,9 +233,7 @@ public class KOptSolverStep {
 
         addingEdge.setInModifiedTriangulation(true);
         modifiedTriangulationEdges.add(addingEdge);
-        //ArrayList<ModifiedWeightedEdge> modifiedEdges = new ArrayList<>();
-        //ArrayList<ModifiedWeightedEdge> deletedEdges = new ArrayList<>();
-        //modifiedEdges.add(forceEdge);
+
         benchmarkClass.step(1);
 
 
@@ -259,11 +245,6 @@ public class KOptSolverStep {
         completeTriangulationWithValidEdges();
 
         benchmarkClass.step(3);
-
-
-        //ArrayList<AugmentingCircle> results = new ArrayList<>();
-
-        // k = 5 * 2;
 
         if (deletedTourEdges.size() > 0) {
             AugmentingCircle result = cheapestAugmentingCircle();
@@ -299,7 +280,7 @@ public class KOptSolverStep {
         benchmarkClass.step(6);
 
 
-        modifyTriangulationAndForceEdge();
+
 
         benchmarkClass.step(7);
 
@@ -312,95 +293,12 @@ public class KOptSolverStep {
             if (kOptEdge.isInTour() && !kOptEdge.isInTriangulation()) {
 
                 System.out.println("sadding edge which is not in triangulation");
-                //throw new ValueException("why is it");
             }
         });
 
     }
 
-    private void modifyTriangulationAndForceEdge() {
 
-
-
-
-        /*for (KOptEdge edge : deletedTourEdges
-        ) {
-
-
-
-            if (!result.points.isEmpty()) {
-                //augment_tour(result.points);
-                results.add(result);
-            }
-            //augment_tour(result.points);
-
-        }*/
-
-
-        /*try {
-            AugmentingCircle circle = results.stream().min(Comparator.comparing(AugmentingCircle::getLength)).orElseThrow(NoSuchElementException::new);
-            if (circle.length < 100) {
-                augmentTour(circle.points);
-                for (KOptEdge edge : modifiedEdges
-                ) {
-                    edge.setInTriangulation(edge.isInModifiedTriangulation());
-                    if (edge.isInTour() && !edge.isInTriangulation()) {
-
-                        System.out.println("adding edge which is not in triangulation");
-                        //throw new ValueException("why is it");
-                        //Thread.sleep(100);
-                    }
-                    //Thread.sleep(100);
-                }
-            } else {
-                for (KOptEdge edge : modifiedEdges
-                ) {
-                    edge.setInModifiedTriangulation(edge.isInTriangulation());
-                    if (edge.isInTour() && !edge.isInTriangulation()) {
-
-                        System.out.println("adding edge which is not in triangulation");
-                        //throw new ValueException("why is it");
-                        //Thread.sleep(100);
-                    }
-                    //Thread.sleep(100);
-                }
-            }
-
-        } catch (NoSuchElementException e) {
-
-            if (!deletedTourEdges.isEmpty()) {
-                for (KOptEdge edge : modifiedEdges
-                ) {
-                    edge.setInModifiedTriangulation(edge.isInTriangulation());
-                    if (edge.isInTour() && !edge.isInTriangulation()) {
-
-                        System.out.println("adding edge which is not in triangulation");
-                        //throw new ValueException("why is it");
-                        //Thread.sleep(100);
-                    }
-                    //Thread.sleep(100);
-                }
-            } else {
-
-
-                for (KOptEdge edge : modifiedEdges
-                ) {
-                    edge.setInTriangulation(edge.isInModifiedTriangulation());
-                    if (edge.isInTour() && !edge.isInTriangulation()) {
-
-                        System.out.println("adding edge which is not in triangulation");
-                        //throw new ValueException("why is it");
-                        //Thread.sleep(100);
-                        //
-                    }
-
-                }
-
-            }
-
-        }*/
-
-    }
 
     /**
      * Delete all Edges of the Triangulation with are intersecting the addingEdge witch is adding in this KOptStep
@@ -418,8 +316,6 @@ public class KOptSolverStep {
             }
             if (TriangulationBuilder.areLinesIntersectingWithoutEndpoints(addingEdge.getLine2D(), edge.getLine2D())) {
                 edge.setInModifiedTriangulation(false);
-                //edge.set_in_tour(false);
-
 
                 if (edge.isInTour()) {
                     deletedTourEdges.add(edge);
@@ -445,7 +341,6 @@ public class KOptSolverStep {
      */
 
     private void completeTriangulationWithValidEdges() {
-        //ArrayList<MyEdge> result = new ArrayList<>();
         List<Line2D> lineArray = modifiedTriangulation.edgeSet()
                 .stream()
                 .map(KOptEdge::getLine2D)
@@ -468,7 +363,6 @@ public class KOptSolverStep {
             }
 
         }
-        //return result;
     }
 
 

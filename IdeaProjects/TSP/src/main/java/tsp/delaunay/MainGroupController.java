@@ -1,15 +1,11 @@
 package tsp.delaunay;
 
 public class MainGroupController implements MainGroupControllerInterface {
-    //MainGroup mainGroup;
     PannableCanvasControllerInterface pannableCanvasController;
     MainController mainController;
     private MainGroupInterface view;
     private ButtonBoxControllerInterface buttonBoxController;
 
-    void loadNewFile() {
-        mainController.getFileWithFileLoaderPopUp();
-    }
 
     @Override
     public void updateTourLength() {
@@ -29,17 +25,11 @@ public class MainGroupController implements MainGroupControllerInterface {
         buttonBoxController = controller;
     }
 
-    public PannableCanvasControllerInterface getPannableCanvasController() {
-        return pannableCanvasController;
-    }
 
     public void setPannableCanvasController(PannableCanvasControllerInterface controller) {
         pannableCanvasController = controller;
     }
 
-    public MainController getMainController() {
-        return mainController;
-    }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;

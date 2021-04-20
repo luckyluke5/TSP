@@ -37,10 +37,6 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
         mainController.syncTourAndTriangulation();
     }
 
-    /*@Override
-    public void updateTourLength() {
-        view.updateTourLengthLabel();
-    }*/
 
     public void setView(ButtonBoxInterface view) {
         this.view = view;
@@ -52,7 +48,4 @@ public class ButtonBoxController implements ButtonBoxControllerInterface {
     }
 
 
-    public void pushTriang0() {
-        mainController.showTriang0();
-    }
 }

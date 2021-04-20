@@ -20,7 +20,4 @@ class AugmentingCircle {
                 '}';
     }
 
-    public Double getLength() {
-        return length;
-    }
 }

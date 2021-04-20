@@ -1,6 +1,5 @@
 package tsp.delaunay;
 
-import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.scene.Group;
@@ -32,9 +31,8 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
     private NumberBinding myScale;
 
     private NumberBinding revScale;
-    private Timeline timeline;
     private Group circleGroup;
-    private ArrayList<Line> strokes;
+
 
     PannableCanvasController controller;
 
@@ -43,11 +41,6 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
         controller = new PannableCanvasController();
         controller.setView(this);
-
-        // add scale transform
-        //scaleXProperty().bind(myScale);
-        //scaleYProperty().bind(myScale);
-        //setStyle("-fx-background-color: green;");
 
         mainGroup = new Group();
 
@@ -88,26 +81,13 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
     }
 
+
+    /**
+     * UPDATE FUNCTIONS FOR THE VIEW
+     */
+
     public void updateInstance() {
         controller.getMainController().resetInstance();
-    }
-
-    public double getScale() {
-        return myScale.getValue().doubleValue();
-    }
-
-    /*
-     * Set x/y scale
-     * @param myScale
-     */
-    public void setScale(double scale) {
-        //myScale.set(scale);
-        //revScale.set(3.3 / scale);
-
-    }
-
-    public void playTimelineFromStart() {
-        timeline.playFromStart();
     }
 
     @Override
@@ -144,18 +124,49 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
     }
 
     @Override
-    public void showTriang0() {
-        ArrayList <Line2D> lines = controller.getTriang0Lines();
+    public void updateMST() {
+        mstLines.getChildren().clear();
 
-        lines.forEach(line -> {
-            Line javaFXLine = convertLine(line);
-            javaFXLine.setStrokeWidth(getDefaultLineStrokeWidth());
-            javaFXLine.strokeWidthProperty().bind(revScale);
-            javaFXLine.setStroke(Color.DIMGRAY);
-            triang0Lines.getChildren().add(javaFXLine);
+        SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> mst = controller.getMainController().getInstance().getMST();
+        for (ModifiedWeightedEdge edge : mst.getEdges()
+        ) {
+            Point2D source = controller.getMainController().getInstance().graph.getEdgeSource(edge);
+            Point2D target = controller.getMainController().getInstance().graph.getEdgeTarget(edge);
 
-        });
-        triang0Lines.setVisible(!triang0Lines.isVisible());
+            Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
+            line.setStrokeWidth(getDefaultLineStrokeWidth());
+            line.strokeWidthProperty().bind(revScale);
+            line.setStroke(Color.GRAY);
+            mstLines.getChildren().add(line);
+
+        }
+
+    }
+
+    @Override
+    public void updatePoints() {
+        circleGroup.getChildren().clear();
+
+        for (ModifiedPoint2D point : controller.getMainController().getVertex().points) {
+            NodeGestures nodeGestures = new NodeGestures(this, point);
+
+
+            Circle circle = new Circle(point.getX(), point.getY(), controller.getMainController().getVertex().getRadius());
+
+
+            //circle.setRadius(controller.getMainController().getVertex().getRadius());
+
+            circle.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
+            circle.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
+            circle.addEventFilter(MouseEvent.MOUSE_RELEASED, nodeGestures.getOnMouseReleasedEventHandler());
+
+            //circle.radiusProperty().bind(revScale);
+
+            circleGroup.getChildren().add(circle);
+
+        }
+
+
     }
 
     @Override
@@ -181,36 +192,6 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
     public void hideDelaunayEdgesWithSpecificOrder() {
         delaunayOrderHigherOrder.setVisible(false);
     }
-
-
-    public void updateMST() {
-        mstLines.getChildren().clear();
-
-        SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> mst = controller.getMainController().getInstance().getMST();
-        for (ModifiedWeightedEdge edge : mst.getEdges()
-        ) {
-            Point2D source = controller.getMainController().getInstance().graph.getEdgeSource(edge);
-            Point2D target = controller.getMainController().getInstance().graph.getEdgeTarget(edge);
-
-            Line line = new Line(source.getX(), source.getY(), target.getX(), target.getY());
-            line.setStrokeWidth(getDefaultLineStrokeWidth());
-            line.strokeWidthProperty().bind(revScale);
-            line.setStroke(Color.GRAY);
-            mstLines.getChildren().add(line);
-
-        }
-
-    }
-
-
-    private Line convertLine(Line2D line) {
-        return new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
-    }
-
-    private double getDefaultLineStrokeWidth() {
-        return controller.getRadiusOfInstance();
-    }
-
     @Override
     public void showTour() {
         inTourLines.setVisible(!inTourLines.isVisible());
@@ -219,123 +200,10 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
     @Override
     public void showTriangulation() {triangLines.setVisible(!triangLines.isVisible());}
 
-
+    @Override
     public void showMST() {mstLines.setVisible(!mstLines.isVisible());}
 
-    /**
-     * Set x/y pivot points
-     *
-     * @param x
-     * @param y
-     */
-    public void setPivot(double x, double y) {
-        setTranslateX(getTranslateX() - x);
-        setTranslateY(getTranslateY() - y);
-    }
-
-    /*void initializePannableCanvas() {
-        setCanvasScale();
-        makeSceneGestures();
-
-        updatePoints();
-
-
-        transformMainGroup();
-    }*/
-
-    /*void initializePannableCanvas(MainScene mainScene) {
-        setCanvasScale(mainScene);
-        makeSceneGestures(mainScene);
-        getCircleGroup();
-
-
-        transformGroup(mainGroup);
-    }*/
-
-    void setCanvasScale() {
-        //Calculating scale and passing it to canvas
-
-        NumberBinding scale_height = Bindings.divide(heightProperty(), controller.getMainController().getVertex().y_diff());
-        NumberBinding scale_width = Bindings.divide(widthProperty(), controller.getMainController().getVertex().x_diff());
-
-
-        //setScale(scale.getValue().doubleValue());
-    }
-
-    /*void setCanvasScale(Scene scene) {
-        //Calculating scale and passing it to canvas
-
-        NumberBinding scale_height = Bindings.divide(scene.heightProperty(), controller.getMainController().getVertex().y_diff());
-        NumberBinding scale_width = Bindings.divide(scene.widthProperty(), controller.getMainController().getVertex().x_diff());
-        NumberBinding scale = Bindings.min(scale_height, scale_width);
-
-        setScale(scale.getValue().doubleValue());
-    }*/
-
-    void makeSceneGestures() {
-
-
-        SceneGestures sceneGestures = new SceneGestures(this);
-        addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
-        addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
-        addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-    }
-
-
-    /*void makeSceneGestures(Scene scene) {
-
-
-        SceneGestures sceneGestures = new SceneGestures(this);
-        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
-        scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
-        scene.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-    }*/
-
-
-/*
-    void createStrokes() {
-        strokes = new ArrayList();
-        ArrayList<Line2D> lines = controller.getMainController().getInstance().getTriangulationLines();
-
-        for (Line2D line : lines) {
-
-            Line l = convertLine(line);
-            l.setStrokeWidth(getDefaultLineStrokeWidth());
-
-
-            l.strokeWidthProperty().bind(revScale);
-            l.setStroke(Color.ORANGE.deriveColor(1, 1, 1, 0.5));
-            strokes.add(l);
-
-        }
-
-
-    }
- */
-
-    /*
-        public void getTimeline() {
-            timeline = new Timeline();
-            final int STARTTIME = 0;
-            System.out.println("STARTTIME " + controller.getMainController().getInstance().getTriangulationLines().size());
-            Integer[] length = {STARTTIME};
-            timeline.setCycleCount(Timeline.INDEFINITE);
-
-            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.2), actionEvent -> {
-                length[0]++;
-
-                int i = length[0];
-                mainGroup.getChildren().add(strokes.get(i - 1));
-                if (length[0] >= strokes.size()) {
-                    timeline.stop();
-                }
-
-            }));
-
-
-
-        }
-     */
+    @Override
     public void centerVisualisation() {
 
         double a = getLayoutBounds().getWidth() * 0.9 / mainGroup.getBoundsInParent().getWidth();
@@ -352,62 +220,37 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
     }
 
-    /**
-     * Modify circles and update Point2D coordinate after Dragg & Drop
-     *
-     * @return ArrayList of Cicrcles
-     */
-    public void updatePoints() {
-        circleGroup.getChildren().clear();
-
-
-        // create sample nodes which can be dragged
-        // NodeGestures nodeGestures = new NodeGestures(this);
-
-        for (ModifiedPoint2D point : controller.getMainController().getVertex().points) {
-            NodeGestures nodeGestures = new NodeGestures(this, point);
-
-
-            Circle circle = new Circle(point.getX(), point.getY(), controller.getMainController().getVertex().getRadius());
-
-
-            //circle.setRadius(controller.getMainController().getVertex().getRadius());
-
-            circle.addEventFilter(MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());
-            circle.addEventFilter(MouseEvent.MOUSE_DRAGGED, nodeGestures.getOnMouseDraggedEventHandler());
-            circle.addEventFilter(MouseEvent.MOUSE_RELEASED, nodeGestures.getOnMouseReleasedEventHandler());
-
-            //circle.radiusProperty().bind(revScale);
-
-
-            circleGroup.getChildren().add(circle);
-
-
-        }
-
-
-        //transformMainGroup();
-
-
-    }
-
-    void createCircleGroup(ArrayList<Circle> circles) {
-
-
-        //Create group with cirles to add to canvas
-
-
-    }
-
+    @Override
     public void clear() {
         getChildren().clear();
     }
 
+
+    /**
+     *GETTERS
+     */
     public PannableCanvasControllerInterface getController() {
         return controller;
     }
 
-    public void setController(PannableCanvasController controller) {
-        this.controller = controller;
+    private double getDefaultLineStrokeWidth() {
+        return controller.getRadiusOfInstance();
     }
+
+
+
+
+    void makeSceneGestures() {
+
+
+        SceneGestures sceneGestures = new SceneGestures(this);
+        addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
+        addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
+        addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
+    }
+
+    private Line convertLine(Line2D line) {
+        return new Line(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+    }
+
 }

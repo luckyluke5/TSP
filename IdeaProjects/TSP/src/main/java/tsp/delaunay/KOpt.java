@@ -24,15 +24,13 @@ public class KOpt {
             for (KOptEdge edge : graph.edgeSet()
             ) {
                 if (edge.getUsefulDelaunayOrder() == i && !edge.isInTriangulation()) {
-                    //try {
+
 
                     KOptSolverStep kOptSolver = new KOptSolverStep(graph);
                     benchmarkClass.step(0);
                     kOptSolver.setAddingEdge(edge);
                     kOptSolver.solve(benchmarkClass);
-                    //} catch (InterruptedException e) {
-                    //    e.printStackTrace();
-                    //}
+
                 }
 
             }

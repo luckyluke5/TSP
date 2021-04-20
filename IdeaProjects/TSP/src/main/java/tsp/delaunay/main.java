@@ -20,7 +20,6 @@ public class main extends Application {
 
         mainScene.mainSceneController.setMainController(mainController);
 
-        //mainScene.setMainController(mainController);
 
         stage.setScene(mainScene);
 
@@ -30,7 +29,6 @@ public class main extends Application {
 
         mainController.getFileWithFileLoaderPopUp();
 
-        //mainGroup.pannableCanvas.initializePannableCanvas();
 
 
     }

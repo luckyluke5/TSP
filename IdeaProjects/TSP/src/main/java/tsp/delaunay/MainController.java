@@ -19,9 +19,6 @@ import java.util.Collections;
 
 public class MainController {
 
-    //MainSceneController mainSceneController;
-
-
     private final Application application;
     private Instance instance;
 
@@ -37,11 +34,7 @@ public class MainController {
     MainController(Application application) {
         this.application = application;
 
-        //mainSceneController = new MainSceneController(this);
-
-
     }
-
 
     void getFileWithFileLoaderPopUp() {
         FileChooser fileChooser = new FileChooser();
@@ -49,6 +42,118 @@ public class MainController {
         File file = fileChooser.showOpenDialog(new Popup());
         setFile(file);
     }
+
+
+
+    /**
+     * INITAL SET FUNCTIONS
+     */
+
+    private void setFile(File file) {
+
+        Vertex vertex = FileReader.readPointsFromFile(file);
+        instance = new Instance(vertex);
+        instance.triangulate();
+
+        updatePoints();
+        updateTour();
+        pannableCanvasController.updateMST();
+        pannableCanvasController.updateTriangulation();
+        centerVisualisation();
+    }
+
+    void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
+        this.pannableCanvasController = pannableCanvasController;
+    }
+
+    void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
+        this.buttonBoxController = buttonBoxController;
+    }
+
+    void setRandomTour() {
+        Point2D lastPoint = null;
+
+        ArrayList<ModifiedPoint2D> points = getVertex().points;
+        Collections.shuffle(points);
+
+        ArrayList<ModifiedWeightedEdge> edgeList = new ArrayList<>();
+
+        for (Point2D point : points
+        ) {
+            if (lastPoint != null) {
+                ModifiedWeightedEdge edge = instance.graph.getEdge(lastPoint, point);
+                edgeList.add(edge);
+            }
+            lastPoint = point;
+
+        }
+
+        ModifiedWeightedEdge edge = instance.graph.getEdge(lastPoint, points.get(0));
+        edgeList.add(edge);
+
+        instance.setTour(edgeList);
+
+        updateTour();
+    }
+
+    void setMstTour() {
+        GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
+        instance.setTour(mstTour.getEdgeList());
+
+        updateTour();
+    }
+
+    void setChristophidesTour() {
+        GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
+        instance.setTour(christofidesTour.getEdgeList());
+
+        updateTour();
+    }
+
+    /**
+     * ALGORITHM FUNCTIONS
+     */
+
+    void makeTwoOptimization() {
+
+        TwoOptSolver solver = new TwoOptSolver(instance.graph);
+        solver.towOptForNonIntersectingEdges();
+        updateTour();
+
+    }
+
+    void syncTourAndTriangulation() {
+        TriangulationBuilder triangulationBuilder = new TriangulationBuilder(instance.graph);
+
+        triangulationBuilder.deleteAllEdgesOfTriangulationWitchAreCrossingAnEdgeOfTour();
+
+        updateTriangulation();
+    }
+
+    void makeKOptimization() {
+
+        double previous = instance.getTourLength();
+
+        KOptSolverGraphCreator creator = new KOptSolverGraphCreator(instance.graph);
+
+        DefaultUndirectedWeightedGraph<Point2D, KOptEdge> kOptGraph = creator.createKOptGraph();
+
+        KOpt solver = new KOpt(kOptGraph);
+
+        solver.solve();
+
+        double after = instance.getTourLength();
+
+        System.out.println("vorher " + previous + " nachher " + after);
+
+        updateTour();
+        updateTriangulation();
+    }
+
+    /**
+     * SAVE and RESET FUNCTIONS
+     */
+
 
     public void saveInstanceToFile() {
 
@@ -106,138 +211,8 @@ public class MainController {
 
     }
 
-    private void setFile(File file) {
-
-        //TimeBenchmarkClass benchmarkClass = new TimeBenchmarkClass("MainController::setFile");
-        Vertex vertex = FileReader.readPointsFromFile(file);
-        //benchmarkClass.step();
-        instance = new Instance(vertex);
-        instance.triangulate();
-        //benchmarkClass.step();
-        //benchmarkClass.step();
-        //benchmarkClass.step();
-        //benchmarkClass.step();
-        updatePoints();
-        updateTour();
-        pannableCanvasController.updateMST();
-        pannableCanvasController.updateTriangulation();
-        centerVisualisation();
-        //benchmarkClass.step();
-
-
-        //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
-    }
-
-    void centerVisualisation() {
-        pannableCanvasController.centerVisualisation();
-    }
-
-    private void updateTour() {
-        pannableCanvasController.updateTour();
-
-        mainGroupController.updateTourLength();
-    }
-
-    void makeKOptimization() {
-
-        double previous = instance.getTourLength();
-
-        KOptSolverGraphCreator creator = new KOptSolverGraphCreator(instance.graph);
-
-        DefaultUndirectedWeightedGraph<Point2D, KOptEdge> kOptGraph = creator.createKOptGraph();
-
-        KOpt solver = new KOpt(kOptGraph);
-
-        solver.solve();
-
-        double after = instance.getTourLength();
-
-        System.out.println("vorher " + previous + " nachher " + after);
-
-        updateTour();
-        updateTriangulation();
-    }
-
-    private void updateTriangulation() {
-        pannableCanvasController.updateTriangulation();
-    }
-
-    void syncTourAndTriangulation() {
-        TriangulationBuilder triangulationBuilder = new TriangulationBuilder(instance.graph);
-        //triangulationBuilder.initialTriangulationWithSetEdges();
-        triangulationBuilder.deleteAllEdgesOfTriangulationWitchAreCrossingAnEdgeOfTour();
-
-
-        updateTriangulation();
-    }
-
     void showNewInstanceWindow() {
-        //pannableCanvasController.clearOldInstance();
-
         newInstance();
-    }
-
-    private void newInstance() {
-
-        try {
-            application.start(new Stage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    void makeTwoOptimization() {
-
-        TwoOptSolver solver = new TwoOptSolver(instance.graph);
-        solver.towOptForNonIntersectingEdges();
-        updateTour();
-
-    }
-
-    void setRandomTour() {
-        Point2D lastPoint = null;
-
-        ArrayList<ModifiedPoint2D> points = getVertex().points;
-        Collections.shuffle(points);
-
-        ArrayList<ModifiedWeightedEdge> edgeList = new ArrayList<>();
-
-        for (Point2D point : points
-        ) {
-            if (lastPoint != null) {
-                ModifiedWeightedEdge edge = instance.graph.getEdge(lastPoint, point);
-                edgeList.add(edge);
-            }
-            lastPoint = point;
-
-        }
-
-        ModifiedWeightedEdge edge = instance.graph.getEdge(lastPoint, points.get(0));
-        edgeList.add(edge);
-
-        instance.setTour(edgeList);
-
-        updateTour();
-
-    }
-
-    Vertex getVertex() {
-        return instance.getVertex();
-    }
-
-    void setMstTour() {
-        GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
-        instance.setTour(mstTour.getEdgeList());
-
-        updateTour();
-    }
-
-    void setChristophidesTour() {
-        GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(instance.graph);
-        instance.setTour(christofidesTour.getEdgeList());
-
-        updateTour();
     }
 
     void resetInstance() {
@@ -254,15 +229,50 @@ public class MainController {
         mainGroupController.resetTourLengthLabel();
     }
 
+    private void newInstance() {
+
+        try {
+            application.start(new Stage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    /**
+     * UPDATE FUNCTIONS
+     */
+
+    private void updateTour() {
+        pannableCanvasController.updateTour();
+
+        mainGroupController.updateTourLength();
+    }
+
+    private void updateTriangulation() {
+        pannableCanvasController.updateTriangulation();
+    }
+
     private void updateMST() {
         pannableCanvasController.updateMST();
     }
 
     private void updatePoints() {
         pannableCanvasController.updatePoints();
-
-
     }
+
+    void centerVisualisation() {
+        pannableCanvasController.centerVisualisation();
+    }
+
+
+
+
+    /**
+     * SHOW / HIDE FUNCTIONS
+     */
 
     void showDelaunayEdgesWithSpecificOrder(int order) {
         pannableCanvasController.showDelaunayEdgesWithSpecificOrder(order);
@@ -274,7 +284,6 @@ public class MainController {
 
     void showTriangCheckbox() {
         pannableCanvasController.showTriangulation();
-
     }
 
     void showMST() {
@@ -285,22 +294,14 @@ public class MainController {
         pannableCanvasController.showTour();
     }
 
-    public void showTriang0() {
-        pannableCanvasController.showTriang0();
+    /**
+     * Getters
+     */
 
+    Vertex getVertex() {
+        return instance.getVertex();
     }
 
-    void computeShortTour() {
-
-    }
-
-    void setButtonBoxController(ButtonBoxControllerInterface buttonBoxController) {
-        this.buttonBoxController = buttonBoxController;
-    }
-
-    void setPannableCanvasController(PannableCanvasControllerInterface pannableCanvasController) {
-        this.pannableCanvasController = pannableCanvasController;
-    }
 
     Instance getInstance() {
 

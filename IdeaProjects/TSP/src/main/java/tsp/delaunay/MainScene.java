@@ -13,15 +13,6 @@ public class MainScene extends Scene implements MainSceneInterface {
         this.mainSceneController = mainSceneController;
     }
 
-    /*public MainScene(double width, double height) {
-        super(new MainGroup(), width, height);
-        mainSceneController = new MainSceneController();
-
-        mainGroup=new MainGroup();
-
-
-
-    }*/
 
     MainScene(MainGroup root, double width, double height) {
         super(root, width, height);
@@ -34,16 +25,6 @@ public class MainScene extends Scene implements MainSceneInterface {
 
         mainSceneController.setMainGroupController(mainGroup.getController());
 
-        //MainGroup.initalizeGroup(mainGroup.getMainGroupController(), mainGroup.pannableCanvas, this);
-
-
     }
 
-
-
-    /*public void setMainController(MainController mainController) {
-        mainSceneController.setMainController(mainController);
-
-        mainGroup.setMainController(mainController);
-    }*/
 }

@@ -59,9 +59,6 @@ public class TwoOptSolver {
         }
     }
 
-    /*public Instance getInstance() {
-        return instance;
-    }*/
 
     private double solveEdgeCrossing(ModifiedWeightedEdge edge1, ModifiedWeightedEdge edge2) {
 

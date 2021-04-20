@@ -5,6 +5,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 
+
+/**
+ * CREATE ALL BUTTONS AND MENUS
+ */
 class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
 
@@ -29,26 +33,21 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
 
         createFileMenu();
+
         createInitialisationMenuButton();
+
         createTwoOptButton();
+
         createTourTriangualtionSyncButton();
+
         createKOptButton();
 
-
-        //createTriangulationButton();
         createViewMenu();
-
-
-        //createTourLengthLabel();
 
         createResetButton();
 
-
         autosize();
-        //setAlignment(Pos.BASELINE_RIGHT);
-        //setSpacing(10);
 
-        //updateTourLengthLabel();
 
     }
 
@@ -94,7 +93,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
     }
 
     private void createTwoOptButton() {
-        MenuItem twoOptButton = new MenuItem("2. Two Optimisation Tour/ Eliminate Crossing");
+        MenuItem twoOptButton = new MenuItem("2. Eliminate Crossing");
         twoOptButton.setOnAction(actionEvent -> controller.pushTwoOpt());
 
         algo.getItems().add(twoOptButton);
@@ -130,7 +129,6 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
     }
 
-    //TODO eindeutigere Funktionsbezeichner und Labels
     private void createTriangulationCheckbox() {
         CheckMenuItem triangulationCheckbox = new CheckMenuItem("Show Triangulation");
         triangulationCheckbox.setOnAction(actionEvent -> controller.pushTriangulationCheckbox());
@@ -140,8 +138,6 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
     void createDelaunayTriangulationMenuButton() {
         Menu delaunayTriangulationMenuButton = new Menu("Delaunay Edges Higher Order");
-        //delaunayTriangulationMenuButton.setSelected(false);
-        //delaunayTriangulationMenuButton.setOnAction(actionEvent -> controller.pushTriang0());
 
         MenuItem hideMenuItem = new MenuItem("Hide");
         hideMenuItem.setOnAction(e -> {
@@ -165,12 +161,6 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         view.getItems().add(delaunayTriangulationMenuButton);
     }
 
-    /*private void createTourLengthLabel() {
-        tourLengthLabel = new Label();
-
-        getChildren().add(tourLengthLabel);
-
-    }*/
 
     private void createResetButton() {
         MenuItem resetButton = new MenuItem("0. Reset");
@@ -190,7 +180,6 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         MenuItem mstTourInitializationButton = new MenuItem("Mst Tour");
         mstTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setMstTour());
 
-        //getChildren().add(mstTourInitializationButton);
         return mstTourInitializationButton;
     }
 
@@ -198,21 +187,10 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         MenuItem christophidesTourInitializationButton = new MenuItem("Christophides Tour");
         christophidesTourInitializationButton.setOnAction(actionEvent -> controller.mainController.setChristophidesTour());
 
-        //getChildren().add(christophidesTourInitializationButton);
         return christophidesTourInitializationButton;
     }
 
-    //TODO eindeutigere Funktionsbezeichner und Labels
 
-    /*@Override
-    public void updateTourLengthLabel() {
-        try {
-
-            tourLengthLabel.setText(String.valueOf(controller.mainController.getInstance().getTourLength()));
-        } catch (NullPointerException e) {
-            tourLengthLabel.setText("Noch keine Tour berechnet");
-        }
-    }*/
 
     ButtonBoxControllerInterface getController() {
         return controller;

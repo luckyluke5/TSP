@@ -71,11 +71,6 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
         view.showMST();
     }
 
-    @Override
-    public void showTriang0() {
-        view.showTriang0();
-
-    }
 
     @Override
     public void showDelaunayEdgesWithSpecificOrder(int order) {

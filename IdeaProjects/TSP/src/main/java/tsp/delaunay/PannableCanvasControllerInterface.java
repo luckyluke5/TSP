@@ -3,8 +3,6 @@ package tsp.delaunay;
 public interface PannableCanvasControllerInterface extends Controller {
     void showMST();
 
-    void clearOldInstance();
-
     void updateMST();
 
     void showTour();
@@ -16,7 +14,6 @@ public interface PannableCanvasControllerInterface extends Controller {
 
     void showTriangulation();
 
-    void showTriang0();
 
     void showDelaunayEdgesWithSpecificOrder(int order);
 

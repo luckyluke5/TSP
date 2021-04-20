@@ -22,13 +22,10 @@ public class DelaunayOrderCalculator {
         Point2D source = line.getP1();
         Point2D target = line.getP2();
 
-        double length = source.distance(target);
 
-        //length=10;
 
         ArrayList<Point2D> leftPoints = new ArrayList<>();
         ArrayList<Point2D> rightPoints = new ArrayList<>();
-        int onLine = 0;
 
         for (Point2D point : points
         ) {
@@ -74,48 +71,33 @@ public class DelaunayOrderCalculator {
         if (leftPointsSorted.length > 0) {
             try {
                 double leftMax = leftPointsSorted[leftPointsSorted.length - 1];
-                //rightIndex = 0;
+
                 while (leftMax >= rightPointsSorted[rightIndex]) {
                     rightIndex += 1;
                 }
                 if (leftMax == rightPointsSorted[rightIndex]) {
                     System.out.println("More then tree points on circle");
                     rightIndex = points.size();
-                } else {
-                    //edge.rightDistance=Math.abs(rightPointsSorted[rightIndex] - rightPointsSorted[rightIndex - 1])/length;
-                    //edge.rightDistance = Math.abs(rightPointsSorted[rightIndex] - rightPointsSorted[rightIndex - 1]);
-                    //edge.distanceToNextCircleCenterString += "RD"+String.valueOf(Math.round(Math.abs(rightPointsSorted[rightIndex] - rightPointsSorted[rightIndex - 1]) / (length / 10))) + " ";
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                //rightIndex = this.points.size();
+
             }
-        } else {
-            //edge.setPartOfConvexHull(true);
         }
         if (rightPointsSorted.length > 0) {
 
             try {
 
                 double rightMin = rightPointsSorted[0];
-                //leftIndex = 0;
                 while (rightMin <= leftPointsSorted[leftPointsSorted.length - (leftIndex + 1)]) {
                     leftIndex += 1;
                 }
                 if (rightMin == leftPointsSorted[leftPointsSorted.length - (leftIndex + 1)]) {
                     System.out.println("More then tree points on circle");
                     leftIndex = points.size();
-                } else {
-                    //edge.leftDistance=Math.abs(leftPointsSorted[leftPointsSorted.length - (leftIndex + 1)] - leftPointsSorted[leftPointsSorted.length - (leftIndex)])/length;
-                    //edge.leftDistance = Math.abs(leftPointsSorted[leftPointsSorted.length - (leftIndex + 1)] - leftPointsSorted[leftPointsSorted.length - (leftIndex)]);
-
-                    //edge.distanceToNextCircleCenterString += "LD"+String.valueOf(Math.round(Math.abs(leftPointsSorted[leftPointsSorted.length - (leftIndex + 1)] - leftPointsSorted[leftPointsSorted.length - (leftIndex)]) / (length / 10))) + " ";
                 }
 
             } catch (ArrayIndexOutOfBoundsException e) {
-                //leftIndex = this.points.size();
             }
-        } else {
-            //edge.setPartOfConvexHull(true);
         }
         try {
             Point2D leftMinPoint = leftPoints.stream().max(Comparator.comparing((Point2D point) -> {
@@ -128,11 +110,6 @@ public class DelaunayOrderCalculator {
                 Point2D.Double center = calculateCircleCenter(edge, point);
                 return line.ptLineDist(center) * line.relativeCCW(center);
             })).orElseThrow(NoSuchElementException::new);
-
-
-            //edge.distanceToNextCircleCenterString= "";
-
-            //edge.distanceToNextCircleCenterString+="PC"+String.valueOf(Math.round(edgeMetric.cutting))+" CC"+String.valueOf(Math.round(edgeMetric.notCutting));
 
         } catch (NoSuchElementException ignored) {
 

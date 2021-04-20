@@ -11,10 +11,6 @@ public class TimeBenchmarkClass {
     }
 
     void step() {
-
-
-        //System.out.println("This step in " + name + " takes " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastTime) + " ms");
-
         lastTime = System.nanoTime();
     }
 }

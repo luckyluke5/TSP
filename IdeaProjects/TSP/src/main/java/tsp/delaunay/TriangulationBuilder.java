@@ -121,10 +121,6 @@ public class TriangulationBuilder {
 
     }
 
-    /*public Instance getInstance() {
-        return instance;
-    }*/
-
     static boolean areLinesIntersectingWithoutEndpoints(Line2D line1, Line2D line2) {
 
 
@@ -159,7 +155,7 @@ public class TriangulationBuilder {
     }
 
     private void completeTriangulationWithValidEdges() {
-        //ArrayList<MyEdge> result = new ArrayList<>();
+
         List<Line2D> triangulationLines = triangulation.edgeSet().stream().map(ModifiedWeightedEdge::getLine2D).collect(Collectors.toList());
         List<Line2D> tourLines = tour.edgeSet().stream().map(ModifiedWeightedEdge::getLine2D).collect(Collectors.toList());
         List<Line2D> doNotCrossingLines = new ArrayList<>();
@@ -177,7 +173,6 @@ public class TriangulationBuilder {
             }
 
         }
-        //return result;
     }
 
 

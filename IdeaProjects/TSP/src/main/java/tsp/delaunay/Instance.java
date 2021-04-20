@@ -19,14 +19,8 @@ public class Instance {
 
     DefaultUndirectedWeightedGraph<Point2D, ModifiedWeightedEdge> graph;
 
-
-
-
-
     final MaskSubgraph<Point2D, ModifiedWeightedEdge> tour;
     private final MaskSubgraph<Point2D, ModifiedWeightedEdge> triangulation;
-
-
 
     private ArrayList<Line2D> triang0Lines = new ArrayList<>();
 
@@ -46,8 +40,7 @@ public class Instance {
             for (int j = i + 1; j < getPoints().size(); j++) {
                 ModifiedWeightedEdge edge = graph.addEdge(getPoints().get(i), getPoints().get(j));
                 graph.setEdgeWeight(edge, getPoints().get(i).distance(getPoints().get(j)));
-                //int order = setUsefulOrderOfEdge(edge);
-                //edge.setUsefulDelaunayOrder(order);
+
             }
         }
         benchmarkClass.step();
@@ -57,14 +50,6 @@ public class Instance {
         tour = new MaskSubgraph<>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTour());
         triangulation = new MaskSubgraph<>(graph, (Point2D p) -> false, (ModifiedWeightedEdge edge) -> !edge.isInTriangulation());
 
-        //benchmarkClass.step();
-
-        //GraphPath<Point2D, ModifiedWeightedEdge> christofidesTour = new ChristofidesThreeHalvesApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
-        //GraphPath<Point2D, ModifiedWeightedEdge> mstTour = new TwoApproxMetricTSP<Point2D, ModifiedWeightedEdge>().getTour(graph);
-
-        //benchmarkClass.step();
-
-        //setTour(mstTour.getEdgeList());
         benchmarkClass.step();
 
 
@@ -74,17 +59,8 @@ public class Instance {
 
         benchmarkClass.step();
 
-
-
     }
 
-    public double getTourLength() {
-        return tour
-                .edgeSet()
-                .stream()
-                .mapToDouble(ModifiedWeightedEdge::getWeight)
-                .sum();
-    }
 
 
     /**
@@ -157,6 +133,11 @@ public class Instance {
 
     }
 
+
+    /**
+     * GETTERS
+     */
+
     public ArrayList<Line2D> getTriangulationLines() {
         Set<ModifiedWeightedEdge> edgeSet = triangulation.edgeSet();
 
@@ -198,12 +179,17 @@ public class Instance {
     }
 
 
-
-
     public SpanningTreeAlgorithm.SpanningTree<ModifiedWeightedEdge> getMST() {
         return new KruskalMinimumSpanningTree<>(graph).getSpanningTree();
     }
 
+    public double getTourLength() {
+        return tour
+                .edgeSet()
+                .stream()
+                .mapToDouble(ModifiedWeightedEdge::getWeight)
+                .sum();
+    }
 
     public ArrayList<Line2D> getTriang0Lines() {
         return triang0Lines;

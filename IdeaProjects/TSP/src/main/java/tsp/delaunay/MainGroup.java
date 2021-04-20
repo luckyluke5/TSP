@@ -21,10 +21,6 @@ public class MainGroup extends BorderPane implements MainGroupInterface {
         controller.setPannableCanvasController(pannableCanvas.getController());
         controller.setButtonBoxController(buttonBox.getController());
 
-        //setAlignment(pannableCanvas, Pos.TOP_RIGHT);
-        //setMargin(pannableCanvas, new Insets(12,12,12,12));
-        //setLeft(buttonBox);
-        //setCenter(pannableCanvas);
 
         tourLengthLabel = new Label("start");
 
@@ -34,8 +30,6 @@ public class MainGroup extends BorderPane implements MainGroupInterface {
         setBottom(tourLengthLabel);
 
 
-        //getChildren().add(pannableCanvas);
-        //getChildren().add(buttonBox);
     }
 
 

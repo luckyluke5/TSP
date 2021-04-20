@@ -7,8 +7,6 @@ public interface PannableCanvasInterface {
 
     void updateMST();
 
-    void playTimelineFromStart();
-
     void updateTour();
 
     void showTour();
@@ -16,8 +14,6 @@ public interface PannableCanvasInterface {
     void showTriangulation();
 
     void updateTriangulation();
-
-    void showTriang0();
 
     void showDelaunayEdgesWithSpecificOrder(int order);
 
