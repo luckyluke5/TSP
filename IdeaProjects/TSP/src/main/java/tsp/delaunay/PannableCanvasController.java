@@ -93,6 +93,11 @@ public class PannableCanvasController implements PannableCanvasControllerInterfa
         view.updatePoints();
     }
 
+    @Override
+    public void centerVisualisation() {
+        view.centerVisualisation();
+    }
+
     public ArrayList<Line2D> getTourLines() {
 
 

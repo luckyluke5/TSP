@@ -23,4 +23,6 @@ public interface PannableCanvasControllerInterface extends Controller {
     void hideDelaunayEdgesWithSpecificOrder();
 
     void updatePoints();
+
+    void centerVisualisation();
 }

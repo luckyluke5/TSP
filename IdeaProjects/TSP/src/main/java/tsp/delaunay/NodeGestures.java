@@ -86,8 +86,8 @@ public class NodeGestures {
             Circle node = (Circle) event.getSource();
 
             node.setFill(Color.BROWN);
-            node.setCenterX(event.getX());
-            node.setCenterY(event.getY());
+            //node.setCenterX(event.getX());
+            //node.setCenterY(event.getY());
 
             //node.setTranslateX(nodeDragContext.translateAnchorX + ((event.getSceneX() - nodeDragContext.mouseAnchorX) / scale));
             //node.setTranslateY(nodeDragContext.translateAnchorY - ((event.getSceneY() - nodeDragContext.mouseAnchorY) / scale));

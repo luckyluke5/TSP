@@ -36,11 +36,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
 
 
         //createTriangulationButton();
-        createTourCheckbox();
-        createTriangulationCheckbox();
-        createMSTCheckbox();
-
-        createDelaunayTriangulationMenuButton();
+        createViewMenu();
 
 
         //createTourLengthLabel();
@@ -53,6 +49,21 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
         //setSpacing(10);
 
         //updateTourLengthLabel();
+
+    }
+
+    private void createViewMenu() {
+        createTourCheckbox();
+        createTriangulationCheckbox();
+        createMSTCheckbox();
+        createDelaunayTriangulationMenuButton();
+
+
+        MenuItem centerView = new MenuItem("Center View");
+        centerView.setOnAction(actionEvent -> controller.mainController.centerVisualisation());
+
+        view.getItems().add(centerView);
+
 
     }
 
@@ -162,7 +173,7 @@ class ButtonBox extends MenuBar implements ButtonBoxInterface {
     }*/
 
     private void createResetButton() {
-        Menu resetButton = new Menu("0. Reset");
+        MenuItem resetButton = new MenuItem("0. Reset");
         resetButton.setOnAction(actionEvent -> controller.mainController.resetInstance());
 
         algo.getItems().add(resetButton);

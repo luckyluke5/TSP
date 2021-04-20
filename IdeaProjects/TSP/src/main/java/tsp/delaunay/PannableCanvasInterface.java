@@ -24,4 +24,6 @@ public interface PannableCanvasInterface {
     void hideDelaunayEdgesWithSpecificOrder();
 
     void updatePoints();
+
+    void centerVisualisation();
 }

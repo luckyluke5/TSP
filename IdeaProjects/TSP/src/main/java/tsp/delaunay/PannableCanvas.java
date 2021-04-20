@@ -233,7 +233,7 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
         setTranslateY(getTranslateY() - y);
     }
 
-    void initializePannableCanvas() {
+    /*void initializePannableCanvas() {
         setCanvasScale();
         makeSceneGestures();
 
@@ -241,7 +241,7 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
 
         transformMainGroup();
-    }
+    }*/
 
     /*void initializePannableCanvas(MainScene mainScene) {
         setCanvasScale(mainScene);
@@ -336,7 +336,7 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
         }
      */
-    private void transformMainGroup() {
+    public void centerVisualisation() {
 
         double a = getLayoutBounds().getWidth() * 0.9 / mainGroup.getBoundsInParent().getWidth();
         double b = getLayoutBounds().getHeight() * 0.9 / mainGroup.getBoundsInParent().getHeight();
@@ -386,7 +386,7 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
         }
 
 
-        transformMainGroup();
+        //transformMainGroup();
 
 
     }

@@ -121,10 +121,15 @@ public class MainController {
         updateTour();
         pannableCanvasController.updateMST();
         pannableCanvasController.updateTriangulation();
+        centerVisualisation();
         //benchmarkClass.step();
 
 
         //TODO triangulate1() oder triangulate2() ich war mir nicht sicher.
+    }
+
+    void centerVisualisation() {
+        pannableCanvasController.centerVisualisation();
     }
 
     private void updateTour() {
