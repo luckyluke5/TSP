@@ -3,6 +3,8 @@ package tsp.delaunay;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 
 /**
@@ -53,6 +55,7 @@ public class NodeGestures {
 
             afterY=0;
 
+
             nodeDragContext.mouseAnchorX = event.getSceneX();
             nodeDragContext.mouseAnchorY = event.getSceneY();
 
@@ -63,7 +66,7 @@ public class NodeGestures {
 
             System.out.println("LOCATION OF [["+point.getPoint_id()+"]]::"+"X:"+point.getX()+"Y:"+point.getY());
 
-           firstY=(event.getSceneY() - canvas.getBoundsInParent().getMinY())  / canvas.getScale();
+            firstY = (event.getSceneY() - canvas.getBoundsInParent().getMinY()) / canvas.getScale();
 
         }
 
@@ -78,18 +81,20 @@ public class NodeGestures {
             if (!event.isPrimaryButtonDown())
                 return;
 
-            double scale = canvas.getScale();
+            //double scale = canvas.getScale();
 
-            Node node = (Node) event.getSource();
+            Circle node = (Circle) event.getSource();
 
-            node.setTranslateX(nodeDragContext.translateAnchorX + ((event.getSceneX() - nodeDragContext.mouseAnchorX) / scale));
-            node.setTranslateY(nodeDragContext.translateAnchorY - ((event.getSceneY() - nodeDragContext.mouseAnchorY) / scale));
+            node.setFill(Color.BROWN);
+            node.setCenterX(event.getX());
+            node.setCenterY(event.getY());
 
-            afterY= ((event.getSceneY() - canvas.getBoundsInParent().getMinY()) / scale);
+            //node.setTranslateX(nodeDragContext.translateAnchorX + ((event.getSceneX() - nodeDragContext.mouseAnchorX) / scale));
+            //node.setTranslateY(nodeDragContext.translateAnchorY - ((event.getSceneY() - nodeDragContext.mouseAnchorY) / scale));
+
+            //afterY= ((event.getSceneY() - canvas.getBoundsInParent().getMinY()) / scale);
 
             event.consume();
-
-
 
 
         }
@@ -98,14 +103,22 @@ public class NodeGestures {
     private final EventHandler<MouseEvent> onMouseReleasedEventHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            xCor = (event.getSceneX() - canvas.getBoundsInParent().getMinX()) / canvas.getScale();
-            double delteY = firstY-afterY;
-            if(delteY != firstY) {
-                point.setLocation(xCor, point.getY() + delteY);
 
-                canvas.updateInstance();
+            Circle node = (Circle) event.getSource();
+            node.setFill(Color.BLACK);
+            node.setCenterX(event.getX());
+            node.setCenterY(event.getY());
 
-            }
+
+            //xCor = (event.getSceneX() - canvas.getBoundsInParent().getMinX()) / canvas.getScale();
+            //double delteY = firstY-afterY;
+            //if(delteY != firstY) {
+            point.setLocation(event.getX(), event.getY());
+            canvas.updateInstance();
+
+            event.consume();
+
+
         }
     };
 
