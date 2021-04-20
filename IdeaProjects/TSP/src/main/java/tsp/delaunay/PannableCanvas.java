@@ -28,7 +28,7 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
     private final Group mstLines;
     // das ist nicht die main group die in der scene verankert ist
     // sondern die erste gruppe, an der circle, strokes und tourLines enthalten ist
-    private final Group mainGroup;
+    final Group mainGroup;
     private NumberBinding myScale;
 
     private NumberBinding revScale;
@@ -36,7 +36,7 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
     private Group circleGroup;
     private ArrayList<Line> strokes;
 
-    private PannableCanvasController controller;
+    PannableCanvasController controller;
 
 
     public PannableCanvas() {
@@ -82,6 +82,8 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
 
         myScale = Bindings.min(mainGroup.scaleXProperty(), Bindings.multiply(-1, mainGroup.scaleYProperty()));
         revScale = Bindings.divide(3.3, myScale);
+
+        makeSceneGestures();
 
 
     }
@@ -336,8 +338,13 @@ public class PannableCanvas extends Pane implements PannableCanvasInterface {
      */
     private void transformMainGroup() {
 
-        mainGroup.setScaleX(mainGroup.getScaleX() * getLayoutBounds().getWidth() * 0.9 / mainGroup.getBoundsInParent().getWidth());
-        mainGroup.setScaleY(mainGroup.getScaleY() * getLayoutBounds().getHeight() * 0.9 / mainGroup.getBoundsInParent().getHeight());
+        double a = getLayoutBounds().getWidth() * 0.9 / mainGroup.getBoundsInParent().getWidth();
+        double b = getLayoutBounds().getHeight() * 0.9 / mainGroup.getBoundsInParent().getHeight();
+
+        double scale = Math.min(a, b);
+
+        mainGroup.setScaleX(mainGroup.getScaleX() * scale);
+        mainGroup.setScaleY(mainGroup.getScaleY() * scale);
 
         mainGroup.setTranslateX(mainGroup.getTranslateX() - mainGroup.getBoundsInParent().getMinX());
         mainGroup.setTranslateY(mainGroup.getTranslateY() - mainGroup.getBoundsInParent().getMinY());

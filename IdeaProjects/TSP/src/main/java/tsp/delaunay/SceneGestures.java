@@ -46,6 +46,7 @@ public class SceneGestures {
             sceneDragContext.translateAnchorX = canvas.getTranslateX();
             sceneDragContext.translateAnchorY = canvas.getTranslateY();
 
+            event.consume();
         }
 
     };
@@ -72,8 +73,17 @@ public class SceneGestures {
         @Override
         public void handle(ScrollEvent event) {
 
+            System.out.println(canvas.mainGroup.getScaleX());
+            System.out.println(canvas.mainGroup.getScaleY());
 
-            double scale = canvas.getScale(); // currently we only use Y, same value is used for X
+            canvas.mainGroup.setScaleX(canvas.mainGroup.getScaleX() + event.getDeltaY() / (100 * canvas.controller.getRadiusOfInstance()));
+            canvas.mainGroup.setScaleY(canvas.mainGroup.getScaleY() - event.getDeltaY() / (100 * canvas.controller.getRadiusOfInstance()));
+
+            System.out.println(canvas.mainGroup.getScaleX());
+            System.out.println(canvas.mainGroup.getScaleY());
+
+
+            /*double scale = canvas.getScale(); // currently we only use Y, same value is used for X
             double oldScale = scale;
 
             scale *= Math.pow(1.005, event.getDeltaY());
@@ -91,7 +101,8 @@ public class SceneGestures {
 
 
             canvas.setScale( scale);
-            canvas.setPivot(f*dx, f*dy);
+            canvas.setPivot(f*dx, f*dy);*/
+
 
             event.consume();
 
